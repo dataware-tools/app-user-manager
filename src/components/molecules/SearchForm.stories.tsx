@@ -19,12 +19,11 @@ Default.args = {
 const ComponentChangable = (): JSX.Element => {
   const [searchText, setSearchText] = React.useState("change this text");
   const onSearch = () => {
-    console.log(searchText);
+    console.log(`search "${searchText}"!!`);
   };
   const onSearchTextChange = (newSearchText: string) => {
     setSearchText(newSearchText);
   };
-  console.log(searchText);
 
   return (
     <SearchForm
