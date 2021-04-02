@@ -26,8 +26,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   deactiveEmptySelect: {
+    alignItems: "center",
+    color: theme.palette.text.disabled,
     cursor: "pointer",
+    display: "flex",
     height: "2.7rem",
+    paddingLeft: "1rem",
     width: "100%",
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
@@ -165,13 +169,17 @@ const MultiSelect = ({
       }
       onClick={() => setMenuIsOpen(true)}
     >
-      {currentSelected.map((option) => {
-        return (
-          <div key={option.value} className={styles.selectedItem}>
-            {option.label}
-          </div>
-        );
-      })}
+      {currentSelected.length > 0 ? (
+        currentSelected.map((option) => {
+          return (
+            <div key={option.value} className={styles.selectedItem}>
+              {option.label}
+            </div>
+          );
+        })
+      ) : (
+        <div>Select...</div>
+      )}
     </div>
   );
 };
