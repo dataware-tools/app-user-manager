@@ -60,14 +60,27 @@ let theme = createMuiTheme({
       disabled: `hsl(${HDLBaseColor}, ${BasicSaturation}, 62%)`,
     },
     divider: `hsl(${HDLBaseColor}, ${BasicSaturation}, 88%)`,
-    // Not working!
-    // props: {
-    //   MuiButton: {
-    //     disableElevation: true,
-    //     variant: "contained",
-    //     color: "primary",
-    //   },
-    // },
+  },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {},
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+        variant: "contained",
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
   },
 });
 

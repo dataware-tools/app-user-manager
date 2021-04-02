@@ -16,8 +16,6 @@ const Sample = (): JSX.Element => {
     <div>
       <h1>Hello {user ? user.name : "world"}</h1>
       <Button
-        variant="contained"
-        disableElevation
         onClick={() => {
           getAccessTokenSilently().then((accessToken: string) => {
             fetchApi(apiURL, accessToken, setApiResult);
