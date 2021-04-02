@@ -6,15 +6,14 @@ import { ThemeProvider, StylesProvider } from "@material-ui/core/styles";
 import dynamic from "next/dynamic";
 import theme from "../theme";
 
-const App = ({ Component, pageProps, router }: AppProps): JSX.Element => {
+const App = ({ Component, pageProps }: AppProps): JSX.Element => {
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles?.parentElement?.removeChild(jssStyles);
     }
-    console.log(router);
-  }, [router]);
+  }, []);
 
   const SafeHydrate = dynamic(() => import("./_app_csr"), { ssr: false });
   return (
