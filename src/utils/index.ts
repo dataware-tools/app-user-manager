@@ -8,7 +8,8 @@ export const APP_ROUTE = {
   HOME: "/",
 };
 
-const API_HOME: string = process.env.REACT_APP_BACKEND_API_URL || "/api/latest";
+const API_HOME: string =
+  process.env.NEXT_PUBLIC_BACKEND_API_PREFIX || "/api/latest";
 
 const constructApiBaseUrl = (url: string) => `${API_HOME}${url}`;
 
