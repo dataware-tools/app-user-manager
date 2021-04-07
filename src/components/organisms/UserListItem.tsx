@@ -100,23 +100,23 @@ const UserListItem = ({ user, roles }: UserListItemProps): JSX.Element => {
     setPrevRoles(rolesToOptions(user.roles));
   }, [user.roles]);
 
-  const onSave = () => {
+  const onSave = async () => {
     setIsSaving(true);
     setPrevRoles([...currentRoles]);
     const roleIds = selectedRolesToRoleIds(currentRoles);
     // TODO: fetching process in onSave() should be inherit from parent of UserList. it may be simplified thanks to SWR.
-    getAccessTokenSilently().then((accessToken: string) => {
-      permissionManager.OpenAPI.TOKEN = accessToken;
-      permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-      fetchApi(
+    const res = await getAccessTokenSilently()
+      .then((accessToken: string) => {
+        permissionManager.OpenAPI.TOKEN = accessToken;
+        permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
+      })
+      .then(() =>
         permissionManager.UserService.updateUser(user.user_id, {
           role_ids: roleIds,
-        }),
-        undefined,
-        setStatusUpdateUser,
-        updateCurrentRoles
-      );
-    });
+        })
+      )
+      .catch(() => undefined);
+    updateCurrentRoles(res);
     setIsSaving(false);
   };
 

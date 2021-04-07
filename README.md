@@ -13,7 +13,7 @@ The things you have to do after creating a repository based on this template are
 
 ```bash
 $ export DOCKER_BUILDKIT=1
-$ docker build -t <image name> --ssh default .
+$ docker build -t app-user-manager --ssh default .
 
 ```
 
