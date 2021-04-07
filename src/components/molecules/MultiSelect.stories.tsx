@@ -188,7 +188,8 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
     setIsLoading(false);
   };
 
-  const onSave = () => {
+  const onSave = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setPrevSelected([...selectedOptions]);
   };
 
