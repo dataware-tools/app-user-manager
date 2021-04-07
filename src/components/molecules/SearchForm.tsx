@@ -6,7 +6,7 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 type PropType = {
   onSubmit: () => void;
   searchText: string;
-  onChange: (newSearchtext: string) => void;
+  onChange: (newSearchText: string) => void;
 };
 
 const SearchForm = (props: PropType): JSX.Element => {
@@ -18,10 +18,11 @@ const SearchForm = (props: PropType): JSX.Element => {
       }}
     >
       <OutlinedInput
+        size="small"
         placeholder="Search..."
         endAdornment={
           <InputAdornment position="end">
-            <IconButton edge="end" onClick={props.onSubmit}>
+            <IconButton edge="end" onClick={props.onSubmit} size="small">
               <SearchIcon />
             </IconButton>
           </InputAdornment>
