@@ -71,7 +71,7 @@ type PropType = {
   isSaving?: boolean;
   onInputChange?: (newValue: string, actionMeta: InputActionMeta) => void;
   onMenuScrollToBottom?: (e: SyntheticEvent) => void;
-  onSave?: () => void;
+  onSave?: () => Promise<unknown>;
   onFocusOut?: () => void;
 };
 
@@ -97,9 +97,9 @@ const MultiSelect = ({
       <LoadingButton
         pending={isSaving}
         sx={{ ml: 1 }}
-        onClick={() => {
+        onClick={async () => {
           if (isNonNullable(onSave)) {
-            onSave();
+            await onSave();
           }
           setMenuIsOpen(false);
         }}
