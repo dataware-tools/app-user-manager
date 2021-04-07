@@ -63,5 +63,7 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": ["error"],
     // in Next project, react need not be imported every file.
     "react/react-in-jsx-scope": "off",
+    // API responce is snake case.
+    camelcase: "off",
   },
 };

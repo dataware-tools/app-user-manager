@@ -4,6 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import AppBar from "@material-ui/core/AppBar";
 import Link from "@material-ui/core/Link";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Spacer } from "../../utils";
 
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
   appBar: {
@@ -33,42 +34,40 @@ export const Header = (): JSX.Element => {
   const styles = useStyles();
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
   return (
-    <AppBar
-      className={styles.appBar}
-      elevation={0}
-      position="sticky"
-      sx={{ mb: 4 }}
-    >
-      <Toolbar className={styles.toolBar}>
-        <div className={styles.leftContaienr}>
-          <Link href="/" color="inherit" className={styles.homeLink}>
-            Dataware Tools
-          </Link>
-        </div>
-        <div className={styles.rightContainer}>
-          {!isAuthenticated ? (
-            <Link
-              color="inherit"
-              className={styles.authLink}
-              onClick={() => {
-                loginWithRedirect({ returnTo: window.location.href });
-              }}
-            >
-              Login
+    <>
+      <AppBar className={styles.appBar} elevation={0} position="fixed">
+        <Toolbar className={styles.toolBar}>
+          <div className={styles.leftContaienr}>
+            <Link href="/" color="inherit" className={styles.homeLink}>
+              Dataware Tools
             </Link>
-          ) : (
-            <Link
-              color="inherit"
-              className={styles.authLink}
-              onClick={() => {
-                logout({ returnTo: window.location.origin });
-              }}
-            >
-              Logout
-            </Link>
-          )}
-        </div>
-      </Toolbar>
-    </AppBar>
+          </div>
+          <div className={styles.rightContainer}>
+            {!isAuthenticated ? (
+              <Link
+                color="inherit"
+                className={styles.authLink}
+                onClick={() => {
+                  loginWithRedirect({ returnTo: window.location.href });
+                }}
+              >
+                Login
+              </Link>
+            ) : (
+              <Link
+                color="inherit"
+                className={styles.authLink}
+                onClick={() => {
+                  logout({ returnTo: window.location.origin });
+                }}
+              >
+                Logout
+              </Link>
+            )}
+          </div>
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
+    </>
   );
 };
