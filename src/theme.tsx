@@ -52,7 +52,7 @@ let theme = createMuiTheme({
     },
     background: {
       default: `hsl(${HDLBaseColor}, ${BasicSaturation}, 98%)`,
-      paper: `hsl(${HDLBaseColor}, ${BasicSaturation}, 100%)`,
+      paper: `hsl(${HDLBaseColor}, ${BasicSaturation}, 98%)`,
     },
     text: {
       primary: `hsl(${HDLBaseColor}, ${BasicSaturation}, 13%)`,
@@ -79,6 +79,24 @@ let theme = createMuiTheme({
         root: {
           borderRadius: 0,
         },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          lineHeight: 1.2,
+          borderBottom: `solid 1px hsl(${HDLBaseColor}, ${BasicSaturation}, 88%)`,
+        },
+      },
+    },
+    MuiPagination: {
+      defaultProps: {
+        shape: "rounded",
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: { maxWidth: "none" },
       },
     },
   },
