@@ -143,6 +143,7 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
   ]);
   const [currentOptions, setCurrentOptions] = React.useState<optionType>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isSaving, setIsSaving] = React.useState(false);
   const [isSavable, setIsSavable] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
   const [needAddingOptions, setNeedAddingOptions] = React.useState(false);
@@ -188,8 +189,11 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
     setIsLoading(false);
   };
 
-  const onSave = () => {
+  const onSave = async () => {
+    setIsSaving(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setPrevSelected([...selectedOptions]);
+    setIsSaving(false);
   };
 
   const onChange = (newInput: optionType) => {
@@ -232,6 +236,7 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
       }}
       isLoading={isLoading}
       currentSelected={[...selectedOptions]}
+      isSaving={isSaving}
       onSave={onSave}
       onFocusOut={onFocusOut}
       haveSaveButton={isSavable}

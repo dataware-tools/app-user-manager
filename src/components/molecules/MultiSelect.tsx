@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 import Select, {
   OptionsType,
   OptionTypeBase,
@@ -10,8 +10,9 @@ import CreatableSelect from "react-select/creatable";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { isNonNullable } from "../../utils/index";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import LoadingButton from "@material-ui/lab/LoadingButton";
 
+// TODO: refactoring & change react-select to mui-autocomplete
 const useStyles = makeStyles((theme) => ({
   deactiveSelect: {
     alignItems: "center",
@@ -59,17 +60,18 @@ const useStyles = makeStyles((theme) => ({
 
 type PropType = {
   currentSelected: OptionsType<OptionTypeBase>;
-  haveSaveButton?: boolean;
-  isCreatable: boolean;
-  isLoading?: boolean;
   onChange: (
     newValue: OptionsType<OptionTypeBase>,
     actionMeta: ActionMeta<OptionTypeBase>
   ) => void;
   options: OptionsType<OptionTypeBase>;
+  haveSaveButton?: boolean;
+  isCreatable: boolean;
+  isLoading?: boolean;
+  isSaving?: boolean;
   onInputChange?: (newValue: string, actionMeta: InputActionMeta) => void;
   onMenuScrollToBottom?: (e: SyntheticEvent) => void;
-  onSave?: () => void;
+  onSave?: () => Promise<unknown>;
   onFocusOut?: () => void;
 };
 
@@ -77,6 +79,7 @@ const MultiSelect = ({
   isCreatable,
   currentSelected,
   isLoading,
+  isSaving,
   onSave,
   onFocusOut,
   haveSaveButton,
@@ -84,24 +87,25 @@ const MultiSelect = ({
 }: PropType): JSX.Element => {
   const styles = useStyles();
   const muiColors = useTheme().palette;
-  const [menuIsOpen, setMenuIsOpen] = React.useState<boolean>(false);
+  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const loadingOptions = isLoading
     ? { isLoading: true, menuShouldBlockScroll: true }
     : {};
 
   const SaveButton = () => {
     return (
-      <Button
+      <LoadingButton
+        pending={isSaving}
         sx={{ ml: 1 }}
-        onClick={() => {
-          setMenuIsOpen(false);
+        onClick={async () => {
           if (isNonNullable(onSave)) {
-            onSave();
+            await onSave();
           }
+          setMenuIsOpen(false);
         }}
       >
         Save
-      </Button>
+      </LoadingButton>
     );
   };
 
@@ -148,17 +152,14 @@ const MultiSelect = ({
         console.log("click away!!");
       }}
     >
-      {isCreatable ? (
-        <div className={styles.selectContainer}>
+      <div className={styles.selectContainer}>
+        {isCreatable ? (
           <CreatableSelect {...selectProps} />
-          {haveSaveButton ? <SaveButton /> : null}
-        </div>
-      ) : (
-        <div className={styles.selectContainer}>
+        ) : (
           <Select {...selectProps} />
-          {haveSaveButton ? <SaveButton /> : null}
-        </div>
-      )}
+        )}
+        {haveSaveButton ? <SaveButton /> : null}
+      </div>
     </ClickAwayListener>
   ) : (
     <div
