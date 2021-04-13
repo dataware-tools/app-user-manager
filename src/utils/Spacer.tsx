@@ -1,13 +1,18 @@
 type Props = {
   size: number | string;
-  axis?: "vertical" | "horizontal";
+  direction?: "vertical" | "horizontal";
   style?: any;
   delegated?: any;
 };
 
-const Component = ({ size, axis, style = {}, ...delegated }: Props) => {
-  const width = axis === "vertical" ? 1 : size;
-  const height = axis === "horizontal" ? 1 : size;
+const Component = ({
+  size,
+  direction,
+  style = {},
+  ...delegated
+}: Props): JSX.Element => {
+  const width = direction === "vertical" ? 1 : size;
+  const height = direction === "horizontal" ? 1 : size;
   return (
     <span
       style={{

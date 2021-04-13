@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: typeof themeInstance) => ({
 
 const Sample = (): JSX.Element => {
   const { user, getAccessTokenSilently } = useAuth0();
-  const [apiResult, setApiResult] = useState<any>(undefined);
+  const [apiResult, setApiResult] = useState<unknown>(undefined);
   const styles = useStyles();
 
   return (
