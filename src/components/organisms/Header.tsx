@@ -4,7 +4,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import AppBar from "@material-ui/core/AppBar";
 import Link from "@material-ui/core/Link";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Spacer } from "../../utils";
 
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
   appBar: {
@@ -14,7 +13,7 @@ const useStyles = makeStyles((theme: typeof themeInstance) => ({
     backgroundColor: theme.palette.common.black,
     justifyContent: "space-between",
   },
-  leftContaienr: {
+  leftContainer: {
     flex: 1,
   },
   rightContainer: {
@@ -37,7 +36,7 @@ export const Header = (): JSX.Element => {
     <>
       <AppBar className={styles.appBar} elevation={0} position="fixed">
         <Toolbar className={styles.toolBar}>
-          <div className={styles.leftContaienr}>
+          <div className={styles.leftContainer}>
             <Link href="/" color="inherit" className={styles.homeLink}>
               Dataware Tools
             </Link>
