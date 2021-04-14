@@ -25,13 +25,7 @@ const ComponentChangable = (): JSX.Element => {
     setSearchText(newSearchText);
   };
 
-  return (
-    <SearchForm
-      searchText={searchText}
-      onSubmit={onSearch}
-      onChange={onSearchTextChange}
-    />
-  );
+  return <SearchForm onSearch={onSearch} />;
 };
 
 export const Changable = (): JSX.Element => <ComponentChangable />;

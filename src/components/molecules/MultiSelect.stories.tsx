@@ -143,7 +143,6 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
   ]);
   const [currentOptions, setCurrentOptions] = React.useState<optionType>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [isSaving, setIsSaving] = React.useState(false);
   const [isSavable, setIsSavable] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
   const [needAddingOptions, setNeedAddingOptions] = React.useState(false);
@@ -190,10 +189,8 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
   };
 
   const onSave = async () => {
-    setIsSaving(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setPrevSelected([...selectedOptions]);
-    setIsSaving(false);
   };
 
   const onChange = (newInput: optionType) => {
@@ -236,7 +233,6 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
       }}
       isLoading={isLoading}
       currentSelected={[...selectedOptions]}
-      isSaving={isSaving}
       onSave={onSave}
       onFocusOut={onFocusOut}
       haveSaveButton={isSavable}
@@ -247,40 +243,3 @@ const ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButto
 export const FetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButton = (): JSX.Element => (
   <ComponentFetchWhenEveryInputChangedAndMenuScrolledToBottomAndHaveSaveButton />
 );
-
-// const createLongOptions = (startNum: number, numOfOptions: number) => {
-//   const options = [];
-//   for (let i = startNum; i < startNum + numOfOptions; i++) {
-//     options.push({ value: i, label: `${i}` });
-//   }
-//   return options;
-// };
-
-// const handredOptions = createLongOptions(0, 100);
-// const thousandOptions = createLongOptions(0, 1000);
-// const threeThousandOptions = createLongOptions(0, 3000);
-// const tenThousandOptions = createLongOptions(0, 10000);
-
-// export const HaveHandredOptions = Template.bind({});
-// HaveHandredOptions.args = {
-//   options: handredOptions,
-//   currentSelected: templateInitialSelected,
-// };
-
-// export const HaveThousandOptions = Template.bind({});
-// HaveThousandOptions.args = {
-//   options: thousandOptions,
-//   currentSelected: templateInitialSelected,
-// };
-
-// export const HaveThreeThousandOptions = Template.bind({});
-// HaveThreeThousandOptions.args = {
-//   options: threeThousandOptions,
-//   currentSelected: templateInitialSelected,
-// };
-
-// export const HaveTenThousandOptions = Template.bind({});
-// HaveTenThousandOptions.args = {
-//   options: tenThousandOptions,
-//   currentSelected: templateInitialSelected,
-// };
