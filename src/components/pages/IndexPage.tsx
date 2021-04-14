@@ -1,18 +1,32 @@
-import { PageWrapper } from "../organisms/PageWrapper";
 import { Spacer } from "../../utils";
 import { MenuBar } from "../molecules/MenuBar";
 import { useState } from "react";
-import { UsersEditor } from "../organisms/MockUsersEditor";
-import { RolesEditor } from "../organisms/MockRolesEditor";
+import { UsersEditor } from "../organisms/UsersEditor";
+import { RolesEditor } from "../organisms/RolesEditor";
+import { makeStyles } from "@material-ui/core/styles";
 
-export const TopPage = (): JSX.Element => {
+const useStyles = makeStyles(() => ({
+  root: {
+    display: "flex",
+  },
+  menuBarContainer: {
+    flex: 0,
+  },
+  mainContainer: {
+    flex: 1,
+  },
+}));
+
+export const IndexPage = (): JSX.Element => {
   const tabNames = ["Users", "Roles"];
   // TODO: save tab number to local state
   const [tabNum, setTabNum] = useState(0);
+  const styles = useStyles();
+
   return (
     <>
-      <div style={{ display: "flex" }}>
-        <div style={{ flex: 0 }}>
+      <div className={styles.root}>
+        <div className={styles.menuBarContainer}>
           <MenuBar
             tabNames={tabNames}
             value={tabNum}
@@ -21,8 +35,8 @@ export const TopPage = (): JSX.Element => {
             }}
           />
         </div>
-        <Spacer axis="horizontal" size="3vw" />
-        <div style={{ flex: 1 }}>
+        <Spacer direction="horizontal" size="3vw" />
+        <div className={styles.mainContainer}>
           {(() => {
             switch (tabNames[tabNum]) {
               case "Users":
@@ -32,7 +46,7 @@ export const TopPage = (): JSX.Element => {
             }
           })()}
         </div>
-        <Spacer axis="horizontal" size="3vw" />
+        <Spacer direction="horizontal" size="3vw" />
       </div>
     </>
   );

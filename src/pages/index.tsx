@@ -1,6 +1,6 @@
-import { TopPage } from "../components/pages/MockPage";
+import { IndexPage } from "../components/pages/IndexPage";
 const Page = (): JSX.Element => {
-  return <TopPage />;
+  return <IndexPage />;
 };
 
 export default Page;
