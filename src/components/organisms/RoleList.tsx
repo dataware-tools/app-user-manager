@@ -7,7 +7,6 @@ import { RefObject } from "react";
 import { isNonNullable } from "../../utils";
 import { RoleListItem, RoleListItemProps } from "./RoleListItem";
 
-// TODO: receive role as type defined in API specification.
 type RoleListProps = {
   rows: RoleListItemProps["data"][];
   columns: RoleListItemProps["columns"];
@@ -27,27 +26,29 @@ const RoleList = ({
 }: RoleListProps): JSX.Element => {
   const rowProps = { columns, onDeleteRow, onClickRow };
   return (
-    <Table stickyHeader={stickyHeader}>
-      <TableHead>
-        <TableRow>
-          {columns.map((column) => (
-            <TableCell
-              key={column.field}
-              align={column.type === "number" ? "right" : "left"}
-            >
-              {column.field}
-            </TableCell>
+    <>
+      <Table stickyHeader={stickyHeader}>
+        <TableHead>
+          <TableRow>
+            {columns.map((column) => (
+              <TableCell
+                key={column.field}
+                align={column.type === "number" ? "right" : "left"}
+              >
+                {column.field}
+              </TableCell>
+            ))}
+            {isNonNullable(onDeleteRow) ? <TableCell /> : null}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row, index) => (
+            <RoleListItem key={index} data={row} index={index} {...rowProps} />
           ))}
-          {isNonNullable(onDeleteRow) ? <TableCell /> : null}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {rows.map((row, index) => (
-          <RoleListItem key={index} data={row} index={index} {...rowProps} />
-        ))}
-        <div ref={bottomRef} />
-      </TableBody>
-    </Table>
+        </TableBody>
+      </Table>
+      <div ref={bottomRef} />
+    </>
   );
 };
 
