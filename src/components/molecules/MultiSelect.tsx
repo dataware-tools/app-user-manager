@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type PropType = {
+type MultiSelectPropType = {
   currentSelected: OptionsType<OptionTypeBase>;
   onChange: (
     newValue: OptionsType<OptionTypeBase>,
@@ -68,26 +68,28 @@ type PropType = {
   haveSaveButton?: boolean;
   isCreatable: boolean;
   isLoading?: boolean;
-  isSaving?: boolean;
   onInputChange?: (newValue: string, actionMeta: InputActionMeta) => void;
   onMenuScrollToBottom?: (e: SyntheticEvent) => void;
-  onSave?: () => Promise<unknown>;
+  onSave?: () => Promise<void> | void;
   onFocusOut?: () => void;
+  menuPortalTarget?: HTMLElement;
+  styles?: Record<string, unknown>;
+  closeMenuOnScroll?: (e: Event) => boolean;
 };
 
 const MultiSelect = ({
   isCreatable,
   currentSelected,
   isLoading,
-  isSaving,
   onSave,
   onFocusOut,
   haveSaveButton,
   ...delegated
-}: PropType): JSX.Element => {
+}: MultiSelectPropType): JSX.Element => {
   const styles = useStyles();
   const muiColors = useTheme().palette;
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
+  const [isSelectFocused, SetIsSelectFocused] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const loadingOptions = isLoading
     ? { isLoading: true, menuShouldBlockScroll: true }
     : {};
@@ -99,9 +101,11 @@ const MultiSelect = ({
         sx={{ ml: 1 }}
         onClick={async () => {
           if (isNonNullable(onSave)) {
+            setIsSaving(true);
             await onSave();
+            setIsSaving(false);
           }
-          setMenuIsOpen(false);
+          SetIsSelectFocused(false);
         }}
       >
         Save
@@ -111,10 +115,12 @@ const MultiSelect = ({
 
   const selectProps = {
     isMulti: true,
-    menuIsOpen: true,
     autoFocus: true,
     defaultValue: currentSelected,
     className: styles.select,
+    menuPlacement: "auto" as const,
+    defaultMenuIsOpen: true,
+    closeMenuOnSelect: false,
     theme: (theme: SelectThemeType) => ({
       ...theme,
       colors: {
@@ -142,14 +148,13 @@ const MultiSelect = ({
     ...loadingOptions,
   };
 
-  return menuIsOpen ? (
+  return isSelectFocused ? (
     <ClickAwayListener
       onClickAway={() => {
-        setMenuIsOpen(false);
+        SetIsSelectFocused(false);
         if (isNonNullable(onFocusOut)) {
           onFocusOut();
         }
-        console.log("click away!!");
       }}
     >
       <div className={styles.selectContainer}>
@@ -168,7 +173,7 @@ const MultiSelect = ({
           ? styles.deactiveSelect
           : styles.deactiveEmptySelect
       }
-      onClick={() => setMenuIsOpen(true)}
+      onClick={() => SetIsSelectFocused(true)}
     >
       {currentSelected.length > 0 ? (
         currentSelected.map((option) => {
@@ -186,4 +191,4 @@ const MultiSelect = ({
 };
 
 export { MultiSelect };
-export type { PropType as MultiSelectPropType };
+export type { MultiSelectPropType };
