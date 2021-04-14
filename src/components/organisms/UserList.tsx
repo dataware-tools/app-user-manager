@@ -1,60 +1,42 @@
 import { permissionManager } from "@dataware-tools/app-common";
-import { UserListItem } from "./UserListItem";
+import { UserListItem, UserListItemProps } from "./UserListItem";
 import { useMemo, RefObject } from "react";
-import { isNonNullable } from "../../utils/index";
 
-type Users = permissionManager.User[];
-type Roles = permissionManager.Role[];
+type Users = permissionManager.UserModel[];
+type Roles = permissionManager.RoleModel[];
 type UserListProps = {
   users: Users;
   roles: Roles;
   bottomRef?: RefObject<HTMLDivElement>;
+  // TODO: onChange として，user リストをそのまま渡す
+  onUpdateUser: UserListItemProps["onUpdateUser"];
+  userListContainerRef: RefObject<HTMLElement>;
 };
 
-const UserList = ({ users, roles, bottomRef }: UserListProps): JSX.Element => {
+const UserList = ({
+  users,
+  roles,
+  bottomRef,
+  onUpdateUser,
+  userListContainerRef,
+}: UserListProps): JSX.Element => {
   const fixedRoles = useMemo(() => {
-    return roles
-      .map((role) => {
-        if (
-          isNonNullable(role) &&
-          isNonNullable(role.name) &&
-          isNonNullable(role.role_id)
-        ) {
-          return {
-            name: role.name,
-            role_id: role.role_id,
-          };
-        } else {
-          return undefined;
-        }
-      })
-      .filter((role): role is NonNullable<typeof role> => Boolean(role));
+    return roles.map((role) => ({
+      name: role.name,
+      role_id: role.role_id,
+    }));
   }, [roles]);
-  const fixedUsers = useMemo(() => {
-    return users
-      .map((user) => {
-        if (
-          isNonNullable(user) &&
-          isNonNullable(user.name) &&
-          isNonNullable(user.user_id) &&
-          isNonNullable(user.roles)
-        ) {
-          return {
-            name: user.name,
-            user_id: user.user_id,
-            roles: user.roles,
-          };
-        } else {
-          return null;
-        }
-      })
-      .filter((user): user is NonNullable<typeof user> => Boolean(user));
-  }, [users]);
 
   return (
-    <div style={{ paddingRight: "20px" }}>
-      {fixedUsers.map((user) => (
-        <UserListItem user={user} key={user.user_id} roles={fixedRoles} />
+    <div>
+      {users.map((user) => (
+        <UserListItem
+          user={user}
+          key={user.user_id}
+          roles={fixedRoles}
+          onUpdateUser={onUpdateUser}
+          listContainerRef={userListContainerRef}
+        />
       ))}
       <div ref={bottomRef} />
     </div>
