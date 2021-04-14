@@ -67,7 +67,7 @@ type RoleEditModalBodyProps = {
   roleId?: number;
 };
 
-const RoleEditModalBody = forwardRef(
+const RoleEditModalBody = forwardRef<HTMLDivElement, RoleEditModalBodyProps>(
   ({ focusTarget, onClose, onSave, roleId }: RoleEditModalBodyProps, ref) => {
     const styles = useStyles();
     const roleNameRef = createRef<HTMLInputElement>();

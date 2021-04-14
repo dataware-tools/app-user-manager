@@ -15,16 +15,16 @@ export const TestLayout = () => (
             onChange={() => {}}
           />
         </div>
-        <Spacer axis="horizontal" size="3vw" />
+        <Spacer direction="horizontal" size="3vw" />
         <div style={{ flex: 1 }}>
           <ToolBar>
             <Button>Test</Button>
-            <Spacer axis="horizontal" size={5} />
+            <Spacer direction="horizontal" size={5} />
             <Button>Test</Button>
-            <Spacer axis="horizontal" size={5} />
+            <Spacer direction="horizontal" size={5} />
             <Button>Test</Button>
           </ToolBar>
-          <Spacer axis="vertical" size="3vh" />
+          <Spacer direction="vertical" size="3vh" />
           <div
             style={{
               overflow: "auto",
@@ -82,7 +82,7 @@ export const TestLayout = () => (
             End!
           </div>
         </div>
-        <Spacer axis="horizontal" size="3vw" />
+        <Spacer direction="horizontal" size="3vw" />
       </div>
     </PageWrapper>
   </>

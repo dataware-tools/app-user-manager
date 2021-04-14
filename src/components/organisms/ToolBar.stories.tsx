@@ -10,9 +10,9 @@ export default {
 export const Default = () => (
   <ToolBar>
     <Button>Test</Button>
-    <Spacer axis="horizontal" size={5} />
+    <Spacer direction="horizontal" size={5} />
     <Button>Test</Button>
-    <Spacer axis="horizontal" size={5} />
+    <Spacer direction="horizontal" size={5} />
     <Button>Test</Button>
   </ToolBar>
 );

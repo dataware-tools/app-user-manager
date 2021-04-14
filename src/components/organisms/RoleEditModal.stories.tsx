@@ -1,6 +1,5 @@
-import { Story } from "@storybook/react";
 import { useState } from "react";
-import { RoleEditModal, RoleEditModalProps } from "./RoleEditModal";
+import { RoleEditModal } from "./RoleEditModal";
 import Button from "@material-ui/core/Button";
 
 export default {
@@ -8,9 +7,6 @@ export default {
   title: "RoleEditModal",
 };
 
-const Template: Story<RoleEditModalProps> = (args) => (
-  <RoleEditModal {...args} />
-);
 export const Default = () => {
   const [open, setOpen] = useState(false);
   return (
@@ -25,6 +21,9 @@ export const Default = () => {
       <RoleEditModal
         open={open}
         onClose={() => {
+          setOpen(false);
+        }}
+        onSave={() => {
           setOpen(false);
         }}
       />
