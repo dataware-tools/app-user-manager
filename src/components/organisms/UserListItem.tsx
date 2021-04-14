@@ -1,33 +1,29 @@
 import { MultiSelect } from "../molecules/MultiSelect";
-import { useAuth0 } from "@auth0/auth0-react";
-import { permissionManager, fetchApi } from "@dataware-tools/app-common";
-import { useState, useEffect } from "react";
-import { API_ROUTE, FetchStatusType, isNonNullable, Spacer } from "../../utils";
+import { useState, useEffect, RefObject } from "react";
+import { Spacer } from "../../utils";
 import { makeStyles } from "@material-ui/core/styles";
+import { permissionManager } from "@dataware-tools/app-common";
 
 type Roles = {
-  role_id?: number;
-  name?: string;
+  role_id: number;
+  name: string;
 }[];
 type User = {
   user_id: string;
   name: string;
   roles: Roles;
 };
-type UserListItemProps = {
-  user: User;
-  roles: Roles;
-};
 type Options = {
   value: string;
   label: string;
 }[];
-type ResUpdateUser = permissionManager.User | undefined;
-type StatusUpdateUser =
-  | ({
-      res: permissionManager.User | undefined;
-    } & FetchStatusType)
-  | null;
+
+type UserListItemProps = {
+  user: User;
+  roles: Roles;
+  onUpdateUser: (user: User) => Promise<void> | void;
+  listContainerRef?: RefObject<HTMLElement>;
+};
 
 const useStyles = makeStyles({
   container: {
@@ -35,59 +31,45 @@ const useStyles = makeStyles({
     flexDirection: "row",
     width: "100%",
   },
-  userNameContainer: {
+  multiSelectContainer: {
+    width: "100%",
+  },
+  userName: {
     alignItems: "center",
     display: "flex",
-    flex: 1,
-  },
-  multiSelectContainer: {
-    flex: 5,
+    overflowWrap: "break-word",
+    width: "15vw",
+    wordBreak: "break-all",
   },
 });
 
-const UserListItem = ({ user, roles }: UserListItemProps): JSX.Element => {
-  const [isFetchFailed, setIsFetchFailed] = useState<boolean>(false);
-  const [statusUpdateUser, setStatusUpdateUser] = useState<StatusUpdateUser>(
-    null
-  );
+const UserListItem = ({
+  user,
+  roles,
+  onUpdateUser,
+  listContainerRef,
+}: UserListItemProps): JSX.Element => {
   const [currentRoles, setCurrentRoles] = useState<Options>([]);
   const [prevRoles, setPrevRoles] = useState<Options>([]);
   const [currentOptions, setCurrentOptions] = useState<Options>([]);
-  const [isSaving, setIsSaving] = useState(false);
   const [isSavable, setIsSavable] = useState(false);
-  const { getAccessTokenSilently } = useAuth0();
 
   const styles = useStyles();
 
   const rolesToOptions = (roles: Roles) => {
-    const options = roles
-      .map((role) => {
-        if (isNonNullable(role.role_id) && isNonNullable(role.name)) {
-          return {
-            value: `${role.role_id}`,
-            label: role.name,
-          };
-        } else {
-          return null;
-        }
-      })
-      .filter((role): role is NonNullable<typeof role> => Boolean(role));
+    const options = roles.map((role) => ({
+      value: `${role.role_id}`,
+      label: role.name,
+    }));
     return options;
   };
 
-  const selectedRolesToRoleIds = (currentRoles: Options) => {
-    const roleIds = currentRoles.map(
-      (role) => (role.value as unknown) as number
-    );
-    return roleIds;
-  };
-
-  const updateCurrentRoles = (res: ResUpdateUser) => {
-    if (isNonNullable(res) && isNonNullable(res?.roles)) {
-      setCurrentRoles(rolesToOptions(res.roles));
-    } else {
-      setIsFetchFailed(true);
-    }
+  const optionsToRoles = (options: Options) => {
+    const roles = options.map((option) => ({
+      role_id: (option.value as unknown) as permissionManager.RoleModel["role_id"],
+      name: option.label,
+    }));
+    return roles;
   };
 
   useEffect(() => {
@@ -101,23 +83,9 @@ const UserListItem = ({ user, roles }: UserListItemProps): JSX.Element => {
   }, [user.roles]);
 
   const onSave = async () => {
-    setIsSaving(true);
     setPrevRoles([...currentRoles]);
-    const roleIds = selectedRolesToRoleIds(currentRoles);
-    // TODO: fetching process in onSave() should be inherit from parent of UserList. it may be simplified thanks to SWR.
-    const res = await getAccessTokenSilently()
-      .then((accessToken: string) => {
-        permissionManager.OpenAPI.TOKEN = accessToken;
-        permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-      })
-      .then(() =>
-        permissionManager.UserService.updateUser(user.user_id, {
-          role_ids: roleIds,
-        })
-      )
-      .catch(() => undefined);
-    updateCurrentRoles(res);
-    setIsSaving(false);
+    const roles = optionsToRoles(currentRoles);
+    await onUpdateUser({ ...user, roles: roles });
   };
 
   const onChange = (newInput: Options) => {
@@ -136,24 +104,29 @@ const UserListItem = ({ user, roles }: UserListItemProps): JSX.Element => {
     }
   }, [currentRoles, prevRoles]);
 
-  return isFetchFailed ? (
-    <div>Fetch failed! please relaod this page!</div>
-  ) : (
+  return (
     <div className={styles.container}>
-      <div className={styles.userNameContainer}>
-        <Spacer axis="horizontal" size={5} />
-        <div>{user.name}</div>
-      </div>
+      <div className={styles.userName}>{user.name}</div>
+      <Spacer direction="horizontal" size="1vw" />
       <div className={styles.multiSelectContainer}>
         <MultiSelect
           options={currentOptions}
           isCreatable={false}
           onChange={onChange}
-          isSaving={isSaving}
           currentSelected={[...currentRoles]}
           onSave={onSave}
           onFocusOut={onFocusOut}
           haveSaveButton={isSavable}
+          closeMenuOnScroll={(e) => {
+            return e.target === listContainerRef?.current;
+          }}
+          styles={{
+            menuPortal: (base: Record<string, unknown>) => ({
+              ...base,
+              zIndex: 9999,
+            }),
+          }}
+          menuPortalTarget={document.body}
         />
       </div>
     </div>
