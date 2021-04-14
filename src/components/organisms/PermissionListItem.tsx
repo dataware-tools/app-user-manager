@@ -2,13 +2,9 @@ import IconButton from "@material-ui/core/IconButton";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { makeStyles } from "@material-ui/core/styles";
-import themeInstance from "../../theme";
-import { MouseEvent, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
-
-const useStyles = makeStyles((theme: typeof themeInstance) => ({}));
+import { RefObject } from "react";
 
 type Database = string;
 
@@ -26,8 +22,9 @@ type PermissionListItemProps = {
   databases: Database[];
   index: number;
   onChange: (index: number, newValue: Permission) => void;
-  onDelete: (e: MouseEvent, index: number) => void;
+  onDelete: (index: number) => void;
   permission: Permission;
+  listContainerRef: RefObject<HTMLDivElement>;
 };
 
 const PermissionListItem = ({
@@ -37,14 +34,17 @@ const PermissionListItem = ({
   onChange,
   onDelete,
   permission,
+  listContainerRef,
 }: PermissionListItemProps): JSX.Element => {
   const actionsToOptions = (actions: Action[]) => {
-    const options = actions.map((action) => {
-      return {
-        value: action.action_id,
-        label: action.name,
-      };
-    });
+    const options = actions
+      .filter((action): action is NonNullable<typeof action> => Boolean(action))
+      .map((action) => {
+        return {
+          value: action.action_id,
+          label: action.name,
+        };
+      });
     return options;
   };
 
@@ -69,26 +69,24 @@ const PermissionListItem = ({
     return databases;
   };
 
-  const [currentDatabases, setCurrentDatabases] = useState<Options>(
-    databasesToOptions(permission.databases)
-  );
-  const [currentActions, setCurrentActions] = useState<Options>(
-    actionsToOptions(permission.actions)
-  );
-
   return (
     <TableRow>
       <TableCell>
         <CreatableSelect
           isMulti
           closeMenuOnSelect={false}
-          defaultValue={databasesToOptions(permission.databases)}
+          menuPlacement="auto"
+          // Below 3 props prevent visual bugs such that menu hide under modal.
+          // However, when role have many permission, scrolling is not smooth since many scrolling event listener exist.
+          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+          menuPortalTarget={document.body}
+          closeMenuOnScroll={(e) => e.target === listContainerRef.current}
+          value={databasesToOptions(permission.databases)}
           options={databasesToOptions(databases)}
           onChange={(newValue) => {
-            setCurrentDatabases([...newValue]);
             onChange(index, {
               databases: optionsToDatabases([...newValue]),
-              actions: optionsToActions(currentActions),
+              actions: [...permission.actions],
             });
           }}
         />
@@ -97,19 +95,22 @@ const PermissionListItem = ({
         <Select
           isMulti
           closeMenuOnSelect={false}
-          defaultValue={actionsToOptions(permission.actions)}
+          menuPlacement="auto"
+          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+          menuPortalTarget={document.body}
+          closeMenuOnScroll={(e) => e.target === listContainerRef.current}
+          value={actionsToOptions(permission.actions)}
           options={actionsToOptions(actions)}
           onChange={(newValue) => {
-            setCurrentActions([...newValue]);
             onChange(index, {
-              databases: optionsToDatabases(currentDatabases),
+              databases: [...permission.databases],
               actions: optionsToActions([...newValue]),
             });
           }}
         />
       </TableCell>
       <TableCell align="center" padding="none" size="small">
-        <IconButton onClick={(e) => onDelete(e, index)}>
+        <IconButton onClick={() => onDelete(index)}>
           <DeleteIcon />
         </IconButton>
       </TableCell>
