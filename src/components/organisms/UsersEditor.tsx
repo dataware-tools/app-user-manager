@@ -53,7 +53,6 @@ const UsersEditor = (): JSX.Element => {
   const { getAccessTokenSilently } = useAuth0();
   const [error, setError] = useState<null | ErrorMessageProps>(null);
 
-  const userListContainerRef = createRef<HTMLDivElement>();
   const styles = useStyles();
 
   const pageForQuery = page - 1;
@@ -169,12 +168,11 @@ const UsersEditor = (): JSX.Element => {
               <strong>No roles defined! please define role!</strong>
             </div>
           ) : null}
-          <div className={styles.bodyContainer} ref={userListContainerRef}>
+          <div className={styles.bodyContainer}>
             <UserList
               users={listUsersRes.users}
               roles={listRolesRes.roles}
               onUpdateUser={updateUser}
-              userListContainerRef={userListContainerRef}
             />
           </div>
           <Spacer direction="vertical" size="3vh" />

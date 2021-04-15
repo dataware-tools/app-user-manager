@@ -2,20 +2,13 @@ import IconButton from "@material-ui/core/IconButton";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
-import CreatableSelect from "react-select/creatable";
-import Select from "react-select";
-import { RefObject } from "react";
+import { createFilterOptions, MultiSelect } from "../molecules/MultiSelect";
 
 type Database = string;
 
 type Action = { action_id: string; name: string };
 
 type Permission = { databases: Database[]; actions: Action[] };
-
-type Options = {
-  value: string;
-  label: string;
-}[];
 
 type PermissionListItemProps = {
   actions: Action[];
@@ -24,7 +17,6 @@ type PermissionListItemProps = {
   onChange: (index: number, newValue: Permission) => void;
   onDelete: (index: number) => void;
   permission: Permission;
-  listContainerRef: RefObject<HTMLDivElement>;
 };
 
 const PermissionListItem = ({
@@ -34,79 +26,55 @@ const PermissionListItem = ({
   onChange,
   onDelete,
   permission,
-  listContainerRef,
 }: PermissionListItemProps): JSX.Element => {
-  const actionsToOptions = (actions: Action[]) => {
-    const options = actions
-      .filter((action): action is NonNullable<typeof action> => Boolean(action))
-      .map((action) => {
-        return {
-          value: action.action_id,
-          label: action.name,
-        };
-      });
-    return options;
-  };
-
-  const optionsToActions = (options: Options) => {
-    const actions = options.map((option) => ({
-      action_id: option.value,
-      name: option.label,
-    }));
-    return actions;
-  };
-
-  const databasesToOptions = (databases: Database[]) => {
-    const options = databases.map((database) => ({
-      value: database,
-      label: database,
-    }));
-    return options;
-  };
-
-  const optionsToDatabases = (options: Options) => {
-    const databases = options.map((option) => option.value);
-    return databases;
-  };
+  const filter = createFilterOptions<Database>();
 
   return (
     <TableRow>
-      <TableCell>
-        <CreatableSelect
-          isMulti
-          closeMenuOnSelect={false}
-          menuPlacement="auto"
-          // Below 3 props prevent visual bugs such that menu hide under modal.
-          // However, when role have many permission, scrolling is not smooth since many scrolling event listener exist.
-          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-          menuPortalTarget={document.body}
-          closeMenuOnScroll={(e) => e.target === listContainerRef.current}
-          value={databasesToOptions(permission.databases)}
-          options={databasesToOptions(databases)}
-          onChange={(newValue) => {
+      <TableCell style={{ lineHeight: 1.5, fontSize: "1rem" }}>
+        <MultiSelect
+          options={databases}
+          value={permission.databases}
+          onChange={(e, newValues) => {
             onChange(index, {
-              databases: optionsToDatabases([...newValue]),
-              actions: [...permission.actions],
+              databases: [...newValues],
+              actions: permission.actions,
             });
           }}
+          getOptionLabel={(option) => option}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+
+            const { inputValue } = params;
+            const isExisting = options.some((option) => inputValue === option);
+            if (inputValue !== "" && !isExisting) {
+              filtered.push(inputValue);
+            }
+
+            return filtered;
+          }}
+          freeSolo
+          filterSelectedOptions
+          fullWidth
         />
       </TableCell>
-      <TableCell>
-        <Select
-          isMulti
-          closeMenuOnSelect={false}
-          menuPlacement="auto"
-          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-          menuPortalTarget={document.body}
-          closeMenuOnScroll={(e) => e.target === listContainerRef.current}
-          value={actionsToOptions(permission.actions)}
-          options={actionsToOptions(actions)}
-          onChange={(newValue) => {
+      <TableCell style={{ lineHeight: 1.5, fontSize: "1rem" }}>
+        <MultiSelect
+          options={actions}
+          value={permission.actions}
+          freeSolo={false}
+          onChange={(e, newValues) => {
             onChange(index, {
-              databases: [...permission.databases],
-              actions: optionsToActions([...newValue]),
+              databases: permission.databases,
+              actions: [...newValues],
             });
           }}
+          getOptionLabel={(option) => option.name}
+          getOptionSelected={(option, value) => {
+            return option.action_id === value.action_id;
+          }}
+          filterSelectedOptions
+          fullWidth
         />
       </TableCell>
       <TableCell align="center" padding="none" size="small">
