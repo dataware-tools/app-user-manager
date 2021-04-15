@@ -72,26 +72,33 @@ const RoleListItem = ({
 
   return (
     <TableRow className={styles.row}>
-      {columns.map((column) => (
-        <TableCell
-          className={styles.cell}
-          key={column.field}
-          align={column.type === "number" ? "right" : "left"}
-          onClick={(e) => {
-            if (isNonNullable(onClickRow)) {
-              onClickRow(e, {
-                index,
-                row: data,
-                content: { field: column.field, data: data[column.field] },
-              });
-            }
-          }}
-        >
-          {isEmpty(data[column.field])
-            ? column.ifEmpty
-            : JSON.stringify(data[column.field])}
-        </TableCell>
-      ))}
+      {columns.map((column) => {
+        const columnName = column.field;
+        const content = data[columnName];
+        const strContent = isEmpty(content)
+          ? column.ifEmpty
+          : typeof content === "string" || typeof content === "number"
+          ? content
+          : JSON.stringify(content);
+        return (
+          <TableCell
+            className={styles.cell}
+            key={column.field}
+            align={column.type === "number" ? "right" : "left"}
+            onClick={(e) => {
+              if (isNonNullable(onClickRow)) {
+                onClickRow(e, {
+                  index,
+                  row: data,
+                  content: { field: column.field, data: content },
+                });
+              }
+            }}
+          >
+            {strContent}
+          </TableCell>
+        );
+      })}
       {isNonNullable(onDeleteRow) ? (
         <TableCell align="center" padding="none" size="small">
           <IconButton
