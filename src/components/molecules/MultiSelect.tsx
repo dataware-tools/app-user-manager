@@ -96,9 +96,11 @@ const MultiSelect = <
     }
   };
 
+  const saveButtonId = `MultiSelect-SaveButton-value-${JSON.stringify(value)}`;
   const SaveButton = () => {
     return (
       <LoadingButton
+        id={saveButtonId}
         pending={isSaving}
         sx={{ ml: 1 }}
         onClick={async () => {
@@ -121,7 +123,6 @@ const MultiSelect = <
           onFocusOut();
         }
         setIsSelectFocused(false);
-        setMenuOpen(true);
       }}
     >
       <div className={styles.selectContainer}>
@@ -131,13 +132,20 @@ const MultiSelect = <
           multiple
           open={menuOpen}
           onOpen={() => setMenuOpen(true)}
-          onClose={(e, reason) => {
+          onClose={async (e, reason) => {
             if (
               reason === "escape" ||
               reason === "toggleInput" ||
               reason === "blur"
             ) {
               setMenuOpen(false);
+            }
+            const saveButton = document.getElementById(saveButtonId);
+
+            // @ts-expect-error I don't know how to resolve this
+            if (saveButton && e.relatedTarget === saveButton) {
+              await save();
+              setIsSelectFocused(false);
             }
           }}
           ChipProps={{
