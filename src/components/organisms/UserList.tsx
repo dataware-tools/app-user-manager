@@ -8,9 +8,7 @@ type UserListProps = {
   users: Users;
   roles: Roles;
   bottomRef?: RefObject<HTMLDivElement>;
-  // TODO: onChange として，user リストをそのまま渡す
   onUpdateUser: UserListItemProps["onUpdateUser"];
-  userListContainerRef: RefObject<HTMLElement>;
 };
 
 const UserList = ({
@@ -18,7 +16,6 @@ const UserList = ({
   roles,
   bottomRef,
   onUpdateUser,
-  userListContainerRef,
 }: UserListProps): JSX.Element => {
   const fixedRoles = useMemo(() => {
     return roles.map((role) => ({
@@ -35,7 +32,6 @@ const UserList = ({
           key={user.user_id}
           roles={fixedRoles}
           onUpdateUser={onUpdateUser}
-          listContainerRef={userListContainerRef}
         />
       ))}
       <div ref={bottomRef} />

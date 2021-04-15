@@ -1,8 +1,7 @@
 import { MultiSelect } from "../molecules/MultiSelect";
-import { useState, useEffect, RefObject } from "react";
+import { useState, useEffect } from "react";
 import { Spacer } from "../../utils";
 import { makeStyles } from "@material-ui/core/styles";
-import { permissionManager } from "@dataware-tools/app-common";
 
 type Roles = {
   role_id: number;
@@ -13,16 +12,11 @@ type User = {
   name: string;
   roles: Roles;
 };
-type Options = {
-  value: string;
-  label: string;
-}[];
 
 type UserListItemProps = {
   user: User;
   roles: Roles;
   onUpdateUser: (user: User) => Promise<void> | void;
-  listContainerRef?: RefObject<HTMLElement>;
 };
 
 const useStyles = makeStyles({
@@ -32,6 +26,7 @@ const useStyles = makeStyles({
     width: "100%",
   },
   multiSelectContainer: {
+    flex: 1,
     width: "100%",
   },
   userName: {
@@ -47,49 +42,16 @@ const UserListItem = ({
   user,
   roles,
   onUpdateUser,
-  listContainerRef,
 }: UserListItemProps): JSX.Element => {
-  const [currentRoles, setCurrentRoles] = useState<Options>([]);
-  const [prevRoles, setPrevRoles] = useState<Options>([]);
-  const [currentOptions, setCurrentOptions] = useState<Options>([]);
+  const [currentRoles, setCurrentRoles] = useState<Roles>(user.roles);
+  const [prevRoles, setPrevRoles] = useState<Roles>(user.roles);
   const [isSavable, setIsSavable] = useState(false);
 
   const styles = useStyles();
 
-  const rolesToOptions = (roles: Roles) => {
-    const options = roles.map((role) => ({
-      value: `${role.role_id}`,
-      label: role.name,
-    }));
-    return options;
-  };
-
-  const optionsToRoles = (options: Options) => {
-    const roles = options.map((option) => ({
-      role_id: (option.value as unknown) as permissionManager.RoleModel["role_id"],
-      name: option.label,
-    }));
-    return roles;
-  };
-
-  useEffect(() => {
-    const options = rolesToOptions(roles);
-    setCurrentOptions(options);
-  }, [roles]);
-
-  useEffect(() => {
-    setCurrentRoles(rolesToOptions(user.roles));
-    setPrevRoles(rolesToOptions(user.roles));
-  }, [user.roles]);
-
   const onSave = async () => {
     setPrevRoles([...currentRoles]);
-    const roles = optionsToRoles(currentRoles);
-    await onUpdateUser({ ...user, roles: roles });
-  };
-
-  const onChange = (newInput: Options) => {
-    setCurrentRoles([...newInput]);
+    await onUpdateUser({ ...user, roles: currentRoles });
   };
 
   const onFocusOut = () => {
@@ -110,23 +72,21 @@ const UserListItem = ({
       <Spacer direction="horizontal" size="1vw" />
       <div className={styles.multiSelectContainer}>
         <MultiSelect
-          options={currentOptions}
-          isCreatable={false}
-          onChange={onChange}
-          currentSelected={[...currentRoles]}
-          onSave={onSave}
+          freeSolo={false}
+          options={roles}
+          value={currentRoles}
+          onChange={(e, newValues) => {
+            setCurrentRoles([...newValues]);
+          }}
+          getOptionLabel={(option) => option.name}
+          getOptionSelected={(option, value) => {
+            return option.role_id === value.role_id;
+          }}
+          onSave={isSavable ? onSave : undefined}
+          saveOnFocusOut={false}
           onFocusOut={onFocusOut}
-          haveSaveButton={isSavable}
-          closeMenuOnScroll={(e) => {
-            return e.target === listContainerRef?.current;
-          }}
-          styles={{
-            menuPortal: (base: Record<string, unknown>) => ({
-              ...base,
-              zIndex: 9999,
-            }),
-          }}
-          menuPortalTarget={document.body}
+          filterSelectedOptions
+          fullWidth
         />
       </div>
     </div>

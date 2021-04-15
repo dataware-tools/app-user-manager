@@ -107,7 +107,7 @@ const PermissionList = ({
                 <TableCell>
                   <div className={styles.header}>Databases</div>
                 </TableCell>
-                <TableCell className={styles.header}>
+                <TableCell>
                   <div className={styles.header}>Actions</div>
                 </TableCell>
                 <TableCell />
@@ -134,7 +134,6 @@ const PermissionList = ({
                       );
                       onChange(newPermissions);
                     }}
-                    listContainerRef={listContainerRef}
                   />
                 );
               })}
