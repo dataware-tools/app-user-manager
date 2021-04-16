@@ -1,11 +1,6 @@
-import Container from "@material-ui/core/Container";
-import { Sample } from "../components/molecules/Sample";
+import { IndexPage } from "../components/pages/IndexPage";
 const Page = (): JSX.Element => {
-  return (
-    <Container>
-      <Sample />
-    </Container>
-  );
+  return <IndexPage />;
 };
 
 export default Page;

@@ -1,9 +1,9 @@
 {
-  "name": "@dataware-tools/app-template-nextjs",
+  "name": "@dataware-tools/app-user-manager",
   "version": "0.1.0",
   "private": true,
-  "repository": "https://github.com/dataware-tools/app-template-nextjs.git",
-  "homepage": "/app-template-nextjs",
+  "repository": "https://github.com/dataware-tools/app-user-manager.git",
+  "homepage": "/app-user-manager",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -18,11 +18,12 @@
     "@emotion/styled": "^11.1.5",
     "@material-ui/core": "^5.0.0-alpha.28",
     "@material-ui/icons": "^5.0.0-alpha.28",
+    "@material-ui/lab": "^5.0.0-alpha.28",
     "immer": "^9.0.1",
     "next": "10.0.9",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-toastify": "^7.0.3",
+    "react-select": "^4.3.0",
     "swr": "^0.5.4"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
+    "@types/react-select": "^4.0.13",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "babel-loader": "^8.2.2",
@@ -75,7 +77,8 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not IE 11"
     ],
     "development": [
       "last 1 chrome version",

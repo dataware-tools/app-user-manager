@@ -18,6 +18,7 @@ module.exports = {
     "selector-type-case": null,
     "selector-type-no-unknown": null,
     "rule-empty-line-before": null,
+    "max-nesting-depth": 2,
   },
   reportNeedlessDisables: true,
   reportInvalidScopeDisables: true,

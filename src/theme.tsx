@@ -2,7 +2,6 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 const HDLBaseColor = 200;
 const BasicSaturation = "10%";
-// Create a theme instance.
 let theme = createMuiTheme({
   typography: {
     fontFamily: [
@@ -52,7 +51,7 @@ let theme = createMuiTheme({
     },
     background: {
       default: `hsl(${HDLBaseColor}, ${BasicSaturation}, 98%)`,
-      paper: `hsl(${HDLBaseColor}, ${BasicSaturation}, 100%)`,
+      paper: `hsl(${HDLBaseColor}, ${BasicSaturation}, 98%)`,
     },
     text: {
       primary: `hsl(${HDLBaseColor}, ${BasicSaturation}, 13%)`,
@@ -60,14 +59,45 @@ let theme = createMuiTheme({
       disabled: `hsl(${HDLBaseColor}, ${BasicSaturation}, 62%)`,
     },
     divider: `hsl(${HDLBaseColor}, ${BasicSaturation}, 88%)`,
-    // Not working!
-    // props: {
-    //   MuiButton: {
-    //     disableElevation: true,
-    //     variant: "contained",
-    //     color: "primary",
-    //   },
-    // },
+  },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {},
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+        variant: "contained",
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          lineHeight: 1.2,
+          borderBottom: `solid 1px hsl(${HDLBaseColor}, ${BasicSaturation}, 88%)`,
+        },
+      },
+    },
+    MuiPagination: {
+      defaultProps: {
+        shape: "rounded",
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: { maxWidth: "none" },
+      },
+    },
   },
 });
 
