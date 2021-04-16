@@ -1,12 +1,11 @@
 import { databaseStore, permissionManager } from "@dataware-tools/app-common";
-import Container from "@material-ui/core/Container";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Modal from "@material-ui/core/Modal";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
-import { API_ROUTE, Spacer, isNonNullable } from "../../utils";
+import { API_ROUTE, Spacer } from "../../utils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { createRef, useState, forwardRef } from "react";
 import { PermissionList, PermissionListProps } from "./PermissionList";
@@ -32,8 +31,6 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flex: 1,
     flexDirection: "column",
-    marginBottom: "1vh",
-    marginTop: "3vh",
     overflow: "auto",
     padding: "0 3vw",
   },
@@ -50,9 +47,8 @@ const useStyles = makeStyles(() => ({
     fontWeight: "bold",
     lineHeight: 2,
   },
-  descriptionInput: {
-    display: "block",
-    marginBottom: "10px",
+  descriptionInputContainer: {
+    margin: "0 3vw",
   },
 }));
 
@@ -107,7 +103,7 @@ const RoleEditModalBody = forwardRef<HTMLDivElement, RoleEditModalBodyProps>(
 
     const getRoleURL = `${API_ROUTE.PERMISSION.BASE}/roles/${roleId}`;
     const getRole = async () => {
-      if (isNonNullable(roleId)) {
+      if (roleId) {
         permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
         permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
         const getRoleRes = await permissionManager.RoleService.getRole(roleId);
@@ -184,24 +180,19 @@ const RoleEditModalBody = forwardRef<HTMLDivElement, RoleEditModalBodyProps>(
     };
 
     const onClickSaveButton = async () => {
-      if (
-        isNonNullable(roleNameRef.current) &&
-        isNonNullable(descriptionRef.current)
-      ) {
+      if (roleNameRef.current && descriptionRef.current) {
         const name = roleNameRef.current.value;
         const description = descriptionRef.current.value;
         if (name !== "") {
           setValidationError(false);
           setIsSaving(true);
 
-          if (isNonNullable(role)) {
+          if (role) {
             const newRole = {
               role_id: roleId,
               name,
               description,
-              permissions: isNonNullable(permissions)
-                ? permissions
-                : role.permissions,
+              permissions: permissions || role.permissions,
             };
             const saveRoleRes = await saveRole(newRole);
 
@@ -248,12 +239,10 @@ const RoleEditModalBody = forwardRef<HTMLDivElement, RoleEditModalBodyProps>(
           />
         ) : error ? (
           <ErrorMessage reason={error.reason} instruction={error.instruction} />
-        ) : isNonNullable(role) &&
-          isNonNullable(databases) &&
-          isNonNullable(actions) ? (
+        ) : role && databases && actions ? (
           <>
             <div className={styles.formContainer}>
-              <Spacer direction="horizontal" size="2vw" />
+              <Spacer direction="vertical" size="2vh" />
               <TextField
                 variant="standard"
                 required
@@ -271,23 +260,21 @@ const RoleEditModalBody = forwardRef<HTMLDivElement, RoleEditModalBodyProps>(
                 error={validationError}
                 inputRef={roleNameRef}
               />
-              <Spacer direction="horizontal" size="2vw" />
+              <Spacer direction="vertical" size="1vh" />
               <div>
                 <div className={styles.descriptionLabel}>Description</div>
-                <Container>
+                <div className={styles.descriptionInputContainer}>
                   <TextField
                     fullWidth
                     inputRef={descriptionRef}
                     multiline
                     defaultValue={role.description}
-                    className={styles.descriptionInput}
                   />
-                </Container>
+                </div>
               </div>
+              <Spacer direction="vertical" size="1vh" />
               <PermissionList
-                permissions={
-                  isNonNullable(permissions) ? permissions : role.permissions
-                }
+                permissions={permissions || role.permissions}
                 actions={actions.actions}
                 databases={
                   // TODO: fix API type
@@ -298,6 +285,7 @@ const RoleEditModalBody = forwardRef<HTMLDivElement, RoleEditModalBodyProps>(
                 }
               />
             </div>
+            <Spacer direction="vertical" size="2vh" />
             <ToolBar>
               <LoadingButton
                 size="large"
