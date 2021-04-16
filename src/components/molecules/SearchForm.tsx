@@ -6,10 +6,16 @@ import { useState } from "react";
 
 type SearchPropType = {
   onSearch: (searchText: string) => void;
+  defaultValue?: string;
+  value?: string;
 };
 
-const SearchForm = ({ onSearch }: SearchPropType): JSX.Element => {
-  const [searchText, setSearchText] = useState("");
+const SearchForm = ({
+  onSearch,
+  defaultValue,
+  value,
+}: SearchPropType): JSX.Element => {
+  const [searchText, setSearchText] = useState(defaultValue || "");
   return (
     <form
       onSubmit={(e) => {
@@ -34,7 +40,7 @@ const SearchForm = ({ onSearch }: SearchPropType): JSX.Element => {
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setSearchText(event.target.value);
         }}
-        value={searchText}
+        value={value != null ? value : searchText}
       />
     </form>
   );
