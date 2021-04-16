@@ -1,9 +1,10 @@
-import { Spacer } from "../../utils";
+import { Spacer, getURLParam, isNonNullable, addParamToURL } from "../../utils";
 import { MenuBar } from "../molecules/MenuBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UsersEditor } from "../organisms/UsersEditor";
 import { RolesEditor } from "../organisms/RolesEditor";
 import { makeStyles } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -18,10 +19,25 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const IndexPage = (): JSX.Element => {
-  const tabNames = ["Users", "Roles"];
-  // TODO: save tab number to local state
-  const [tabNum, setTabNum] = useState(0);
   const styles = useStyles();
+
+  // TODO: save tab number to local state
+  const tabNames = ["Users", "Roles"];
+  const currentTabName = getURLParam("tab") || "Users";
+  const [tabNum, setTabNum] = useState(
+    tabNames.findIndex((tabName) => tabName === currentTabName)
+  );
+
+  const setTabNumByBrowserBack = () => {
+    const currentTabName = getURLParam("tab") || "Users";
+    setTabNum(tabNames.findIndex((tabName) => tabName === currentTabName));
+  };
+
+  useEffect(() => {
+    window.addEventListener("popstate", setTabNumByBrowserBack, false);
+    return () =>
+      window.removeEventListener("popstate", setTabNumByBrowserBack, false);
+  }, [setTabNumByBrowserBack]);
 
   return (
     <>
@@ -32,6 +48,7 @@ export const IndexPage = (): JSX.Element => {
             value={tabNum}
             onChange={(newValue) => {
               setTabNum(newValue);
+              addParamToURL(`?tab=${tabNames[newValue]}`, "push");
             }}
           />
         </div>
