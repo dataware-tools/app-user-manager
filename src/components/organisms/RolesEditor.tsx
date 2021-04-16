@@ -1,9 +1,16 @@
 import AddCircle from "@material-ui/icons/AddCircle";
 import Pagination from "@material-ui/core/Pagination";
-import { API_ROUTE, Spacer, isNonNullable } from "../../utils";
+import {
+  API_ROUTE,
+  Spacer,
+  isNonNullable,
+  ObjToParamString,
+  addURLParam,
+  getURLParam,
+} from "../../utils";
 import { SearchForm } from "../molecules/SearchForm";
 import { ToolBar } from "./ToolBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RoleList } from "./RoleList";
 import { RoleEditModal, RoleEditModalProps } from "./RoleEditModal";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -45,10 +52,9 @@ const useStyles = makeStyles(() => ({
 
 const RolesEditor = (): JSX.Element => {
   // TODO: save per_page to local state
-  // TODO: pass per_page, and page to window.path.
-  const [searchText, setSearchText] = useState("");
-  const [perPage, setPerPage] = useState(20);
-  const [page, setPage] = useState(1);
+  const [searchText, setSearchText] = useState(getURLParam("searchText") || "");
+  const [perPage, setPerPage] = useState(Number(getURLParam("perPage")) || 20);
+  const [page, setPage] = useState(Number(getURLParam("page")) || 1);
   const [modalProps, setModalProps] = useState({
     open: false,
     roleId: undefined as undefined | RoleEditModalProps["roleId"],
@@ -81,7 +87,11 @@ const RolesEditor = (): JSX.Element => {
     return listRolesRes;
   };
 
-  const listRolesQuery = `?per_page=${pageForQuery}&page=${page}&searchText=${searchText}`;
+  const listRolesQuery = ObjToParamString({
+    page: pageForQuery,
+    per_page: perPage,
+    search_text: searchText,
+  });
   const listRolesURL = `${API_ROUTE.PERMISSION.BASE}/roles${listRolesQuery}`;
   const { data: listRolesRes, error: listRolesError } = useSWR(
     listRolesURL,
@@ -126,6 +136,10 @@ const RolesEditor = (): JSX.Element => {
     }
   };
 
+  useEffect(() => {
+    addURLParam({ page, perPage, searchText }, "replace");
+  }, [page, perPage, searchText]);
+
   const addRole = async () => {
     setModalProps({
       open: true,
@@ -161,6 +175,7 @@ const RolesEditor = (): JSX.Element => {
       <ToolBar>
         <SearchForm
           onSearch={(newSearchText) => setSearchText(newSearchText)}
+          defaultValue={searchText}
         />
         <Spacer direction="horizontal" size="15px" />
         <div>| per page component |</div>
