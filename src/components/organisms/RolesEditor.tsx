@@ -3,7 +3,6 @@ import Pagination from "@material-ui/core/Pagination";
 import {
   API_ROUTE,
   Spacer,
-  isNonNullable,
   ObjToParamString,
   addURLParam,
   getURLParam,
@@ -194,7 +193,7 @@ const RolesEditor = (): JSX.Element => {
         <div className={styles.errorMessageContainer}>
           <ErrorMessage reason={error.reason} instruction={error.instruction} />
         </div>
-      ) : isNonNullable(listRolesRes) ? (
+      ) : listRolesRes ? (
         <>
           <div className={styles.mainContainer}>
             <RoleList

@@ -1,7 +1,3 @@
-export function isNonNullable<T>(val: T): val is NonNullable<T> {
-  return val !== null && val !== undefined;
-}
-
 export function getURLParam(param: string): string | null {
   return new URLSearchParams(window.location.search).get(param);
 }

@@ -11,7 +11,6 @@ import Pagination from "@material-ui/core/Pagination";
 import {
   API_ROUTE,
   Spacer,
-  isNonNullable,
   getURLParam,
   ObjToParamString,
   addURLParam,
@@ -176,7 +175,7 @@ const UsersEditor = (): JSX.Element => {
         </div>
       ) : error ? (
         <ErrorMessage reason={error.reason} instruction={error.instruction} />
-      ) : isNonNullable(listUsersRes) && isNonNullable(listRolesRes) ? (
+      ) : listUsersRes && listRolesRes ? (
         <>
           {listRolesRes.roles?.length === 0 ? (
             <div>

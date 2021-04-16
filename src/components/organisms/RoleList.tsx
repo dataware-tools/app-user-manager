@@ -4,7 +4,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { RefObject } from "react";
-import { isNonNullable } from "../../utils";
 import { RoleListItem, RoleListItemProps } from "./RoleListItem";
 
 type RoleListProps = {
@@ -38,7 +37,7 @@ const RoleList = ({
                 {column.field}
               </TableCell>
             ))}
-            {isNonNullable(onDeleteRow) ? <TableCell /> : null}
+            {onDeleteRow ? <TableCell /> : null}
           </TableRow>
         </TableHead>
         <TableBody>

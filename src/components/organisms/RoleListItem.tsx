@@ -2,7 +2,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import themeInstance from "../../theme";
 import { makeStyles } from "@material-ui/core/styles";
-import { isNonNullable } from "../../utils";
 import { MouseEvent } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
@@ -86,7 +85,7 @@ const RoleListItem = ({
             key={column.field}
             align={column.type === "number" ? "right" : "left"}
             onClick={(e) => {
-              if (isNonNullable(onClickRow)) {
+              if (onClickRow) {
                 onClickRow(e, {
                   index,
                   row: data,
@@ -99,7 +98,7 @@ const RoleListItem = ({
           </TableCell>
         );
       })}
-      {isNonNullable(onDeleteRow) ? (
+      {onDeleteRow ? (
         <TableCell align="center" padding="none" size="small">
           <IconButton
             onClick={(e) => {
