@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import { isNonNullable } from "../../utils/index";
 import { makeStyles } from "@material-ui/core/styles";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Autocomplete, {
@@ -22,7 +21,6 @@ const selectedItemStyleBase = {
   whiteSpace: "nowrap" as const,
 };
 
-// TODO: refactoring & change react-select to mui-autocomplete
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
   deactiveSelect: {
     alignItems: "center",
@@ -89,7 +87,7 @@ const MultiSelect = <
   const [menuOpen, setMenuOpen] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const save = async () => {
-    if (isNonNullable(onSave)) {
+    if (onSave) {
       setIsSaving(true);
       await onSave();
       setIsSaving(false);
@@ -119,7 +117,7 @@ const MultiSelect = <
         if (saveOnFocusOut) {
           save();
         }
-        if (isNonNullable(onFocusOut)) {
+        if (onFocusOut) {
           onFocusOut();
         }
         setIsSelectFocused(false);
@@ -162,7 +160,7 @@ const MultiSelect = <
   ) : (
     <div
       className={
-        isNonNullable(value) && value.length > 0
+        value && value.length > 0
           ? styles.deactiveSelect
           : styles.deactiveEmptySelect
       }
@@ -171,11 +169,11 @@ const MultiSelect = <
         setMenuOpen(true);
       }}
     >
-      {isNonNullable(value) && value.length > 0 ? (
+      {value && value.length > 0 ? (
         value.map((option, index) => {
           return (
             <div key={index} className={styles.selectedItem}>
-              {isNonNullable(getOptionLabel)
+              {getOptionLabel
                 ? // @ts-expect-error I don't know how to resolve this error
                   getOptionLabel(option)
                 : // @ts-expect-error I don't know how to resolve this error
