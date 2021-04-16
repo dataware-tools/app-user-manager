@@ -1,8 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
-import themeInstance from "../../theme";
 import { ReactNode } from "react";
 
-const useStyles = makeStyles((theme: typeof themeInstance) => ({
+const useStyles = makeStyles(() => ({
   toolBar: {
     justifyContent: "space-between",
     overflow: "auto",
