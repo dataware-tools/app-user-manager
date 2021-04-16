@@ -13,11 +13,11 @@ export const MetaHeader = (): JSX.Element => {
         rel="stylesheet"
       />
       {/*
-    if you want to use japanese better? font, comment out this. but you shoul reamind that japanese font is maybe little heavy for usual application.
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
+      if you want to use japanese better font, comment out this. but you should remind that japanese font is maybe little heavy for usual application.
+      <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet"
+      />
     */}
       <link rel="apple-touch-icon" href="./logo192.png" />
       <link rel="manifest" href="./manifest.json" />
@@ -25,10 +25,7 @@ export const MetaHeader = (): JSX.Element => {
       <meta name="theme-color" content={theme.palette.primary.main} />
       <meta charSet="utf-8" />
       <meta name="theme-color" content="#000000" />
-      <meta
-        name="description"
-        content="Human Dataware Lab application template"
-      />
+      <meta name="description" content="Human Dataware Lab user manager" />
     </>
   );
 };

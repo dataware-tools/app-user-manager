@@ -2,7 +2,6 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 const HDLBaseColor = 200;
 const BasicSaturation = "10%";
-// Create a theme instance.
 let theme = createMuiTheme({
   typography: {
     fontFamily: [
