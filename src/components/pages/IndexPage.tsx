@@ -1,10 +1,9 @@
-import { Spacer, getURLParam, isNonNullable, addParamToURL } from "../../utils";
+import { Spacer, getURLParam, addURLParam, resetURLParam } from "../../utils";
 import { MenuBar } from "../molecules/MenuBar";
 import { useState, useEffect } from "react";
 import { UsersEditor } from "../organisms/UsersEditor";
 import { RolesEditor } from "../organisms/RolesEditor";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouter } from "next/router";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,7 +47,8 @@ export const IndexPage = (): JSX.Element => {
             value={tabNum}
             onChange={(newValue) => {
               setTabNum(newValue);
-              addParamToURL(`?tab=${tabNames[newValue]}`, "push");
+              resetURLParam("push");
+              addURLParam(`?tab=${tabNames[newValue]}`, "replace");
             }}
           />
         </div>
