@@ -19,8 +19,7 @@ export const MetaHeader = (): JSX.Element => {
         rel="stylesheet"
       />
     */}
-      <link rel="apple-touch-icon" href="./logo192.png" />
-      <link rel="manifest" href="./manifest.json" />
+      <link rel="icon" href="/user-manager/favicon.ico" />
       {/* PWA primary color */}
       <meta name="theme-color" content={theme.palette.primary.main} />
       <meta charSet="utf-8" />
