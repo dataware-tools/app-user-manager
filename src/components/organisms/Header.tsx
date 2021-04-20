@@ -4,7 +4,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import AppBar from "@material-ui/core/AppBar";
 import Link from "@material-ui/core/Link";
 import { useAuth0 } from "@auth0/auth0-react";
-import { redirectUri } from "../../pages/_app_csr";
 
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
   appBar: {
