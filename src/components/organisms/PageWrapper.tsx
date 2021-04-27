@@ -5,8 +5,8 @@ import { LoadingIndicator } from "../molecules/LoadingIndicator";
 import { ErrorMessage } from "../molecules/ErrorMessage";
 import { makeStyles } from "@material-ui/core/styles";
 
-export type PageWrapperProps = {
-  children: JSX.Element | JSX.Element[] | string;
+type ContainerProps = {
+  children: React.ReactNode;
 };
 
 const useStyles = makeStyles(() => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const PageWrapper = (props: PageWrapperProps): JSX.Element => {
+const Container = (props: ContainerProps): JSX.Element => {
   const styles = useStyles();
   const { isLoading, error } = useAuth0();
   if (isLoading) {
@@ -51,3 +51,6 @@ export const PageWrapper = (props: PageWrapperProps): JSX.Element => {
     </div>
   );
 };
+
+export { Container as PageWrapper };
+export type { ContainerProps as PageWrapperProps };
