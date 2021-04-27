@@ -176,11 +176,23 @@ const RoleEditModalBody = ({
         setIsSaving(true);
 
         if (role) {
+          const convPermissions = (
+            permissions: PermissionListProps["permissions"]
+          ) => {
+            return permissions.map((permission) => {
+              return {
+                databases: permission.databases,
+                action_ids: permission.actions.map(
+                  (action) => action.action_id
+                ),
+              };
+            });
+          };
           const newRole = {
             role_id: roleId,
             name,
             description,
-            permissions: permissions || role.permissions,
+            permissions: convPermissions(permissions || role.permissions),
           };
           const saveRoleRes = await saveRole(newRole);
 
