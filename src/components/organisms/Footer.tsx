@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: typeof themeInstance) => ({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  leftContaienr: {
+  leftContainer: {
     flex: 1,
   },
   rightContainer: {
@@ -31,7 +31,7 @@ export const Footer = (): JSX.Element => {
     <div className={styles.footer}>
       <Divider variant="middle" sx={{ mt: "3vh", mb: "1vh" }} />
       <div className={styles.footerBody}>
-        <div className={styles.leftContaienr}>
+        <div className={styles.leftContainer}>
           <Link
             variant="body2"
             color="inherit"
