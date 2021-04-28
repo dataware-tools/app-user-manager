@@ -9,6 +9,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import React from "react";
 import { ThemeProvider, StylesProvider } from "@material-ui/core/styles";
 import theme from "../src/theme";
+import { SWRConfig } from "swr";
+import { SwrOptions } from "../src/utils";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -26,15 +28,17 @@ export const decorators = [
         <StylesProvider injectFirst>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Auth0Provider
-              domain={authConfig.domain}
-              clientId={authConfig.clientId}
-              audience={authConfig.apiUrl}
-              redirectUri={redirectUri}
-              onRedirectCallback={onRedirectCallback}
-            >
-              {story()}
-            </Auth0Provider>
+            <SWRConfig value={SwrOptions}>
+              <Auth0Provider
+                domain={authConfig.domain}
+                clientId={authConfig.clientId}
+                audience={authConfig.apiUrl}
+                redirectUri={redirectUri}
+                onRedirectCallback={onRedirectCallback}
+              >
+                {story()}
+              </Auth0Provider>
+            </SWRConfig>
           </ThemeProvider>
         </StylesProvider>
       </>
