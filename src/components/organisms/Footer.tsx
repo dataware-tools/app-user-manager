@@ -2,19 +2,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import themeInstance from "../../theme";
 import Link from "@material-ui/core/Link";
 import Divider from "@material-ui/core/Divider";
-import Container from "@material-ui/core/Container";
 import { repository } from "../../../package.json";
 
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
   footer: {
     color: theme.palette.text.secondary,
+    marginLeft: "10vw",
+    marginRight: "10vw",
   },
   footerBody: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  leftContaienr: {
+  leftContainer: {
     flex: 1,
   },
   rightContainer: {
@@ -27,10 +28,10 @@ const useStyles = makeStyles((theme: typeof themeInstance) => ({
 export const Footer = (): JSX.Element => {
   const styles = useStyles();
   return (
-    <Container className={styles.footer}>
-      <Divider variant="middle" sx={{ mt: 5, mb: 2 }} />
+    <div className={styles.footer}>
+      <Divider variant="middle" sx={{ mt: "3vh", mb: "1vh" }} />
       <div className={styles.footerBody}>
-        <div className={styles.leftContaienr}>
+        <div className={styles.leftContainer}>
           <Link
             variant="body2"
             color="inherit"
@@ -53,6 +54,6 @@ export const Footer = (): JSX.Element => {
           </Link>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };

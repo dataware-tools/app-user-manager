@@ -1,10 +1,9 @@
 # syntax=docker/dockerfile:1.0.0-experimental
-# Install dependencies only when needed
+
 FROM node:14 AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 WORKDIR /app
 RUN wget -O /bin/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && chmod +x /bin/jq
-COPY ./package.json ./.npm* ./
+COPY ./package*.json ./.npm* ./
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 RUN npm -g config set user root && npm -g config set unsafe-perm true
 RUN --mount=type=ssh --mount=type=secret,id=npmrc,target=/root/.npmrc npm install
@@ -14,7 +13,7 @@ FROM node:alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN npm build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM node:alpine AS runner

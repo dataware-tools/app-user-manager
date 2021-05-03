@@ -1,25 +1,34 @@
-import React, { SyntheticEvent } from "react";
-import Select, {
-  OptionsType,
-  OptionTypeBase,
-  ActionMeta,
-  InputActionMeta,
-  Theme as SelectThemeType,
-} from "react-select";
-import CreatableSelect from "react-select/creatable";
+import { useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import { isNonNullable } from "../../utils/index";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import LoadingButton from "@material-ui/lab/LoadingButton";
+import Autocomplete, {
+  AutocompleteProps,
+  createFilterOptions,
+} from "@material-ui/core/Autocomplete";
+import ClearIcon from "@material-ui/icons/Clear";
+import themeInstance from "../../theme";
+import { TextField } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
+const selectedItemStyleBase = {
+  backgroundColor: themeInstance.palette.grey[300],
+  borderRadius: "2px" as const,
+  boxSizing: "border-box" as const,
+  fontSize: "85%" as const,
+  margin: "2px 4px 2px 0px" as const,
+  overflow: "hidden" as const,
+  textOverflow: "ellipsis" as const,
+  whiteSpace: "nowrap" as const,
+};
+
+const useStyles = makeStyles((theme: typeof themeInstance) => ({
   deactiveSelect: {
     alignItems: "center",
     borderRadius: "4px",
     cursor: "pointer",
     display: "flex",
     flexWrap: "wrap",
-    padding: "3px 12px",
+    padding: "6px",
     width: "100%",
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
@@ -27,10 +36,11 @@ const useStyles = makeStyles((theme) => ({
   },
   deactiveEmptySelect: {
     alignItems: "center",
+    borderRadius: "4px",
     color: theme.palette.text.disabled,
     cursor: "pointer",
     display: "flex",
-    height: "2.7rem",
+    height: "40px",
     paddingLeft: "1rem",
     width: "100%",
     "&:hover": {
@@ -44,136 +54,130 @@ const useStyles = makeStyles((theme) => ({
   select: {
     width: "100%",
   },
-  selectedItem: {
-    backgroundColor: theme.palette.grey[300],
-    borderRadius: "2px",
-    boxSizing: "border-box",
-    fontSize: "85%",
-    margin: "2px 4px 2px 0px",
-    overflow: "hidden",
-    padding: "4px 6px",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
+  selectedItem: { ...selectedItemStyleBase, padding: "2px 6px" },
 }));
 
-type PropType = {
-  currentSelected: OptionsType<OptionTypeBase>;
-  haveSaveButton?: boolean;
-  isCreatable: boolean;
-  isLoading?: boolean;
-  onChange: (
-    newValue: OptionsType<OptionTypeBase>,
-    actionMeta: ActionMeta<OptionTypeBase>
-  ) => void;
-  options: OptionsType<OptionTypeBase>;
-  onInputChange?: (newValue: string, actionMeta: InputActionMeta) => void;
-  onMenuScrollToBottom?: (e: SyntheticEvent) => void;
-  onSave?: () => void;
-  onFocusOut?: () => void;
-};
+type MultiSelectPropType<
+  T,
+  DisableClearable extends boolean | undefined,
+  FreeSolo extends boolean | undefined
+> = {
+  onSave?: () => Promise<void> | void;
+  onFocusOut?: () => Promise<void> | void;
+  saveOnFocusOut?: boolean;
+  options: T[];
+  disableClearable?: DisableClearable;
+  freeSolo?: FreeSolo;
+} & Partial<AutocompleteProps<T, true, DisableClearable, FreeSolo>>;
 
-const MultiSelect = ({
-  isCreatable,
-  currentSelected,
-  isLoading,
+const MultiSelect = <
+  T,
+  DisableClearable extends boolean | undefined,
+  FreeSolo extends boolean | undefined
+>({
   onSave,
   onFocusOut,
-  haveSaveButton,
+  saveOnFocusOut = true,
+  value,
+  getOptionLabel,
   ...delegated
-}: PropType): JSX.Element => {
+}: MultiSelectPropType<T, DisableClearable, FreeSolo>): JSX.Element => {
   const styles = useStyles();
-  const muiColors = useTheme().palette;
-  const [menuIsOpen, setMenuIsOpen] = React.useState<boolean>(false);
-  const loadingOptions = isLoading
-    ? { isLoading: true, menuShouldBlockScroll: true }
-    : {};
+  const [isSelectFocused, setIsSelectFocused] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const save = async () => {
+    if (onSave) {
+      setIsSaving(true);
+      await onSave();
+      setIsSaving(false);
+    }
+  };
 
+  const saveButtonId = `MultiSelect-SaveButton-value-${JSON.stringify(value)}`;
   const SaveButton = () => {
     return (
-      <Button
+      <LoadingButton
+        id={saveButtonId}
+        pending={isSaving}
         sx={{ ml: 1 }}
-        onClick={() => {
-          setMenuIsOpen(false);
-          if (isNonNullable(onSave)) {
-            onSave();
-          }
+        onClick={async () => {
+          await save();
+          setIsSelectFocused(false);
         }}
       >
         Save
-      </Button>
+      </LoadingButton>
     );
   };
 
-  const selectProps = {
-    isMulti: true,
-    menuIsOpen: true,
-    autoFocus: true,
-    defaultValue: currentSelected,
-    className: styles.select,
-    theme: (theme: SelectThemeType) => ({
-      ...theme,
-      colors: {
-        ...theme.colors,
-        primary: muiColors.primary.main,
-        primary75: muiColors.primary.main,
-        primary50: muiColors.primary.main,
-        primary25: muiColors.primary.light,
-        danger: muiColors.error.main,
-        dangerLight: muiColors.error.light,
-        neutral0: muiColors.common.white,
-        neutral5: muiColors.grey[200],
-        neutral10: muiColors.grey[300],
-        neutral20: muiColors.grey[300],
-        neutral30: muiColors.grey[400],
-        neutral40: muiColors.grey[500],
-        neutral50: muiColors.grey[600],
-        neutral60: muiColors.grey[700],
-        neutral70: muiColors.grey[800],
-        neutral80: muiColors.grey[900],
-        neutral90: muiColors.grey[900],
-      },
-    }),
-    ...delegated,
-    ...loadingOptions,
-  };
-
-  return menuIsOpen ? (
+  return isSelectFocused ? (
     <ClickAwayListener
       onClickAway={() => {
-        setMenuIsOpen(false);
-        if (isNonNullable(onFocusOut)) {
+        if (saveOnFocusOut) {
+          save();
+        }
+        if (onFocusOut) {
           onFocusOut();
         }
-        console.log("click away!!");
+        setIsSelectFocused(false);
       }}
     >
-      {isCreatable ? (
-        <div className={styles.selectContainer}>
-          <CreatableSelect {...selectProps} />
-          {haveSaveButton ? <SaveButton /> : null}
-        </div>
-      ) : (
-        <div className={styles.selectContainer}>
-          <Select {...selectProps} />
-          {haveSaveButton ? <SaveButton /> : null}
-        </div>
-      )}
+      <div className={styles.selectContainer}>
+        <Autocomplete
+          {...delegated}
+          value={value}
+          multiple
+          open={menuOpen}
+          onOpen={() => setMenuOpen(true)}
+          onClose={async (e, reason) => {
+            if (
+              reason === "escape" ||
+              reason === "toggleInput" ||
+              reason === "blur"
+            ) {
+              setMenuOpen(false);
+            }
+            const saveButton = document.getElementById(saveButtonId);
+
+            // @ts-expect-error I don't know how to resolve this
+            if (saveButton && e.relatedTarget === saveButton) {
+              await save();
+              setIsSelectFocused(false);
+            }
+          }}
+          ChipProps={{
+            style: { ...selectedItemStyleBase },
+            deleteIcon: <ClearIcon />,
+          }}
+          size="small"
+          renderInput={(params) => <TextField {...params} autoFocus />}
+          getOptionLabel={getOptionLabel}
+        />
+        {onSave ? <SaveButton /> : null}
+      </div>
     </ClickAwayListener>
   ) : (
     <div
       className={
-        currentSelected.length > 0
+        value && value.length > 0
           ? styles.deactiveSelect
           : styles.deactiveEmptySelect
       }
-      onClick={() => setMenuIsOpen(true)}
+      onClick={() => {
+        setIsSelectFocused(true);
+        setMenuOpen(true);
+      }}
     >
-      {currentSelected.length > 0 ? (
-        currentSelected.map((option) => {
+      {value && value.length > 0 ? (
+        value.map((option, index) => {
           return (
-            <div key={option.value} className={styles.selectedItem}>
-              {option.label}
+            <div key={index} className={styles.selectedItem}>
+              {getOptionLabel
+                ? // @ts-expect-error I don't know how to resolve this error
+                  getOptionLabel(option)
+                : // @ts-expect-error I don't know how to resolve this error
+                  option.label}
             </div>
           );
         })
@@ -184,5 +188,5 @@ const MultiSelect = ({
   );
 };
 
-export { MultiSelect };
-export type { PropType as MultiSelectPropType };
+export { MultiSelect, createFilterOptions };
+export type { MultiSelectPropType };

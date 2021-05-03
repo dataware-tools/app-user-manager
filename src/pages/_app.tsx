@@ -5,6 +5,9 @@ import Head from "next/head";
 import { ThemeProvider, StylesProvider } from "@material-ui/core/styles";
 import dynamic from "next/dynamic";
 import theme from "../theme";
+import { SWRConfig } from "swr";
+import { SwrOptions } from "../utils/index";
+import "./global.css";
 
 const App = ({ Component, pageProps }: AppProps): JSX.Element => {
   useEffect(() => {
@@ -23,18 +26,20 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
-        <title>App template Next - Dataware-tools</title>
+        <title>User Manager - Dataware-tools</title>
       </Head>
       <React.StrictMode>
-        <StylesProvider injectFirst>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {/* See: https://ryotarch.com/javascript/react/next-js-with-csr/ */}
-            <SafeHydrate>
-              <Component {...pageProps} />
-            </SafeHydrate>
-          </ThemeProvider>
-        </StylesProvider>
+        <SWRConfig value={SwrOptions}>
+          <StylesProvider injectFirst>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              {/* See: https://ryotarch.com/javascript/react/next-js-with-csr/ */}
+              <SafeHydrate>
+                <Component {...pageProps} />
+              </SafeHydrate>
+            </ThemeProvider>
+          </StylesProvider>
+        </SWRConfig>
       </React.StrictMode>
     </>
   );
