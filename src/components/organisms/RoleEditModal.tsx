@@ -142,20 +142,12 @@ const RoleEditModalBody = ({
     };
 
     const saveRoleRes = await mutate(getRoleURL, async () => {
-      try {
-        permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
-        permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-        const saveRoleRes = roleId
-          ? await permissionManager.RoleService.updateRole(roleId, requestBody)
-          : await permissionManager.RoleService.createRole(requestBody);
-        return saveRoleRes;
-      } catch (error) {
-        setError({
-          reason: JSON.stringify(error),
-          instruction: "please reload this page",
-        });
-        return undefined;
-      }
+      permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
+      permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
+      const saveRoleRes = roleId
+        ? await permissionManager.RoleService.updateRole(roleId, requestBody)
+        : await permissionManager.RoleService.createRole(requestBody);
+      return saveRoleRes;
     }).catch((error) => {
       setError({
         reason: JSON.stringify(error),
@@ -195,7 +187,6 @@ const RoleEditModalBody = ({
             permissions: convPermissions(permissions || role.permissions),
           };
           const saveRoleRes = await saveRole(newRole);
-
           if (saveRoleRes) {
             onSave(saveRoleRes);
             setIsSaving(false);
