@@ -1,20 +1,10 @@
 name: Build and test
 
-on:
-  push:
-    branches:
-      - master
-      - main
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - master
-      - main
+on: [push]
 
 jobs:
   docker:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 300
 
     steps:
