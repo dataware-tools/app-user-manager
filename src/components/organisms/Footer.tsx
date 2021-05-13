@@ -50,7 +50,7 @@ export const Footer = (): JSX.Element => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            GithHub
+            GitHub
           </Link>
         </div>
       </div>
