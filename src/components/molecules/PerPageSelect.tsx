@@ -1,31 +1,38 @@
-import { Dropdown, Form, Input } from "semantic-ui-react";
+import React from 'react';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
-const PerPageSelect = (props: any) => {
+const PerPageSelect = (): JSX.Element => {
+  const [page, setPage] = React.useState('20');
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setPage(event.target.value as string);
+  };
+
   return (
     <div>
-      <Form>
-        <Input
-          label="#Rows per page:"
-          fluid
-          input={
-            <Dropdown
-              selection
-              label="perPage"
-              placeholder="20"
-              onChange={(event: any, data: any) => {
-                props.setPerPage(data.value);
-              }}
-              options={[
-                { key: "20", value: 20, text: "20" },
-                { key: "50", value: 50, text: "50" },
-                { key: "100", value: 100, text: "100" },
-                { key: "200", value: 200, text: "200" },
-                { key: "500", value: 500, text: "500" },
-              ]}
-            />
-          }
-        />
-      </Form>
+      <FormControl>
+        <Select
+          labelId="perPage"
+          value={page}
+          onChange={handleChange}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          <MenuItem value="" disabled>
+            perPage
+          </MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={100}>100</MenuItem>
+          <MenuItem value={200}>200</MenuItem>
+          <MenuItem value={500}>500</MenuItem>
+        </Select>
+        <FormHelperText>perPage</FormHelperText>
+        </FormControl>
+
     </div>
   );
 };
