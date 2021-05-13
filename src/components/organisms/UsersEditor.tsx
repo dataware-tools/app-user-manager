@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddCircle from "@material-ui/icons/AddCircle";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/core/Pagination";
+import {PerPageSelect} from "../molecules/PerPageSelect"
 
 import {
   API_ROUTE,
@@ -156,7 +157,9 @@ const UsersEditor = (): JSX.Element => {
           defaultValue={searchText}
         />
         <Spacer direction="horizontal" size="15px" />
-        <div>| per page component |</div>
+        <PerPageSelect
+        perPage={perPage}
+        setPerPage={setPerPage}/>
         <Spacer direction="horizontal" size="15px" />
         <Button
           href="https://manage.auth0.com/dashboard/us/hdwlab-com/users"
