@@ -1,4 +1,5 @@
 import { Story } from "@storybook/react";
+import { useState } from "react";
 import { PerPageSelect } from "./PerPageSelect";
 
 export default {
@@ -6,10 +7,7 @@ export default {
   title: "PerPageSelect",
 };
 
-const Template: Story = (args) => <PerPageSelect {...args} />;
-export const Default = Template.bind({});
-Default.args = {
-  setPerPage: (newValue: number) => {
-    console.log(newValue);
-  },
+export const Default: Story = () => {
+  const [perPage, setPerPage] = useState(20);
+  return <PerPageSelect perPage={perPage} setPerPage={setPerPage} />;
 };
