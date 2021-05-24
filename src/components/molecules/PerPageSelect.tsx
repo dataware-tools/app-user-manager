@@ -25,7 +25,7 @@ const PerPageSelect = ({ perPage, setPerPage }: PropsType): JSX.Element => {
         value={perPage}
         onChange={handleChange}
         displayEmpty
-        inputProps={{ "aria-label": "Without label" }}
+        inputProps={{ "aria-labelledby": "Without label" }}
         variant="standard"
       >
         <MenuItem value={20}>20</MenuItem>
