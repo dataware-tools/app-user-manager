@@ -6,7 +6,7 @@ const ExampleApp = (): JSX.Element => {
   return (
     <PageWrapper>
       <Container>
-        <Sample />
+        <Sample sample="sample" />
       </Container>
     </PageWrapper>
   );

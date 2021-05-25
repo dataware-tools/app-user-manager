@@ -1,6 +1,5 @@
-import React from "react";
-import { SearchForm, SearchPropType } from "./SearchForm";
 import { Story } from "@storybook/react";
+import { SearchForm, SearchPropType } from "./SearchForm";
 
 export default {
   component: SearchForm,
@@ -11,21 +10,5 @@ const Template: Story<SearchPropType> = (args) => <SearchForm {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  onSearch: () => {},
-  onSearchTextChange: () => {},
-  searchText: "",
+  onSearch: (searchText) => window.alert(`${searchText}`),
 };
-
-const ComponentChangable = (): JSX.Element => {
-  const [searchText, setSearchText] = React.useState("change this text");
-  const onSearch = () => {
-    console.log(`search "${searchText}"!!`);
-  };
-  const onSearchTextChange = (newSearchText: string) => {
-    setSearchText(newSearchText);
-  };
-
-  return <SearchForm onSearch={onSearch} />;
-};
-
-export const Changable = (): JSX.Element => <ComponentChangable />;

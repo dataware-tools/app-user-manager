@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: typeof themeInstance) => ({
 
 const MenuBar = ({ tabNames, onChange, value }: MenuBarProps): JSX.Element => {
   const styles = useStyles();
-  const _onChange = (e: SyntheticEvent, newValue: number) => {
+  const _onChange = (_: SyntheticEvent, newValue: number) => {
     onChange(newValue);
   };
 

@@ -12,7 +12,9 @@ export const TestLayout = () => (
           <MenuBar
             tabNames={["test", "test", "test", "test", "test", "test"]}
             value={0}
-            onChange={() => {}}
+            onChange={() => {
+              console.log("change tag!");
+            }}
           />
         </div>
         <Spacer direction="horizontal" size="3vw" />

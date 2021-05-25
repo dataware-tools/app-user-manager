@@ -19,6 +19,7 @@ import { ErrorMessage, ErrorMessageProps } from "../molecules/ErrorMessage";
 import { LoadingIndicator } from "../molecules/LoadingIndicator";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
+import { PerPageSelect } from "components/molecules/PerPageSelect";
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -125,6 +126,7 @@ const RolesEditor = (): JSX.Element => {
             reason: "failed to delete roles",
             instruction: "please reload this page",
           });
+          return undefined;
         }
       });
     } catch (error) {
@@ -177,7 +179,7 @@ const RolesEditor = (): JSX.Element => {
           defaultValue={searchText}
         />
         <Spacer direction="horizontal" size="15px" />
-        <div>| per page component |</div>
+        <PerPageSelect perPage={perPage} setPerPage={setPerPage} />
         <Spacer direction="horizontal" size="15px" />
         <LoadingButton startIcon={<AddCircle />} onClick={addRole}>
           Add Role
@@ -226,7 +228,7 @@ const RolesEditor = (): JSX.Element => {
             <Pagination
               page={page}
               count={Math.ceil(listRolesRes.total / listRolesRes.per_page)}
-              onChange={(e, newPage) => setPage(newPage)}
+              onChange={(_, newPage) => setPage(newPage)}
             />
           </div>
         </>

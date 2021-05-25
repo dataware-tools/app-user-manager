@@ -129,7 +129,7 @@ const PermissionList = ({
                   }}
                   onDelete={(targetIndex) => {
                     const newPermissions = permissions.filter(
-                      (permission, i) => i !== targetIndex
+                      (_, i) => i !== targetIndex
                     );
                     onChange(newPermissions);
                   }}

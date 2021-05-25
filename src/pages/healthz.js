@@ -1,5 +1,7 @@
 // health check URL
-function Ping() {}
+function Ping() {
+  console.log("foo");
+}
 
 // This gets called on every request
 export async function getServerSideProps(context) {

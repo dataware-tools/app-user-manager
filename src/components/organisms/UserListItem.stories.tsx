@@ -13,10 +13,16 @@ Default.args = {
   user: {
     user_id: "user id",
     name: "user name",
-    roles: [{ role_id: "1", name: "admin" }],
+    roles: [{ role_id: 1, name: "admin" }],
   },
   roles: [
-    { role_id: "1", name: "admin" },
-    { role_id: "2", name: "manager" },
+    {
+      role_id: 1,
+      name: "admin",
+    },
+    {
+      role_id: 2,
+      name: "manager",
+    },
   ],
 };

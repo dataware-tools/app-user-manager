@@ -75,7 +75,7 @@ const UserListItem = ({
           freeSolo={false}
           options={roles}
           value={currentRoles}
-          onChange={(e, newValues) => {
+          onChange={(_, newValues) => {
             setCurrentRoles([...newValues]);
           }}
           getOptionLabel={(option) => option.name}
