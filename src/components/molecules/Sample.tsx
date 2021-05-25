@@ -1,54 +1,87 @@
 import {
-  FetchStatus,
-  fetchApi,
+  theme as themeInstance,
   databaseStore,
 } from "@dataware-tools/app-common";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import themeInstance from "../../theme";
 import { makeStyles } from "@material-ui/core/styles";
-import { API_ROUTE } from "../../utils";
+
+import { Button } from "@material-ui/core";
+
 import { useAuth0 } from "@auth0/auth0-react";
-import { useState } from "react";
+import useSWR, { mutate } from "swr";
 
-const useStyles = makeStyles((theme: typeof themeInstance) => ({
-  button: {
-    "&:hover": {
-      color: theme.palette.secondary.main,
-    },
-  },
-}));
+type Props = {
+  classes: ReturnType<typeof useStyles>;
+  user: any;
+  URL: string;
+  error: any;
+  data: any;
+} & ContainerProps;
 
-const Sample = (): JSX.Element => {
-  const { user, getAccessTokenSilently } = useAuth0();
-  const [apiResult, setApiResult] = useState<any>(undefined);
-  const styles = useStyles();
+type ContainerProps = {
+  sample: string;
+};
 
+const Component = ({
+  classes,
+  URL,
+  user,
+  error,
+  data,
+  sample,
+}: Props): JSX.Element => {
   return (
     <div>
-      <h1>Hello {user ? user.name : "world"}</h1>
+      <h1 className={classes.sample}>Hello {user ? user.name : "world"}</h1>
+      <div>this is {sample}</div>
       <Button
-        className={styles.button}
         onClick={() => {
-          getAccessTokenSilently().then((accessToken: string) => {
-            databaseStore.OpenAPI.TOKEN = accessToken;
-            databaseStore.OpenAPI.BASE = API_ROUTE.DATABASE.BASE;
-            fetchApi(
-              databaseStore.DatabaseService.listDatabases(),
-              undefined,
-              setApiResult
-            );
-          });
+          mutate(URL);
         }}
       >
-        Test API
+        revalidate API
       </Button>
-      <FetchStatus {...apiResult} />
-      {apiResult && apiResult.isFetchDone && (
-        <Container maxWidth="sm">{JSON.stringify(apiResult)}</Container>
-      )}
+      {error ? (
+        <div>error: {JSON.stringify(error)}</div>
+      ) : data ? (
+        <div>data: {JSON.stringify(data)}</div>
+      ) : null}
     </div>
   );
 };
 
-export { Sample };
+const useStyles = makeStyles((theme: typeof themeInstance) => ({
+  sample: {
+    "&:hover": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}));
+
+const Container = ({ ...delegated }: ContainerProps): JSX.Element => {
+  const apiUrlBase =
+    process.env.NEXT_PUBLIC_BACKEND_API_PREFIX || "/api/latest";
+  const { user, getAccessTokenSilently } = useAuth0();
+  const fetchAPI = async () => {
+    databaseStore.OpenAPI.TOKEN = await getAccessTokenSilently();
+    databaseStore.OpenAPI.BASE = apiUrlBase;
+    const Res = await databaseStore.DatabaseService.listDatabases();
+    return Res;
+  };
+  const URL = `${apiUrlBase}/databases`;
+  const { data, error } = useSWR(URL, fetchAPI);
+  const classes = useStyles();
+
+  return (
+    <Component
+      classes={classes}
+      user={user}
+      data={data}
+      error={error}
+      URL={URL}
+      {...delegated}
+    />
+  );
+};
+
+export { Container as Sample };
+export type { ContainerProps as SampleProps };
