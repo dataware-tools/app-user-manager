@@ -25,12 +25,11 @@ Default.args = {
     { name: "bar", action_id: "3" },
   ],
   databases: ["test", "foo", "bar"],
-  onDelete: (e: any, index: any) => {
+  onDelete: (index) => {
     console.log("delete!");
-    console.log(e);
     console.log(index);
   },
-  onChange: (index: any, newValue: any) => {
+  onChange: (index, newValue) => {
     console.log("change!");
     console.log(index);
     console.log(newValue);

@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme: typeof themeInstance) => ({
   select: {
     width: "100%",
   },
+  // stylelint-disable-next-line declaration-block-trailing-semicolon
   selectedItem: { ...selectedItemStyleBase, padding: "2px 6px" },
 }));
 

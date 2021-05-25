@@ -78,19 +78,10 @@ Default.args = {
     { name: "foo", action_id: "2" },
     { name: "bar", action_id: "3" },
   ],
-  databases: ["test", "foo", "bar"],
-  onDelete: (e: any, index: any) => {
-    console.log("delete!");
-    console.log(e);
-    console.log(index);
-  },
-  onChange: (index: any, newValue: any) => {
-    console.log("change!");
-    console.log(index);
-    console.log(newValue);
-  },
-  onAdd: (e: any) => {
-    console.log("add!");
-    console.log(e);
-  },
+  databases: [
+    { database_id: "test1", description: "test1", name: "test1" },
+    { database_id: "test2", description: "test2", name: "test2" },
+    { database_id: "test3", description: "test3", name: "test3" },
+  ],
+  onChange: (newValue) => console.log(JSON.stringify(newValue)),
 };

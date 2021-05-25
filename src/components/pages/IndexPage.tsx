@@ -60,6 +60,8 @@ export const IndexPage = (): JSX.Element => {
                 return <UsersEditor />;
               case "Roles":
                 return <RolesEditor />;
+              default:
+                return null;
             }
           })()}
         </div>

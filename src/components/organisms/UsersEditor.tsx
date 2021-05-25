@@ -134,6 +134,7 @@ const UsersEditor = (): JSX.Element => {
             reason: JSON.stringify(error),
             instruction: "please reload this page",
           });
+          return undefined;
         }
       });
     } catch (error) {
@@ -195,7 +196,7 @@ const UsersEditor = (): JSX.Element => {
             <Pagination
               count={Math.ceil(listUsersRes.total / listUsersRes.per_page)}
               page={page}
-              onChange={(e, newPage) => setPage(newPage)}
+              onChange={(_, newPage) => setPage(newPage)}
             />
           </div>
         </>

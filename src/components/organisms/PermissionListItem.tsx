@@ -35,7 +35,7 @@ const PermissionListItem = ({
         <MultiSelect
           options={databases}
           value={permission.databases}
-          onChange={(e, newValues) => {
+          onChange={(_, newValues) => {
             onChange(index, {
               databases: [...newValues],
               actions: permission.actions,
@@ -63,7 +63,7 @@ const PermissionListItem = ({
           options={actions}
           value={permission.actions}
           freeSolo={false}
-          onChange={(e, newValues) => {
+          onChange={(_, newValues) => {
             onChange(index, {
               databases: permission.databases,
               actions: [...newValues],
