@@ -15,6 +15,13 @@ type RoleListProps = {
   bottomRef?: RefObject<HTMLDivElement>;
 };
 
+const mapFieldNameToHeader = (fieldName: string) => {
+    if (fieldName === "role_id") { return "Role ID" }
+    if (fieldName === "name") { return "Name" }
+    if (fieldName === "description") { return "Description" }
+    return fieldName
+}
+
 const RoleList = ({
   rows,
   columns,
@@ -34,7 +41,7 @@ const RoleList = ({
                 key={column.field}
                 align={column.type === "number" ? "right" : "left"}
               >
-                {column.field}
+                {mapFieldNameToHeader(column.field)}
               </TableCell>
             ))}
             {onDeleteRow ? <TableCell /> : null}
