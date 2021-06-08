@@ -8,6 +8,8 @@ import AddCircle from "@material-ui/icons/AddCircle";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/core/Pagination";
 import { PerPageSelect } from "../molecules/PerPageSelect";
+import TableContainer from '@material-ui/core/TableContainer';
+import Paper from '@material-ui/core/Paper';
 
 import {
   API_ROUTE,
@@ -29,7 +31,6 @@ const useStyles = makeStyles(() => ({
     maxHeight: "60vh",
     minHeight: "40vh",
     overflow: "auto",
-    padding: "1vh 25px",
   },
   paginationContainer: {
     alignItems: "center",
@@ -185,13 +186,13 @@ const UsersEditor = (): JSX.Element => {
               <strong>No roles defined! please define role!</strong>
             </div>
           ) : null}
-          <div className={styles.bodyContainer}>
+          <TableContainer component={Paper} className={styles.bodyContainer}>
             <UserList
               users={listUsersRes.users}
               roles={listRolesRes.roles}
               onUpdateUser={updateUser}
             />
-          </div>
+          </TableContainer>
           <Spacer direction="vertical" size="3vh" />
           <div className={styles.paginationContainer}>
             <Pagination

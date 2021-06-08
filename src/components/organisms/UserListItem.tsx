@@ -1,7 +1,7 @@
-import { MultiSelect } from "../molecules/MultiSelect";
-import { useState, useEffect } from "react";
-import { Spacer } from "../../utils";
-import { makeStyles } from "@material-ui/core/styles";
+import {MultiSelect} from "../molecules/MultiSelect";
+import {useState, useEffect} from "react";
+import {makeStyles} from "@material-ui/core/styles";
+import {TableCell, TableRow} from "@material-ui/core";
 
 type Roles = {
   role_id: number;
@@ -29,20 +29,16 @@ const useStyles = makeStyles({
     flex: 1,
     width: "100%",
   },
-  userName: {
-    alignItems: "center",
-    display: "flex",
-    overflowWrap: "break-word",
-    width: "15vw",
-    wordBreak: "break-all",
-  },
+  roleCell: {
+    width: "70%"
+  }
 });
 
 const UserListItem = ({
-  user,
-  roles,
-  onUpdateUser,
-}: UserListItemProps): JSX.Element => {
+                        user,
+                        roles,
+                        onUpdateUser,
+                      }: UserListItemProps): JSX.Element => {
   const [currentRoles, setCurrentRoles] = useState<Roles>(user.roles);
   const [prevRoles, setPrevRoles] = useState<Roles>(user.roles);
   const [isSavable, setIsSavable] = useState(false);
@@ -51,7 +47,7 @@ const UserListItem = ({
 
   const onSave = async () => {
     setPrevRoles([...currentRoles]);
-    await onUpdateUser({ ...user, roles: currentRoles });
+    await onUpdateUser({...user, roles: currentRoles});
   };
 
   const onFocusOut = () => {
@@ -67,31 +63,36 @@ const UserListItem = ({
   }, [currentRoles, prevRoles]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.userName}>{user.name}</div>
-      <Spacer direction="horizontal" size="1vw" />
-      <div className={styles.multiSelectContainer}>
-        <MultiSelect
-          freeSolo={false}
-          options={roles}
-          value={currentRoles}
-          onChange={(_, newValues) => {
-            setCurrentRoles([...newValues]);
-          }}
-          getOptionLabel={(option) => option.name}
-          getOptionSelected={(option, value) => {
-            return option.role_id === value.role_id;
-          }}
-          onSave={isSavable ? onSave : undefined}
-          saveOnFocusOut={false}
-          onFocusOut={onFocusOut}
-          filterSelectedOptions
-          fullWidth
-        />
-      </div>
-    </div>
+    <TableRow>
+      <TableCell>
+        {user.name}
+      </TableCell>
+      <TableCell className={styles.roleCell}>
+        <div className={styles.container}>
+          <div className={styles.multiSelectContainer}>
+            <MultiSelect
+              freeSolo={false}
+              options={roles}
+              value={currentRoles}
+              onChange={(_, newValues) => {
+                setCurrentRoles([...newValues]);
+              }}
+              getOptionLabel={(option) => option.name}
+              getOptionSelected={(option, value) => {
+                return option.role_id === value.role_id;
+              }}
+              onSave={isSavable ? onSave : undefined}
+              saveOnFocusOut={false}
+              onFocusOut={onFocusOut}
+              filterSelectedOptions
+              fullWidth
+            />
+          </div>
+        </div>
+      </TableCell>
+    </TableRow>
   );
 };
 
-export { UserListItem };
-export type { UserListItemProps };
+export {UserListItem};
+export type {UserListItemProps};
