@@ -79,11 +79,11 @@ const RolesEditor = (): JSX.Element => {
   const listRoles = async () => {
     permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-    const listRolesRes = await permissionManager.RoleService.listRoles(
-      pageForQuery,
-      perPage,
-      searchText
-    );
+    const listRolesRes = await permissionManager.RoleService.listRoles({
+      page: page,
+      perPage: perPage,
+      search: searchText
+    });
     return listRolesRes;
   };
 
@@ -115,7 +115,7 @@ const RolesEditor = (): JSX.Element => {
         try {
           permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
           permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-          await permissionManager.RoleService.deleteRole(roleId);
+          await permissionManager.RoleService.deleteRole({roleId: roleId});
 
           const newRoles = prev?.roles?.filter(
             (role) => role.role_id !== roleId

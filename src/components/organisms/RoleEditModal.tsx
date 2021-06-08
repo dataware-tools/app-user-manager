@@ -1,4 +1,4 @@
-import { databaseStore, permissionManager } from "@dataware-tools/app-common";
+import {metaStore, permissionManager} from "@dataware-tools/app-common";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
@@ -63,14 +63,12 @@ const RoleEditModalBody = ({
   const [validationError, setValidationError] = useState(false);
   const [error, setError] = useState<null | ErrorMessageProps>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [permissions, setPermissions] = useState<
-    PermissionListProps["permissions"] | null
-  >(null);
+  const [permissions, setPermissions] = useState<PermissionListProps["permissions"] | null>(null);
 
   const listActions = async () => {
     permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-    const listActionsRes = await permissionManager.ActionService.listActions();
+    const listActionsRes = await permissionManager.ActionService.listActions({});
     return listActionsRes;
   };
   const listActionsQuery = `per_page=0`;
@@ -81,12 +79,12 @@ const RoleEditModalBody = ({
   );
 
   const listDatabases = async () => {
-    databaseStore.OpenAPI.TOKEN = await getAccessTokenSilently();
-    databaseStore.OpenAPI.BASE = API_ROUTE.DATABASE.BASE;
-    const listDatabaseRes = await databaseStore.DatabaseService.listDatabases();
+    metaStore.OpenAPI.TOKEN = await getAccessTokenSilently();
+    metaStore.OpenAPI.BASE = API_ROUTE.META.BASE;
+    const listDatabaseRes = await metaStore.DatabaseService.listDatabases({});
     return listDatabaseRes;
   };
-  const listDatabasesURL = `${API_ROUTE.PERMISSION.BASE}/databases`;
+  const listDatabasesURL = `${API_ROUTE.META.BASE}/databases`;
   const { data: databases, error: listDatabasesError } = useSWR(
     listDatabasesURL,
     listDatabases
@@ -97,7 +95,7 @@ const RoleEditModalBody = ({
     if (roleId) {
       permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
       permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-      const getRoleRes = await permissionManager.RoleService.getRole(roleId);
+      const getRoleRes = await permissionManager.RoleService.getRole({roleId: roleId});
       return getRoleRes;
     } else {
       setError({
@@ -145,8 +143,8 @@ const RoleEditModalBody = ({
       permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
       permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
       const saveRoleRes = roleId
-        ? await permissionManager.RoleService.updateRole(roleId, requestBody)
-        : await permissionManager.RoleService.createRole(requestBody);
+        ? await permissionManager.RoleService.updateRole({roleId: roleId, requestBody: requestBody})
+        : await permissionManager.RoleService.createRole({requestBody: requestBody});
       return saveRoleRes;
     }).catch((error) => {
       setError({
@@ -269,7 +267,7 @@ const RoleEditModalBody = ({
               actions={actions.actions}
               databases={
                 // TODO: fix API type
-                databases.databases as NonNullable<typeof databases.databases>
+                databases.data as NonNullable<typeof databases.data>
               }
               onChange={(newPermissions) => setPermissions([...newPermissions])}
             />

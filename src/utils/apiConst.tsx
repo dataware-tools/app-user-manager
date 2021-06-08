@@ -7,6 +7,7 @@ const API_HOME: string =
 const constructApiBaseUrl = (url: string) => `${API_HOME}${url}`;
 
 const databaseStorePrefix: string = API_CATALOG.databaseStore.endpoint;
+const metaStorePrefix: string = API_CATALOG.metaStore.endpoint;
 const recordStorePrefix: string = API_CATALOG.recordStore.endpoint;
 const jobStorePrefix: string = API_CATALOG.jobStore.endpoint;
 const contentStorePrefix: string = API_CATALOG.contentStore.endpoint;
@@ -14,6 +15,9 @@ const fileProviderPrefix: string = API_CATALOG.fileProvider.endpoint;
 const permissionManagerPrefix: string = API_CATALOG.permissionManager.endpoint;
 
 export const API_ROUTE = {
+  META: {
+    BASE: constructApiBaseUrl(metaStorePrefix),
+  },
   RECORD: {
     BASE: constructApiBaseUrl(recordStorePrefix),
   },

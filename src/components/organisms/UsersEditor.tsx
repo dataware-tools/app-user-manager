@@ -61,21 +61,20 @@ const UsersEditor = (): JSX.Element => {
 
   const styles = useStyles();
 
-  const pageForQuery = page - 1;
   const listUsers = async () => {
     permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-    const listUsersRes = await permissionManager.UserService.listUsers(
-      perPage,
-      pageForQuery,
-      searchText
-    );
+    const listUsersRes = await permissionManager.UserService.listUsers({
+      perPage: perPage,
+      page: page,
+      search: searchText
+    });
     return listUsersRes;
   };
 
   const listUsersQuery = ObjToParamString({
-    page: pageForQuery,
     per_page: perPage,
+    page: page,
     search_text: searchText,
   });
   const listUsersURL = `${API_ROUTE.PERMISSION.BASE}/users${listUsersQuery}`;
@@ -88,7 +87,9 @@ const UsersEditor = (): JSX.Element => {
   const listRoles = async () => {
     permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-    const listRolesRes = permissionManager.RoleService.listRoles(undefined, 0);
+    const listRolesRes = permissionManager.RoleService.listRoles({
+      perPage: 0
+    });
     return listRolesRes;
   };
 
@@ -117,14 +118,14 @@ const UsersEditor = (): JSX.Element => {
         try {
           permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
           permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-          const newTarget = await permissionManager.UserService.updateUser(
-            target.user_id,
-            {
+          const newTarget = await permissionManager.UserService.updateUser({
+            userId: target.user_id,
+            requestBody: {
               role_ids: target.roles.map(
                 (role) => role.role_id as permissionManager.RoleModel["role_id"]
               ),
             }
-          );
+          });
           const newUsers = prev?.users.map((user) =>
             user.user_id !== newTarget.user_id ? user : newTarget
           );
