@@ -8,7 +8,7 @@ import { PermissionListItem } from "./PermissionListItem";
 import { createRef } from "react";
 import { AddCircle } from "@material-ui/icons";
 import { Spacer } from "../../utils";
-import { permissionManager, databaseStore } from "@dataware-tools/app-common";
+import { permissionManager, metaStore } from "@dataware-tools/app-common";
 import themeInstance from "../../theme";
 
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: typeof themeInstance) => ({
 }));
 
 type Action = permissionManager.ActionModel;
-type Database = databaseStore.DatabaseModel;
+type Database = metaStore.DatabaseModel;
 
 type Permission = permissionManager.RoleModel["permissions"][number];
 type PermissionListProps = {

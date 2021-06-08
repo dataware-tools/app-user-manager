@@ -64,7 +64,8 @@ const Container = ({ ...delegated }: ContainerProps): JSX.Element => {
   const fetchAPI = async () => {
     databaseStore.OpenAPI.TOKEN = await getAccessTokenSilently();
     databaseStore.OpenAPI.BASE = apiUrlBase;
-    const Res = await databaseStore.DatabaseService.listDatabases();
+    const Res = await databaseStore.DatabaseService.listDatabases({
+    });
     return Res;
   };
   const URL = `${apiUrlBase}/databases`;
