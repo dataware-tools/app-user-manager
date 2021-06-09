@@ -7,6 +7,7 @@ import {
   ErrorMessage,
   ErrorMessageProps,
   PerPageSelect,
+  SearchForm,
 } from "@dataware-tools/app-common";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,7 +24,6 @@ import {
   ObjToParamString,
   addURLParam,
 } from "../../utils";
-import { SearchForm } from "../molecules/SearchForm";
 import { ToolBar } from "./ToolBar";
 import { UserList, UserListProps } from "./UserList";
 

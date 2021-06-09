@@ -7,7 +7,6 @@ import {
   addURLParam,
   getURLParam,
 } from "../../utils";
-import { SearchForm } from "../molecules/SearchForm";
 import { ToolBar } from "./ToolBar";
 import { useState, useEffect } from "react";
 import { RoleList } from "./RoleList";
@@ -19,6 +18,7 @@ import {
   ErrorMessage,
   ErrorMessageProps,
   PerPageSelect,
+  SearchForm,
 } from "@dataware-tools/app-common";
 import useSWR, { mutate } from "swr";
 
