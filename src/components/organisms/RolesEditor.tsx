@@ -10,7 +10,6 @@ import {
 import { SearchForm } from "../molecules/SearchForm";
 import { ToolBar } from "./ToolBar";
 import { useState, useEffect } from "react";
-import { RoleList } from "./RoleList";
 import { RoleEditModal, RoleEditModalProps } from "./RoleEditModal";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
@@ -18,6 +17,7 @@ import {
   LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,
+  Table,
 } from "@dataware-tools/app-common";
 import useSWR, { mutate } from "swr";
 
@@ -67,10 +67,11 @@ const RolesEditor = (): JSX.Element => {
   const [error, setError] = useState<undefined | ErrorMessageProps>(undefined);
   const { getAccessTokenSilently } = useAuth0();
   const rolesListColumns = [
-    { field: "role_id", type: "number" as const },
-    { field: "name", type: "string" as const },
+    { field: "role_id", label: "Role ID", type: "number" as const },
+    { field: "name", label: "Name", type: "string" as const },
     {
       field: "description",
+      label: "Description",
       type: "string" as const,
       ifEmpty: "No description...",
     },
@@ -202,11 +203,12 @@ const RolesEditor = (): JSX.Element => {
       ) : listRolesRes ? (
         <>
           <div className={styles.mainContainer}>
-            <RoleList
+            <Table
               rows={listRolesRes.roles}
               columns={rolesListColumns}
               stickyHeader
-              onClickRow={(_, targetDetail) => {
+              disableHoverCell
+              onClickRow={(targetDetail) => {
                 setModalProps({
                   open: true,
                   roleId: targetDetail.row
@@ -214,7 +216,7 @@ const RolesEditor = (): JSX.Element => {
                   focusTarget: undefined,
                 });
               }}
-              onDeleteRow={(_, targetDetail) => {
+              onDeleteRow={(targetDetail) => {
                 deleteRole(
                   targetDetail.row
                     .role_id as permissionManager.RoleModel["role_id"]
