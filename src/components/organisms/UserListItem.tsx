@@ -1,4 +1,4 @@
-import { MultiSelect } from "../molecules/MultiSelect";
+import { MultiSelect } from "@dataware-tools/app-common";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { TableCell, TableRow } from "@material-ui/core";
