@@ -1,6 +1,7 @@
 import {
   metaStore,
   permissionManager,
+  LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,
 } from "@dataware-tools/app-common";
@@ -15,7 +16,6 @@ import { createRef, useState } from "react";
 import { PermissionList, PermissionListProps } from "./PermissionList";
 import { ToolBar } from "./ToolBar";
 import useSWR, { mutate } from "swr";
-import { LoadingIndicator } from "../molecules/LoadingIndicator";
 
 const useStyles = makeStyles(() => ({
   formContainer: {

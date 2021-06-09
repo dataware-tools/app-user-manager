@@ -3,6 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useSWR, { mutate } from "swr";
 import {
   permissionManager,
+  LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,
 } from "@dataware-tools/app-common";
@@ -25,7 +26,6 @@ import {
 import { SearchForm } from "../molecules/SearchForm";
 import { ToolBar } from "./ToolBar";
 import { UserList, UserListProps } from "./UserList";
-import { LoadingIndicator } from "../molecules/LoadingIndicator";
 
 const useStyles = makeStyles(() => ({
   bodyContainer: {

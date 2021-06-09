@@ -15,11 +15,12 @@ import { RoleEditModal, RoleEditModalProps } from "./RoleEditModal";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   permissionManager,
+  LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,
 } from "@dataware-tools/app-common";
 import useSWR, { mutate } from "swr";
-import { LoadingIndicator } from "../molecules/LoadingIndicator";
+
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
 import { PerPageSelect } from "components/molecules/PerPageSelect";
