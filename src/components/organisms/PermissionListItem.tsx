@@ -2,7 +2,10 @@ import IconButton from "@material-ui/core/IconButton";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { createFilterOptions, MultiSelect } from "../molecules/MultiSelect";
+import {
+  createFilterOptionsForMultiSelect,
+  MultiSelect,
+} from "@dataware-tools/app-common";
 
 type Database = string;
 
@@ -27,7 +30,7 @@ const PermissionListItem = ({
   onDelete,
   permission,
 }: PermissionListItemProps): JSX.Element => {
-  const filter = createFilterOptions<Database>();
+  const filter = createFilterOptionsForMultiSelect<Database>();
 
   return (
     <TableRow>

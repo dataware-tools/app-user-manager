@@ -1,5 +1,5 @@
 import { Spacer, getURLParam, addURLParam, resetURLParam } from "../../utils";
-import { MenuBar } from "../molecules/MenuBar";
+import { TabBar } from "@dataware-tools/app-common";
 import { useState, useEffect } from "react";
 import { UsersEditor } from "../organisms/UsersEditor";
 import { RolesEditor } from "../organisms/RolesEditor";
@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
   },
-  menuBarContainer: {
+  tabBarContainer: {
     flex: 0,
   },
   mainContainer: {
@@ -41,8 +41,8 @@ export const IndexPage = (): JSX.Element => {
   return (
     <>
       <div className={styles.root}>
-        <div className={styles.menuBarContainer}>
-          <MenuBar
+        <div className={styles.tabBarContainer}>
+          <TabBar
             tabNames={tabNames}
             value={tabNum}
             onChange={(newValue) => {
