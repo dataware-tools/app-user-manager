@@ -18,12 +18,12 @@ import {
   LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,
+  PerPageSelect,
 } from "@dataware-tools/app-common";
 import useSWR, { mutate } from "swr";
 
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
-import { PerPageSelect } from "components/molecules/PerPageSelect";
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -183,7 +183,11 @@ const RolesEditor = (): JSX.Element => {
           defaultValue={searchText}
         />
         <Spacer direction="horizontal" size="15px" />
-        <PerPageSelect perPage={perPage} setPerPage={setPerPage} />
+        <PerPageSelect
+          perPage={perPage}
+          setPerPage={setPerPage}
+          values={[10, 20, 50, 100]}
+        />
         <Spacer direction="horizontal" size="15px" />
         <LoadingButton startIcon={<AddCircle />} onClick={addRole}>
           Add Role

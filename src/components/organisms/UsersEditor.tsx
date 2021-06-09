@@ -6,13 +6,13 @@ import {
   LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,
+  PerPageSelect,
 } from "@dataware-tools/app-common";
 
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircle from "@material-ui/icons/AddCircle";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/core/Pagination";
-import { PerPageSelect } from "../molecules/PerPageSelect";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 
@@ -163,7 +163,11 @@ const UsersEditor = (): JSX.Element => {
           defaultValue={searchText}
         />
         <Spacer direction="horizontal" size="15px" />
-        <PerPageSelect perPage={perPage} setPerPage={setPerPage} />
+        <PerPageSelect
+          perPage={perPage}
+          setPerPage={setPerPage}
+          values={[10, 20, 50, 100]}
+        />
         <Spacer direction="horizontal" size="15px" />
         <Button
           href="https://manage.auth0.com/dashboard/us/hdwlab-com/users"
