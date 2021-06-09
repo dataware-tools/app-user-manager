@@ -13,9 +13,12 @@ import { useState, useEffect } from "react";
 import { RoleList } from "./RoleList";
 import { RoleEditModal, RoleEditModalProps } from "./RoleEditModal";
 import { useAuth0 } from "@auth0/auth0-react";
-import { permissionManager } from "@dataware-tools/app-common";
+import {
+  permissionManager,
+  ErrorMessage,
+  ErrorMessageProps,
+} from "@dataware-tools/app-common";
 import useSWR, { mutate } from "swr";
-import { ErrorMessage, ErrorMessageProps } from "../molecules/ErrorMessage";
 import { LoadingIndicator } from "../molecules/LoadingIndicator";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -82,7 +85,7 @@ const RolesEditor = (): JSX.Element => {
     const listRolesRes = await permissionManager.RoleService.listRoles({
       page: page,
       perPage: perPage,
-      search: searchText
+      search: searchText,
     });
     return listRolesRes;
   };
@@ -115,7 +118,7 @@ const RolesEditor = (): JSX.Element => {
         try {
           permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
           permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-          await permissionManager.RoleService.deleteRole({roleId: roleId});
+          await permissionManager.RoleService.deleteRole({ roleId: roleId });
 
           const newRoles = prev?.roles?.filter(
             (role) => role.role_id !== roleId

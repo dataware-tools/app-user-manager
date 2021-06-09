@@ -1,7 +1,7 @@
-import {MultiSelect} from "../molecules/MultiSelect";
-import {useState, useEffect} from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import {TableCell, TableRow} from "@material-ui/core";
+import { MultiSelect } from "../molecules/MultiSelect";
+import { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { TableCell, TableRow } from "@material-ui/core";
 
 type Roles = {
   role_id: number;
@@ -30,15 +30,15 @@ const useStyles = makeStyles({
     width: "100%",
   },
   roleCell: {
-    width: "70%"
-  }
+    width: "70%",
+  },
 });
 
 const UserListItem = ({
-                        user,
-                        roles,
-                        onUpdateUser,
-                      }: UserListItemProps): JSX.Element => {
+  user,
+  roles,
+  onUpdateUser,
+}: UserListItemProps): JSX.Element => {
   const [currentRoles, setCurrentRoles] = useState<Roles>(user.roles);
   const [prevRoles, setPrevRoles] = useState<Roles>(user.roles);
   const [isSavable, setIsSavable] = useState(false);
@@ -47,7 +47,7 @@ const UserListItem = ({
 
   const onSave = async () => {
     setPrevRoles([...currentRoles]);
-    await onUpdateUser({...user, roles: currentRoles});
+    await onUpdateUser({ ...user, roles: currentRoles });
   };
 
   const onFocusOut = () => {
@@ -64,9 +64,7 @@ const UserListItem = ({
 
   return (
     <TableRow>
-      <TableCell>
-        {user.name}
-      </TableCell>
+      <TableCell>{user.name}</TableCell>
       <TableCell className={styles.roleCell}>
         <div className={styles.container}>
           <div className={styles.multiSelectContainer}>
@@ -94,5 +92,5 @@ const UserListItem = ({
   );
 };
 
-export {UserListItem};
-export type {UserListItemProps};
+export { UserListItem };
+export type { UserListItemProps };
