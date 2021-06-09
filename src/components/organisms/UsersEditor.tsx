@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import useSWR, { mutate } from "swr";
-import { permissionManager } from "@dataware-tools/app-common";
+import {
+  permissionManager,
+  LoadingIndicator,
+} from "@dataware-tools/app-common";
 
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircle from "@material-ui/icons/AddCircle";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/core/Pagination";
 import { PerPageSelect } from "../molecules/PerPageSelect";
-import TableContainer from '@material-ui/core/TableContainer';
-import Paper from '@material-ui/core/Paper';
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
 
 import {
   API_ROUTE,
@@ -22,7 +25,6 @@ import { SearchForm } from "../molecules/SearchForm";
 import { ToolBar } from "./ToolBar";
 import { UserList, UserListProps } from "./UserList";
 import { ErrorMessage, ErrorMessageProps } from "../molecules/ErrorMessage";
-import { LoadingIndicator } from "../molecules/LoadingIndicator";
 
 const useStyles = makeStyles(() => ({
   bodyContainer: {
@@ -68,7 +70,7 @@ const UsersEditor = (): JSX.Element => {
     const listUsersRes = await permissionManager.UserService.listUsers({
       perPage: perPage,
       page: page,
-      search: searchText
+      search: searchText,
     });
     return listUsersRes;
   };
@@ -89,7 +91,7 @@ const UsersEditor = (): JSX.Element => {
     permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
     const listRolesRes = permissionManager.RoleService.listRoles({
-      perPage: 0
+      perPage: 0,
     });
     return listRolesRes;
   };
@@ -125,7 +127,7 @@ const UsersEditor = (): JSX.Element => {
               role_ids: target.roles.map(
                 (role) => role.role_id as permissionManager.RoleModel["role_id"]
               ),
-            }
+            },
           });
           const newUsers = prev?.users.map((user) =>
             user.user_id !== newTarget.user_id ? user : newTarget

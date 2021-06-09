@@ -1,4 +1,8 @@
-import {metaStore, permissionManager} from "@dataware-tools/app-common";
+import {
+  metaStore,
+  permissionManager,
+  LoadingIndicator,
+} from "@dataware-tools/app-common";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
@@ -11,7 +15,6 @@ import { PermissionList, PermissionListProps } from "./PermissionList";
 import { ToolBar } from "./ToolBar";
 import useSWR, { mutate } from "swr";
 import { ErrorMessage, ErrorMessageProps } from "../molecules/ErrorMessage";
-import { LoadingIndicator } from "../molecules/LoadingIndicator";
 
 const useStyles = makeStyles(() => ({
   formContainer: {
@@ -63,12 +66,16 @@ const RoleEditModalBody = ({
   const [validationError, setValidationError] = useState(false);
   const [error, setError] = useState<null | ErrorMessageProps>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [permissions, setPermissions] = useState<PermissionListProps["permissions"] | null>(null);
+  const [permissions, setPermissions] = useState<
+    PermissionListProps["permissions"] | null
+  >(null);
 
   const listActions = async () => {
     permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-    const listActionsRes = await permissionManager.ActionService.listActions({});
+    const listActionsRes = await permissionManager.ActionService.listActions(
+      {}
+    );
     return listActionsRes;
   };
   const listActionsQuery = `per_page=0`;
@@ -95,7 +102,9 @@ const RoleEditModalBody = ({
     if (roleId) {
       permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
       permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-      const getRoleRes = await permissionManager.RoleService.getRole({roleId: roleId});
+      const getRoleRes = await permissionManager.RoleService.getRole({
+        roleId: roleId,
+      });
       return getRoleRes;
     } else {
       setError({
@@ -143,8 +152,13 @@ const RoleEditModalBody = ({
       permissionManager.OpenAPI.TOKEN = await getAccessTokenSilently();
       permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
       const saveRoleRes = roleId
-        ? await permissionManager.RoleService.updateRole({roleId: roleId, requestBody: requestBody})
-        : await permissionManager.RoleService.createRole({requestBody: requestBody});
+        ? await permissionManager.RoleService.updateRole({
+            roleId: roleId,
+            requestBody: requestBody,
+          })
+        : await permissionManager.RoleService.createRole({
+            requestBody: requestBody,
+          });
       return saveRoleRes;
     }).catch((error) => {
       setError({
