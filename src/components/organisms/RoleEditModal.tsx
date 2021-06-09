@@ -2,6 +2,8 @@ import {
   metaStore,
   permissionManager,
   LoadingIndicator,
+  ErrorMessage,
+  ErrorMessageProps,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Dialog from "@material-ui/core/Dialog";
@@ -14,7 +16,6 @@ import { createRef, useState } from "react";
 import { PermissionList, PermissionListProps } from "./PermissionList";
 import { ToolBar } from "./ToolBar";
 import useSWR, { mutate } from "swr";
-import { ErrorMessage, ErrorMessageProps } from "../molecules/ErrorMessage";
 
 const useStyles = makeStyles(() => ({
   formContainer: {

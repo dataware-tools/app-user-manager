@@ -1,8 +1,9 @@
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { useAuth0 } from "@auth0/auth0-react";
+
 import { LoadingIndicator } from "@dataware-tools/app-common";
-import { ErrorMessage } from "../molecules/ErrorMessage";
+import { ErrorMessage } from "@dataware-tools/app-common";
 import { makeStyles } from "@material-ui/core/styles";
 
 type ContainerProps = {

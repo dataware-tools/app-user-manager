@@ -4,6 +4,8 @@ import useSWR, { mutate } from "swr";
 import {
   permissionManager,
   LoadingIndicator,
+  ErrorMessage,
+  ErrorMessageProps,
 } from "@dataware-tools/app-common";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,7 +26,6 @@ import {
 import { SearchForm } from "../molecules/SearchForm";
 import { ToolBar } from "./ToolBar";
 import { UserList, UserListProps } from "./UserList";
-import { ErrorMessage, ErrorMessageProps } from "../molecules/ErrorMessage";
 
 const useStyles = makeStyles(() => ({
   bodyContainer: {
