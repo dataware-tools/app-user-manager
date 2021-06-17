@@ -4,30 +4,33 @@ import {
   LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,
+  API_ROUTE,
+  Spacer,
+  DialogContainer,
+  DialogCloseButton,
+  DialogBody,
+  DialogToolBar,
+  DialogWrapper,
+  DialogMain,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
-import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
-import { API_ROUTE, Spacer } from "../../utils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { createRef, useState } from "react";
 import { PermissionList, PermissionListProps } from "./PermissionList";
-import { ToolBar } from "./ToolBar";
 import useSWR, { mutate } from "swr";
 
+type ContainerProps = {
+  open: boolean;
+  focusTarget?: "roleName";
+  onClose: () => void;
+  onSave: (newRole: permissionManager.RoleModel) => Promise<void> | void;
+  roleId?: number;
+};
+
 const useStyles = makeStyles(() => ({
-  formContainer: {
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-    overflow: "auto",
-    padding: "0 3vw",
-  },
-  closeButton: {
-    cursor: "pointer",
-  },
   roleNameInput: {
     fontSize: "2rem",
     fontWeight: "bold",
@@ -39,27 +42,17 @@ const useStyles = makeStyles(() => ({
     lineHeight: 2,
   },
   descriptionInputContainer: {
-    margin: "0 3vw",
+    padding: "0 3vw",
   },
 }));
 
-type RoleEditModalProps = {
-  open: boolean;
-} & RoleEditModalBodyProps;
-
-type RoleEditModalBodyProps = {
-  focusTarget?: "roleName";
-  onClose: () => void;
-  onSave: (newRole: permissionManager.RoleModel) => Promise<void> | void;
-  roleId?: number;
-};
-
-const RoleEditModalBody = ({
+const Container = ({
+  open,
   focusTarget,
   onClose,
   onSave,
   roleId,
-}: RoleEditModalBodyProps) => {
+}: ContainerProps): JSX.Element => {
   const styles = useStyles();
   const roleNameRef = createRef<HTMLInputElement>();
   const descriptionRef = createRef<HTMLInputElement>();
@@ -224,107 +217,90 @@ const RoleEditModalBody = ({
   };
 
   return (
-    <>
-      <ToolBar>
-        <CloseIcon
-          className={styles.closeButton}
-          onClick={() => {
-            onClose();
-          }}
-          fontSize="large"
-        />
-      </ToolBar>
-      {getRoleError || listDatabasesError || listActionsError ? (
-        <ErrorMessage
-          reason={JSON.stringify(
-            getRoleError || listActionsError || listDatabasesError
-          )}
-          instruction="please reload this page"
-        />
-      ) : error ? (
-        <ErrorMessage reason={error.reason} instruction={error.instruction} />
-      ) : role && databases && actions ? (
-        <>
-          <div className={styles.formContainer}>
-            <Spacer direction="vertical" size="2vh" />
-            <TextField
-              variant="standard"
-              required
-              fullWidth
-              autoFocus={focusTarget === "roleName"}
-              InputProps={{
-                style: {
-                  fontSize: "1.7rem",
-                  fontWeight: "bolder",
-                  lineHeight: 1.5,
-                },
-              }}
-              defaultValue={role.name}
-              placeholder="Name"
-              error={validationError}
-              inputRef={roleNameRef}
-            />
-            <Spacer direction="vertical" size="1vh" />
-            <div>
-              <div className={styles.descriptionLabel}>Description</div>
-              <div className={styles.descriptionInputContainer}>
-                <TextField
-                  fullWidth
-                  inputRef={descriptionRef}
-                  multiline
-                  defaultValue={role.description}
-                />
-              </div>
-            </div>
-            <Spacer direction="vertical" size="1vh" />
-            <PermissionList
-              permissions={permissions || role.permissions}
-              actions={actions.actions}
-              databases={
-                // TODO: fix API type
-                databases.data as NonNullable<typeof databases.data>
-              }
-              onChange={(newPermissions) => setPermissions([...newPermissions])}
-            />
-          </div>
-          <Spacer direction="vertical" size="2vh" />
-          <ToolBar>
-            <LoadingButton
-              size="large"
-              onClick={onClickSaveButton}
-              pending={isSaving}
-            >
-              Save
-            </LoadingButton>
-            <Spacer direction="horizontal" size="2vw" />
-          </ToolBar>
-        </>
-      ) : (
-        <LoadingIndicator />
-      )}
-      <Spacer direction="vertical" size="2vh" />
-    </>
-  );
-};
-
-const RoleEditModal = ({
-  focusTarget,
-  onClose,
-  onSave,
-  open,
-  roleId,
-}: RoleEditModalProps): JSX.Element => {
-  return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
-      <RoleEditModalBody
-        focusTarget={focusTarget}
-        onClose={onClose}
-        onSave={onSave}
-        roleId={roleId}
-      />
+      <DialogWrapper>
+        <DialogCloseButton onClick={onClose} />
+        <DialogContainer>
+          {getRoleError || listDatabasesError || listActionsError ? (
+            <ErrorMessage
+              reason={JSON.stringify(
+                getRoleError || listActionsError || listDatabasesError
+              )}
+              instruction="please reload this page"
+            />
+          ) : error ? (
+            <ErrorMessage
+              reason={error.reason}
+              instruction={error.instruction}
+            />
+          ) : role && databases && actions ? (
+            <>
+              <DialogBody>
+                <TextField
+                  variant="standard"
+                  required
+                  fullWidth
+                  autoFocus={focusTarget === "roleName"}
+                  InputProps={{
+                    style: {
+                      fontSize: "1.7rem",
+                      fontWeight: "bolder",
+                      lineHeight: 1.5,
+                    },
+                  }}
+                  defaultValue={role.name}
+                  placeholder="Name"
+                  error={validationError}
+                  inputRef={roleNameRef}
+                />
+                <Spacer direction="vertical" size="1vh" />
+                <DialogMain>
+                  <div>
+                    <div className={styles.descriptionLabel}>Description</div>
+                    <div className={styles.descriptionInputContainer}>
+                      <TextField
+                        fullWidth
+                        inputRef={descriptionRef}
+                        multiline
+                        defaultValue={role.description}
+                      />
+                    </div>
+                  </div>
+                  <Spacer direction="vertical" size="1vh" />
+                  <PermissionList
+                    permissions={permissions || role.permissions}
+                    actions={actions.actions}
+                    databases={
+                      // TODO: fix API type
+                      databases.data as NonNullable<typeof databases.data>
+                    }
+                    onChange={(newPermissions) =>
+                      setPermissions([...newPermissions])
+                    }
+                  />
+                </DialogMain>
+                <DialogToolBar
+                  right={
+                    <LoadingButton
+                      size="large"
+                      onClick={onClickSaveButton}
+                      pending={isSaving}
+                    >
+                      Save
+                    </LoadingButton>
+                  }
+                />
+              </DialogBody>
+            </>
+          ) : (
+            <LoadingIndicator />
+          )}
+          <Spacer direction="vertical" size="2vh" />
+        </DialogContainer>
+      </DialogWrapper>
     </Dialog>
   );
 };
 
-export { RoleEditModal };
-export type { RoleEditModalProps };
+export { Container as RoleEditModal };
+export type { ContainerProps as RoleEditModalProps };
