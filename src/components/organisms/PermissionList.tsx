@@ -7,9 +7,12 @@ import TableRow from "@material-ui/core/TableRow";
 import { PermissionListItem } from "./PermissionListItem";
 import { createRef } from "react";
 import { AddCircle } from "@material-ui/icons";
-import { Spacer } from "../../utils";
-import { permissionManager, metaStore } from "@dataware-tools/app-common";
-import themeInstance from "../../theme";
+import {
+  permissionManager,
+  metaStore,
+  theme as themeInstance,
+  Spacer,
+} from "@dataware-tools/app-common";
 
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
   title: {

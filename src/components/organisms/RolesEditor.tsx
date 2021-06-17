@@ -1,17 +1,14 @@
 import AddCircle from "@material-ui/icons/AddCircle";
 import Pagination from "@material-ui/core/Pagination";
-import {
-  API_ROUTE,
-  Spacer,
-  ObjToParamString,
-  addURLParam,
-  getURLParam,
-} from "../../utils";
-import { ToolBar } from "./ToolBar";
 import { useState, useEffect } from "react";
 import { RoleEditModal, RoleEditModalProps } from "./RoleEditModal";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
+  API_ROUTE,
+  Spacer,
+  objToQueryString,
+  addQueryString,
+  getQueryString,
   permissionManager,
   LoadingIndicator,
   ErrorMessage,
@@ -19,6 +16,8 @@ import {
   Table,
   PerPageSelect,
   SearchForm,
+  PageToolBar,
+  PageMain,
 } from "@dataware-tools/app-common";
 import useSWR, { mutate } from "swr";
 
@@ -26,39 +25,27 @@ import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
-  mainContainer: {
-    boxShadow:
-      "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
-    maxHeight: "60vh",
-    minHeight: "40vh",
-    overflow: "auto",
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    padding: "0 3vw",
   },
   paginationContainer: {
     alignItems: "center",
     display: "flex",
     justifyContent: "center",
   },
-  loadingIndicatorContainer: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    maxHeight: "60vh",
-    minHeight: "40vh",
-  },
-  errorMessageContainer: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    maxHeight: "60vh",
-    minHeight: "40vh",
-  },
 }));
 
 const RolesEditor = (): JSX.Element => {
   // TODO: save per_page to local state
-  const [searchText, setSearchText] = useState(getURLParam("searchText") || "");
-  const [perPage, setPerPage] = useState(Number(getURLParam("perPage")) || 20);
-  const [page, setPage] = useState(Number(getURLParam("page")) || 1);
+  const [searchText, setSearchText] = useState(
+    getQueryString("searchText") || ""
+  );
+  const [perPage, setPerPage] = useState(
+    Number(getQueryString("perPage")) || 20
+  );
+  const [page, setPage] = useState(Number(getQueryString("page")) || 1);
   const [modalProps, setModalProps] = useState({
     open: false,
     roleId: undefined as undefined | RoleEditModalProps["roleId"],
@@ -92,7 +79,7 @@ const RolesEditor = (): JSX.Element => {
     return listRolesRes;
   };
 
-  const listRolesQuery = ObjToParamString({
+  const listRolesQuery = objToQueryString({
     page: pageForQuery,
     per_page: perPage,
     search_text: searchText,
@@ -143,7 +130,7 @@ const RolesEditor = (): JSX.Element => {
   };
 
   useEffect(() => {
-    addURLParam({ page, perPage, searchText }, "replace");
+    addQueryString({ page, perPage, searchText }, "replace");
   }, [page, perPage, searchText]);
 
   const addRole = async () => {
@@ -176,37 +163,37 @@ const RolesEditor = (): JSX.Element => {
   };
 
   return (
-    <div>
-      <Spacer direction="vertical" size="3vh" />
-      <ToolBar>
-        <SearchForm
-          onSearch={(newSearchText) => setSearchText(newSearchText)}
-          defaultValue={searchText}
-        />
-        <Spacer direction="horizontal" size="15px" />
-        <PerPageSelect
-          perPage={perPage}
-          setPerPage={setPerPage}
-          values={[10, 20, 50, 100]}
-        />
-        <Spacer direction="horizontal" size="15px" />
-        <LoadingButton startIcon={<AddCircle />} onClick={addRole}>
-          Add Role
-        </LoadingButton>
-      </ToolBar>
-      <Spacer direction="vertical" size="3vh" />
-      {listRolesError ? (
-        <ErrorMessage
-          reason={JSON.stringify(listRolesError)}
-          instruction="please reload this page"
-        />
-      ) : error ? (
-        <div className={styles.errorMessageContainer}>
+    <>
+      <PageToolBar
+        right={
+          <>
+            <SearchForm
+              onSearch={(newSearchText) => setSearchText(newSearchText)}
+              defaultValue={searchText}
+            />
+            <Spacer direction="horizontal" size="15px" />
+            <PerPageSelect
+              perPage={perPage}
+              setPerPage={setPerPage}
+              values={[10, 20, 50, 100]}
+            />
+            <Spacer direction="horizontal" size="15px" />
+            <LoadingButton startIcon={<AddCircle />} onClick={addRole}>
+              Add Role
+            </LoadingButton>
+          </>
+        }
+      />
+      <PageMain>
+        {listRolesError ? (
+          <ErrorMessage
+            reason={JSON.stringify(listRolesError)}
+            instruction="please reload this page"
+          />
+        ) : error ? (
           <ErrorMessage reason={error.reason} instruction={error.instruction} />
-        </div>
-      ) : listRolesRes ? (
-        <>
-          <div className={styles.mainContainer}>
+        ) : listRolesRes ? (
+          <>
             <Table
               rows={listRolesRes.roles}
               columns={rolesListColumns}
@@ -232,8 +219,14 @@ const RolesEditor = (): JSX.Element => {
               onClose={onModalClose}
               onSave={onSaveModal}
             />
-          </div>
-          <Spacer direction="vertical" size="3vh" />
+          </>
+        ) : (
+          <LoadingIndicator />
+        )}
+      </PageMain>
+      {listRolesRes ? (
+        <>
+          <Spacer direction="vertical" size="1vh" />
           <div className={styles.paginationContainer}>
             <Pagination
               page={page}
@@ -242,12 +235,8 @@ const RolesEditor = (): JSX.Element => {
             />
           </div>
         </>
-      ) : (
-        <div className={styles.loadingIndicatorContainer}>
-          <LoadingIndicator />
-        </div>
-      )}
-    </div>
+      ) : null}
+    </>
   );
 };
 

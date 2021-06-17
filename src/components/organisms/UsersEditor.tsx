@@ -8,58 +8,38 @@ import {
   ErrorMessageProps,
   PerPageSelect,
   SearchForm,
+  PageToolBar,
+  Spacer,
+  getQueryString,
+  API_ROUTE,
+  objToQueryString,
+  addQueryString,
+  PageMain,
 } from "@dataware-tools/app-common";
 
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircle from "@material-ui/icons/AddCircle";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/core/Pagination";
-import TableContainer from "@material-ui/core/TableContainer";
-import Paper from "@material-ui/core/Paper";
 
-import {
-  API_ROUTE,
-  Spacer,
-  getURLParam,
-  ObjToParamString,
-  addURLParam,
-} from "../../utils";
-import { ToolBar } from "./ToolBar";
 import { UserList, UserListProps } from "./UserList";
 
 const useStyles = makeStyles(() => ({
-  bodyContainer: {
-    boxShadow:
-      "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
-    maxHeight: "60vh",
-    minHeight: "40vh",
-    overflow: "auto",
-  },
   paginationContainer: {
     alignItems: "center",
     display: "flex",
     justifyContent: "center",
   },
-  loadingIndicatorContainer: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    maxHeight: "60vh",
-    minHeight: "40vh",
-  },
-  errorMessageContainer: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    maxHeight: "60vh",
-    minHeight: "40vh",
-  },
 }));
 const UsersEditor = (): JSX.Element => {
   // TODO: save per_page to local state
-  const [searchText, setSearchText] = useState(getURLParam("searchText") || "");
-  const [perPage, setPerPage] = useState(Number(getURLParam("perPage")) || 20);
-  const [page, setPage] = useState(Number(getURLParam("page")) || 1);
+  const [searchText, setSearchText] = useState(
+    getQueryString("searchText") || ""
+  );
+  const [perPage, setPerPage] = useState(
+    Number(getQueryString("perPage")) || 20
+  );
+  const [page, setPage] = useState(Number(getQueryString("page")) || 1);
   const { getAccessTokenSilently } = useAuth0();
   const [error, setError] = useState<null | ErrorMessageProps>(null);
 
@@ -76,7 +56,7 @@ const UsersEditor = (): JSX.Element => {
     return listUsersRes;
   };
 
-  const listUsersQuery = ObjToParamString({
+  const listUsersQuery = objToQueryString({
     per_page: perPage,
     page: page,
     search_text: searchText,
@@ -151,70 +131,68 @@ const UsersEditor = (): JSX.Element => {
   };
 
   useEffect(() => {
-    addURLParam({ page, perPage, searchText }, "replace");
+    addQueryString({ page, perPage, searchText }, "replace");
   }, [page, perPage, searchText]);
 
   return (
-    <div>
-      <Spacer direction="vertical" size="3vh" />
-      <ToolBar>
-        <SearchForm
-          onSearch={(newSearchText) => setSearchText(newSearchText)}
-          defaultValue={searchText}
-        />
-        <Spacer direction="horizontal" size="15px" />
-        <PerPageSelect
-          perPage={perPage}
-          setPerPage={setPerPage}
-          values={[10, 20, 50, 100]}
-        />
-        <Spacer direction="horizontal" size="15px" />
-        <Button
-          href="https://manage.auth0.com/dashboard/us/hdwlab-com/users"
-          startIcon={<AddCircle />}
-        >
-          Add User
-        </Button>
-      </ToolBar>
-      <Spacer direction="vertical" size="3vh" />
-      {listUsersError || listRolesError ? (
-        <div className={styles.errorMessageContainer}>
+    <>
+      <PageToolBar
+        right={
+          <>
+            <SearchForm
+              onSearch={(newSearchText) => setSearchText(newSearchText)}
+              defaultValue={searchText}
+            />
+            <Spacer direction="horizontal" size="15px" />
+            <PerPageSelect
+              perPage={perPage}
+              setPerPage={setPerPage}
+              values={[10, 20, 50, 100]}
+            />
+            <Spacer direction="horizontal" size="15px" />
+            <Button
+              href="https://manage.auth0.com/dashboard/us/hdwlab-com/users"
+              startIcon={<AddCircle />}
+            >
+              Add User
+            </Button>
+          </>
+        }
+      />
+      {listRolesRes?.roles?.length === 0 ? (
+        <div>
+          <strong>No roles defined! Please define role!</strong>
+        </div>
+      ) : null}
+      <PageMain>
+        {listUsersError || listRolesError ? (
           <ErrorMessage
             reason={JSON.stringify(listUsersError || listRolesError)}
             instruction="please reload this page"
           />
-        </div>
-      ) : error ? (
-        <ErrorMessage reason={error.reason} instruction={error.instruction} />
-      ) : listUsersRes && listRolesRes ? (
-        <>
-          {listRolesRes.roles?.length === 0 ? (
-            <div>
-              <strong>No roles defined! please define role!</strong>
-            </div>
-          ) : null}
-          <TableContainer component={Paper} className={styles.bodyContainer}>
-            <UserList
-              users={listUsersRes.users}
-              roles={listRolesRes.roles}
-              onUpdateUser={updateUser}
-            />
-          </TableContainer>
-          <Spacer direction="vertical" size="3vh" />
-          <div className={styles.paginationContainer}>
-            <Pagination
-              count={Math.ceil(listUsersRes.total / listUsersRes.per_page)}
-              page={page}
-              onChange={(_, newPage) => setPage(newPage)}
-            />
-          </div>
-        </>
-      ) : (
-        <div className={styles.loadingIndicatorContainer}>
+        ) : error ? (
+          <ErrorMessage reason={error.reason} instruction={error.instruction} />
+        ) : listUsersRes && listRolesRes ? (
+          <UserList
+            users={listUsersRes.users}
+            roles={listRolesRes.roles}
+            onUpdateUser={updateUser}
+          />
+        ) : (
           <LoadingIndicator />
+        )}
+      </PageMain>
+      <Spacer direction="vertical" size="1vh" />
+      {listUsersRes ? (
+        <div className={styles.paginationContainer}>
+          <Pagination
+            count={Math.ceil(listUsersRes.total / listUsersRes.per_page)}
+            page={page}
+            onChange={(_, newPage) => setPage(newPage)}
+          />
         </div>
-      )}
-    </div>
+      ) : null}
+    </>
   );
 };
 
