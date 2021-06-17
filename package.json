@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "repository": "https://github.com/dataware-tools/app-user-manager.git",
-  "homepage": "/app-user-manager",
+  "homepage": "/user-manager",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
