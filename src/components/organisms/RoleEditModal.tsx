@@ -12,6 +12,7 @@ import {
   DialogToolBar,
   DialogWrapper,
   DialogMain,
+  NoticeableLetters,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Dialog from "@material-ui/core/Dialog";
@@ -256,7 +257,9 @@ const Container = ({
                 <Spacer direction="vertical" size="1vh" />
                 <DialogMain>
                   <div>
-                    <div className={styles.descriptionLabel}>Description</div>
+                    <div className={styles.descriptionLabel}>
+                      <NoticeableLetters>Description</NoticeableLetters>
+                    </div>
                     <div className={styles.descriptionInputContainer}>
                       <TextField
                         fullWidth
