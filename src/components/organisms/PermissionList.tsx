@@ -12,6 +12,7 @@ import {
   metaStore,
   theme as themeInstance,
   Spacer,
+  NoticeableLetters,
 } from "@dataware-tools/app-common";
 
 const useStyles = makeStyles((theme: typeof themeInstance) => ({
@@ -88,7 +89,9 @@ const PermissionList = ({
   return (
     <div>
       <div className={styles.tableTop}>
-        <div className={styles.title}>Permissions</div>
+        <div className={styles.title}>
+          <NoticeableLetters>Permissions</NoticeableLetters>
+        </div>
         <Spacer direction="horizontal" size="5px" />
         <div
           onClick={() => {
