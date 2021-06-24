@@ -18,37 +18,6 @@ import {
   SquareIconButton,
 } from "@dataware-tools/app-common";
 
-const useStyles = makeStyles((theme: typeof themeInstance) => ({
-  header: {
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    lineHeight: 1.7,
-  },
-  tableContainer: {
-    height: "30vh",
-    margin: "0 3vw",
-    overflowY: "auto",
-  },
-  titleContainer: {
-    alignItems: "center",
-    display: "flex",
-    padding: "10px 0",
-  },
-  addButton: {
-    alignItems: "center",
-    cursor: "pointer",
-    display: "flex",
-    justifyContent: "center",
-    padding: "5px",
-    "&:hover": {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-  bottomSpace: {
-    minHeight: "50px",
-  },
-}));
-
 type Action = permissionManager.ActionModel;
 type Database = metaStore.DatabaseModel;
 type Permission = permissionManager.RoleModel["permissions"][number];
@@ -121,6 +90,38 @@ const Component = ({
     </div>
   );
 };
+
+const useStyles = makeStyles((theme: typeof themeInstance) => ({
+  header: {
+    fontSize: "1.2rem",
+    fontWeight: "bold",
+    lineHeight: 1.7,
+  },
+  tableContainer: {
+    height: "30vh",
+    margin: "0 3vw",
+    overflowY: "auto",
+  },
+  titleContainer: {
+    alignItems: "center",
+    display: "flex",
+    padding: "10px 0",
+  },
+  addButton: {
+    alignItems: "center",
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "center",
+    padding: "5px",
+    "&:hover": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+  bottomSpace: {
+    minHeight: "50px",
+  },
+}));
+
 const Container = ({
   actions,
   databases,
