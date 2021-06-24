@@ -13,6 +13,7 @@ import {
   DialogWrapper,
   DialogMain,
   NoticeableLetters,
+  DialogSubTitle,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import Dialog from "@material-ui/core/Dialog";
@@ -221,7 +222,7 @@ const Container = ({
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogWrapper>
         <DialogCloseButton onClick={onClose} />
-        <DialogContainer>
+        <DialogContainer padding="0 0 20px">
           {getRoleError || listDatabasesError || listActionsError ? (
             <ErrorMessage
               reason={JSON.stringify(
@@ -257,9 +258,9 @@ const Container = ({
                 <Spacer direction="vertical" size="1vh" />
                 <DialogMain>
                   <div>
-                    <div className={styles.descriptionLabel}>
+                    <DialogSubTitle>
                       <NoticeableLetters>Description</NoticeableLetters>
-                    </div>
+                    </DialogSubTitle>
                     <div className={styles.descriptionInputContainer}>
                       <TextField
                         fullWidth
@@ -271,12 +272,14 @@ const Container = ({
                   </div>
                   <Spacer direction="vertical" size="1vh" />
                   <PermissionList
+                    title={
+                      <DialogSubTitle>
+                        <NoticeableLetters>Permission</NoticeableLetters>
+                      </DialogSubTitle>
+                    }
                     permissions={permissions || role.permissions}
                     actions={actions.actions}
-                    databases={
-                      // TODO: fix API type
-                      databases.data as NonNullable<typeof databases.data>
-                    }
+                    databases={databases.data}
                     onChange={(newPermissions) =>
                       setPermissions([...newPermissions])
                     }
