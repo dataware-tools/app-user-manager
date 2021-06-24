@@ -3,9 +3,9 @@ import {
   metaStore,
   objToQueryString,
   permissionManager,
+  AwaitType,
 } from "@dataware-tools/app-common";
 import useSWR from "swr";
-import { AwaitType } from "./utilTypes";
 
 type Data<T> = T extends void | undefined | null
   ? "__fetchSuccess__" | undefined

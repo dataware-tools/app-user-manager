@@ -16,5 +16,4 @@ const usePrevious = <T>(value: T): T | undefined => {
 };
 
 export { APP_ROUTE, SwrOptions, usePrevious };
-export * from "./utilTypes";
 export * from "./fetchClient";
