@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const RolesEditor = (): JSX.Element => {
+const Container = (): JSX.Element => {
   // TODO: save per_page to local state
   const [searchText, setSearchText] = useState(
     getQueryString("searchText") || ""
@@ -141,7 +141,9 @@ const RolesEditor = (): JSX.Element => {
     });
   };
 
-  const onSaveModal: RoleEditModalProps["onSave"] = (newRole) => {
+  const onSaveRoleSucceeded: RoleEditModalProps["onSaveSucceeded"] = (
+    newRole
+  ) => {
     const prev = listRolesRes;
     if (prev?.roles.find((role) => role.role_id === newRole.role_id)) {
       const newLocalRoles = prev?.roles.map((role) =>
@@ -217,7 +219,7 @@ const RolesEditor = (): JSX.Element => {
             <RoleEditModal
               {...modalProps}
               onClose={onModalClose}
-              onSave={onSaveModal}
+              onSaveSucceeded={onSaveRoleSucceeded}
             />
           </>
         ) : (
@@ -240,4 +242,4 @@ const RolesEditor = (): JSX.Element => {
   );
 };
 
-export { RolesEditor };
+export { Container as RolesPage };

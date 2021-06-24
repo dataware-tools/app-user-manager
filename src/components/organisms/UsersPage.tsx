@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
     justifyContent: "center",
   },
 }));
-const UsersEditor = (): JSX.Element => {
+const Container = (): JSX.Element => {
   // TODO: save per_page to local state
   const [searchText, setSearchText] = useState(
     getQueryString("searchText") || ""
@@ -196,4 +196,4 @@ const UsersEditor = (): JSX.Element => {
   );
 };
 
-export { UsersEditor };
+export { Container as UsersPage };

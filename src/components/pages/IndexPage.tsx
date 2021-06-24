@@ -8,8 +8,8 @@ import {
   PageBody,
 } from "@dataware-tools/app-common";
 import { useState, useEffect } from "react";
-import { UsersEditor } from "../organisms/UsersEditor";
-import { RolesEditor } from "../organisms/RolesEditor";
+import { UsersPage } from "../organisms/UsersPage";
+import { RolesPage } from "../organisms/RolesPage";
 
 export const IndexPage = (): JSX.Element => {
   // TODO: save tab number to local state
@@ -45,9 +45,9 @@ export const IndexPage = (): JSX.Element => {
         {(() => {
           switch (tabNames[tabNum]) {
             case "Users":
-              return <UsersEditor />;
+              return <UsersPage />;
             case "Roles":
-              return <RolesEditor />;
+              return <RolesPage />;
             default:
               return null;
           }
