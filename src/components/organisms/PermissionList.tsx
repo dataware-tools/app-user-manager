@@ -9,7 +9,7 @@ import {
   PermissionListItemProps,
 } from "./PermissionListItem";
 import { createRef, ReactNode, RefObject } from "react";
-import { AddCircle } from "@material-ui/icons";
+import AddCircle from "@material-ui/icons/AddCircle";
 import {
   permissionManager,
   metaStore,

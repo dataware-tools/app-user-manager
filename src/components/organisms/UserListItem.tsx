@@ -1,7 +1,8 @@
 import { MultiSelect } from "@dataware-tools/app-common";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { TableCell, TableRow } from "@material-ui/core";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
 
 type Roles = {
   role_id: number;
