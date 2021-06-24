@@ -7,7 +7,7 @@ export default {
   title: "RoleEditModal",
 };
 
-export const Default = () => {
+export const Default = (): JSX.Element => {
   const [open, setOpen] = useState(false);
   return (
     <div>
@@ -23,7 +23,7 @@ export const Default = () => {
         onClose={() => {
           setOpen(false);
         }}
-        onSave={() => {
+        onSaveSucceeded={() => {
           setOpen(false);
         }}
       />
