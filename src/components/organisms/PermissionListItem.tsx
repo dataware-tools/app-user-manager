@@ -5,6 +5,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import {
   createFilterOptionsForMultiSelect,
   MultiSelect,
+  MultiSelectProps,
 } from "@dataware-tools/app-common";
 
 type Database = string;
@@ -13,7 +14,19 @@ type Action = { action_id: string; name: string };
 
 type Permission = { databases: Database[]; actions: Action[] };
 
-type PermissionListItemProps = {
+type Props = {
+  databaseMultiSelectProps: Pick<
+    MultiSelectProps<Database, false, true>,
+    "onChange" | "getOptionLabel" | "filterOptions"
+  >;
+  actionMultiSelectProps: Pick<
+    MultiSelectProps<Action, false, false>,
+    "onChange" | "getOptionLabel" | "getOptionSelected"
+  >;
+  onDeleteButtonClick: () => void;
+} & Omit<ContainerProps, "onChange" | "onDelete" | "index">;
+
+type ContainerProps = {
   actions: Action[];
   databases: Database[];
   index: number;
@@ -22,43 +35,24 @@ type PermissionListItemProps = {
   permission: Permission;
 };
 
-const PermissionListItem = ({
+const Component = ({
   actions,
   databases,
-  index,
-  onChange,
-  onDelete,
   permission,
-}: PermissionListItemProps): JSX.Element => {
-  const filter = createFilterOptionsForMultiSelect<Database>();
-
+  databaseMultiSelectProps,
+  actionMultiSelectProps,
+  onDeleteButtonClick,
+}: Props): JSX.Element => {
   return (
     <TableRow>
       <TableCell style={{ lineHeight: 1.5, fontSize: "1rem" }}>
         <MultiSelect
           options={databases}
           value={permission.databases}
-          onChange={(_, newValues) => {
-            onChange(index, {
-              databases: [...newValues],
-              actions: permission.actions,
-            });
-          }}
-          getOptionLabel={(option) => option}
-          filterOptions={(options, params) => {
-            const filtered = filter(options, params);
-
-            const { inputValue } = params;
-            const isExisting = options.some((option) => inputValue === option);
-            if (inputValue !== "" && !isExisting) {
-              filtered.push(inputValue);
-            }
-
-            return filtered;
-          }}
           freeSolo
           filterSelectedOptions
           fullWidth
+          {...databaseMultiSelectProps}
         />
       </TableCell>
       <TableCell style={{ lineHeight: 1.5, fontSize: "1rem" }}>
@@ -66,22 +60,13 @@ const PermissionListItem = ({
           options={actions}
           value={permission.actions}
           freeSolo={false}
-          onChange={(_, newValues) => {
-            onChange(index, {
-              databases: permission.databases,
-              actions: [...newValues],
-            });
-          }}
-          getOptionLabel={(option) => option.name}
-          getOptionSelected={(option, value) => {
-            return option.action_id === value.action_id;
-          }}
           filterSelectedOptions
           fullWidth
+          {...actionMultiSelectProps}
         />
       </TableCell>
       <TableCell align="center" padding="none" size="small">
-        <IconButton onClick={() => onDelete(index)}>
+        <IconButton onClick={onDeleteButtonClick}>
           <DeleteIcon />
         </IconButton>
       </TableCell>
@@ -89,5 +74,61 @@ const PermissionListItem = ({
   );
 };
 
-export { PermissionListItem };
-export type { PermissionListItemProps };
+const Container = ({
+  index,
+  permission,
+  onChange,
+  onDelete,
+  ...delegated
+}: ContainerProps): JSX.Element => {
+  const filter = createFilterOptionsForMultiSelect<Database>();
+  const databaseMultiSelectProps: Props["databaseMultiSelectProps"] = {
+    filterOptions: (options, params) => {
+      const filtered = filter(options, params);
+
+      const { inputValue } = params;
+      const isExisting = options.some((option) => inputValue === option);
+      if (inputValue !== "" && !isExisting) {
+        filtered.push(inputValue);
+      }
+
+      return filtered;
+    },
+    getOptionLabel: (option) => option,
+    onChange: (_, newValues) => {
+      onChange(index, {
+        databases: [...newValues],
+        actions: permission.actions,
+      });
+    },
+  };
+
+  const actionMultiSelectProps: Props["actionMultiSelectProps"] = {
+    getOptionLabel: (option) => option.name,
+    getOptionSelected: (option, value) => {
+      return option.action_id === value.action_id;
+    },
+    onChange: (_, newValues) => {
+      onChange(index, {
+        databases: permission.databases,
+        actions: [...newValues],
+      });
+    },
+  };
+
+  const onDeleteButtonClick: Props["onDeleteButtonClick"] = () =>
+    onDelete(index);
+
+  return (
+    <Component
+      permission={permission}
+      databaseMultiSelectProps={databaseMultiSelectProps}
+      actionMultiSelectProps={actionMultiSelectProps}
+      onDeleteButtonClick={onDeleteButtonClick}
+      {...delegated}
+    />
+  );
+};
+
+export { Container as PermissionListItem };
+export type { ContainerProps as PermissionListItemProps };
