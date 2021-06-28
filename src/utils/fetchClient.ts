@@ -73,6 +73,24 @@ const useListActions: UseAPI<
   return [data, error, cacheKey];
 };
 
+const useListUsers: UseAPI<typeof permissionManager.UserService.listUsers> = (
+  token,
+  { ...query },
+  shouldFetch = true
+) => {
+  const cacheQuery = objToQueryString({ ...query });
+  const cacheKey = `${API_ROUTE.PERMISSION.BASE}/actions${cacheQuery}`;
+  const fetcher = async () => {
+    permissionManager.OpenAPI.TOKEN = token;
+    permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
+    const res = await permissionManager.UserService.listUsers(query);
+    return res;
+  };
+  // See: https://swr.vercel.app/docs/conditional-fetching
+  const { data, error } = useSWR(shouldFetch ? cacheKey : null, fetcher);
+  return [data, error, cacheKey];
+};
+
 const useGetRole: UseAPI<typeof permissionManager.RoleService.getRole> = (
   token,
   { roleId, ...query },
@@ -124,4 +142,5 @@ export {
   useListActions,
   useGetRole,
   useListRoles,
+  useListUsers,
 };
