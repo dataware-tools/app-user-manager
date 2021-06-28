@@ -8,18 +8,14 @@ import {
   DialogContainer,
   DialogCloseButton,
   DialogWrapper,
+  usePrevious,
 } from "@dataware-tools/app-common";
 import Dialog from "@material-ui/core/Dialog";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import { mutate } from "swr";
 import { RoleEditModalBody, RoleEditModalBodyProps } from "./RoleEditModalBody";
-import {
-  useGetRole,
-  useListActions,
-  useListDatabases,
-  usePrevious,
-} from "utils";
+import { useGetRole, useListActions, useListDatabases } from "utils";
 
 type Props = {
   error?: ErrorMessageProps;
