@@ -24,6 +24,15 @@ const fetchAPI = async <T, U>(
   }
 };
 
+const fetchPermissionManager = async <T, U>(
+  token: string | (() => Promise<string>),
+  fetcher: (args: T) => Promise<U>,
+  param: T
+): Promise<[data: Data<U>, error: any]> => {
+  permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
+  permissionManager.OpenAPI.TOKEN = token;
+  return await fetchAPI(fetcher, param);
+};
 interface UseAPI<T extends (...args: any) => Promise<any>> {
   (
     token: string | (() => Promise<string>),
@@ -90,4 +99,29 @@ const useGetRole: UseAPI<typeof permissionManager.RoleService.getRole> = (
   return [data, error, cacheKey];
 };
 
-export { useListDatabases, fetchAPI, useListActions, useGetRole };
+const useListRoles: UseAPI<typeof permissionManager.RoleService.listRoles> = (
+  token,
+  { ...query },
+  shouldFetch = true
+) => {
+  const cacheQuery = objToQueryString({ ...query });
+  const cacheKey = `${API_ROUTE.PERMISSION.BASE}/roles${cacheQuery}`;
+  const fetcher = async () => {
+    permissionManager.OpenAPI.TOKEN = token;
+    permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
+    const res = await permissionManager.RoleService.listRoles(query);
+    return res;
+  };
+  // See: https://swr.vercel.app/docs/conditional-fetching
+  const { data, error } = useSWR(shouldFetch ? cacheKey : null, fetcher);
+  return [data, error, cacheKey];
+};
+
+export {
+  useListDatabases,
+  fetchAPI,
+  fetchPermissionManager,
+  useListActions,
+  useGetRole,
+  useListRoles,
+};
