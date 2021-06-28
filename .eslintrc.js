@@ -63,5 +63,6 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     // API response is snake case.
     camelcase: "off",
+    "react/display-name": "off",
   },
 };
