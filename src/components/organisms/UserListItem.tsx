@@ -1,5 +1,5 @@
 import { MultiSelect } from "@dataware-tools/app-common";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
@@ -82,46 +82,44 @@ const useStyles = makeStyles({
   },
 });
 
-const Container = ({
-  user,
-  onUpdateUser,
-  roles,
-}: ContainerProps): JSX.Element => {
-  const [currentRoles, setCurrentRoles] = useState<Roles>(user.roles);
-  const [prevRoles, setPrevRoles] = useState<Roles>(user.roles);
-  const [isSavable, setIsSavable] = useState(false);
+const Container = memo(
+  ({ user, onUpdateUser, roles }: ContainerProps): JSX.Element => {
+    const [currentRoles, setCurrentRoles] = useState<Roles>(user.roles);
+    const [prevRoles, setPrevRoles] = useState<Roles>(user.roles);
+    const [isSavable, setIsSavable] = useState(false);
 
-  const classes = useStyles();
+    const classes = useStyles();
 
-  const onSave = async () => {
-    setPrevRoles([...currentRoles]);
-    await onUpdateUser({ ...user, roles: currentRoles });
-  };
+    const onSave = async () => {
+      await onUpdateUser({ ...user, roles: currentRoles });
+      setPrevRoles(currentRoles);
+    };
 
-  const onCancelEdit = () => {
-    setCurrentRoles([...prevRoles]);
-  };
+    const onCancelEdit = () => {
+      setCurrentRoles(prevRoles);
+    };
 
-  useEffect(() => {
-    if (JSON.stringify(currentRoles) !== JSON.stringify(prevRoles)) {
-      setIsSavable(true);
-    } else {
-      setIsSavable(false);
-    }
-  }, [currentRoles, prevRoles]);
+    useEffect(() => {
+      if (JSON.stringify(currentRoles) !== JSON.stringify(prevRoles)) {
+        setIsSavable(true);
+      } else {
+        setIsSavable(false);
+      }
+    }, [currentRoles, prevRoles]);
 
-  return (
-    <Component
-      classes={classes}
-      onSave={isSavable ? onSave : undefined}
-      onCancelEdit={onCancelEdit}
-      onChange={setCurrentRoles}
-      roleOptions={roles}
-      roles={currentRoles}
-      user={user}
-    />
-  );
-};
+    return (
+      <Component
+        classes={classes}
+        onSave={isSavable ? onSave : undefined}
+        onCancelEdit={onCancelEdit}
+        onChange={setCurrentRoles}
+        roleOptions={roles}
+        roles={currentRoles}
+        user={user}
+      />
+    );
+  }
+);
 
 export { Container as UserListItem };
 export type { ContainerProps as UserListItemProps };
