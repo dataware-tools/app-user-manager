@@ -1,7 +1,10 @@
-export const APP_ROUTE = {
+const APP_ROUTE = {
   HOME: "/",
 };
 
-export const SwrOptions = {
+const SwrOptions = {
   errorRetryCount: 1,
 };
+
+export { APP_ROUTE, SwrOptions };
+export * from "./fetchClient";

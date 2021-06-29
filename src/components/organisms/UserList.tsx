@@ -10,43 +10,37 @@ import { makeStyles } from "@material-ui/core/styles";
 
 type Users = permissionManager.UserModel[];
 type Roles = permissionManager.RoleModel[];
-type UserListProps = {
+
+type Props = {
+  classes: ReturnType<typeof useStyles>;
+  roles: {
+    name: string;
+    role_id: number;
+  }[];
+} & Omit<ContainerProps, "roles">;
+type ContainerProps = {
   users: Users;
   roles: Roles;
   bottomRef?: RefObject<HTMLDivElement>;
   onUpdateUser: UserListItemProps["onUpdateUser"];
 };
 
-const useStyles = makeStyles({
-  headerCell: {
-    height: "47px",
-  },
-});
-
-const UserList = ({
+const Component = ({
+  classes,
   users,
   roles,
   bottomRef,
   onUpdateUser,
-}: UserListProps): JSX.Element => {
-  const fixedRoles = useMemo(() => {
-    return roles.map((role) => ({
-      name: role.name,
-      role_id: role.role_id,
-    }));
-  }, [roles]);
-
-  const styles = useStyles();
-
+}: Props) => {
   return (
     <>
-      <Table size="small">
+      <Table size="small" stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell key="user" className={styles.headerCell}>
+            <TableCell key="user" className={classes.headerCell}>
               User
             </TableCell>
-            <TableCell key="roles" className={styles.headerCell}>
+            <TableCell key="roles" className={classes.headerCell}>
               Roles
             </TableCell>
           </TableRow>
@@ -56,7 +50,7 @@ const UserList = ({
             <UserListItem
               user={user}
               key={user.user_id}
-              roles={fixedRoles}
+              roles={roles}
               onUpdateUser={onUpdateUser}
             />
           ))}
@@ -66,6 +60,24 @@ const UserList = ({
     </>
   );
 };
+const useStyles = makeStyles({
+  headerCell: {
+    height: "47px",
+  },
+});
 
-export { UserList };
-export type { UserListProps };
+const Container = ({ roles, ...delegated }: ContainerProps): JSX.Element => {
+  const fixedRoles = useMemo(() => {
+    return roles.map((role) => ({
+      name: role.name,
+      role_id: role.role_id,
+    }));
+  }, [roles]);
+
+  const classes = useStyles();
+
+  return <Component classes={classes} roles={fixedRoles} {...delegated} />;
+};
+
+export { Container as UserList };
+export type { ContainerProps as UserListProps };
