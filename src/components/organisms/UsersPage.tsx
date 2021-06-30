@@ -75,7 +75,10 @@ const Component = ({
             />
             <Spacer direction="horizontal" size="15px" />
             <Button
-              href="https://manage.auth0.com/dashboard/us/hdwlab-com/users"
+              href={
+                process.env.NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_MANAGE_PAGE ||
+                "https://manage.auth0.com/dashboard/us/dataware-tools/users"
+              }
               startIcon={<AddCircle />}
             >
               Add User
