@@ -16,6 +16,6 @@
 sed -i -e "s/ETb1RhJEbtXlFgWtaHzl5kPCkaYqhTVl/${NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_CONFIG_CLIENT_ID}/g" .next/static/chunks/*.js
 sed -i -e "s/dataware-tools.us.auth0.com/${NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_CONFIG_DOMAIN}/g" .next/static/chunks/*.js
 sed -i -e "s|https://demo.dataware-tools.com/|${NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_CONFIG_API_URL}|g" .next/static/chunks/*.js
-sed -i -e "s|https://manage.auth0.com/dashboard/us/dataware-tools/user|${NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_MANAGE_PAGE}|g" .next/static/chunks/pages*.js
+sed -i -e "s|https://manage.auth0.com/dashboard/us/dataware-tools/user|${NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_MANAGE_PAGE}|g" .next/static/chunks/pages/*.js
 
 exec "$@"
