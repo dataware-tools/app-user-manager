@@ -1,13 +1,7 @@
-## First thing to do
+# app-user-manager
 
-The things you have to do after creating a repository based on this template are as follows:
+Web-application for managing users' roles and permissions.
 
-- Change `name` in `package.json` to the name of your application
-- Change `repository` in `package.json` to the newly created repository
-- Change `homepage` in `package.json` to whatever you want
-  - This should be the same as `urlPrefix` in
-    [App Catalog](https://github.com/dataware-tools/app-common/blob/master/src/app/catalog.tsx)
-    if you want to register your application to dataware-tools
 
 ## How to build docker-image
 
