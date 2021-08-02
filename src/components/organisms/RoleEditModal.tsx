@@ -9,6 +9,7 @@ import {
   DialogCloseButton,
   DialogWrapper,
   usePrevious,
+  extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 import Dialog from "@material-ui/core/Dialog";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -114,7 +115,7 @@ const Container = ({
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
     const setError = (error: any) => {
       setError({
-        reason: JSON.stringify(error),
+        reason: extractReasonFromFetchError(error),
         instruction: "Please reload this page",
       });
       return undefined;
@@ -139,7 +140,7 @@ const Container = ({
   useEffect(() => {
     if (fetchError) {
       setError({
-        reason: JSON.stringify(fetchError),
+        reason: extractReasonFromFetchError(fetchError),
         instruction: "Please reload this page",
       });
     }

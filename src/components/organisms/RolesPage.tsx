@@ -16,6 +16,7 @@ import {
   PerPageSelectProps,
   SearchFormProps,
   TableProps,
+  extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -185,7 +186,7 @@ const Container = (): JSX.Element => {
   useEffect(() => {
     if (fetchError) {
       setError({
-        reason: JSON.stringify(fetchError),
+        reason: extractReasonFromFetchError(fetchError),
         instruction: "Please reload thi page",
       });
     }
@@ -231,7 +232,7 @@ const Container = (): JSX.Element => {
 
     if (deleteRoleError) {
       setError({
-        reason: JSON.stringify(deleteRoleError),
+        reason: extractReasonFromFetchError(deleteRoleError),
         instruction: "Please reload this page",
       });
     } else {
