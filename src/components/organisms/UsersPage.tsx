@@ -15,6 +15,7 @@ import {
   PageMain,
   SearchFormProps,
   PerPageSelectProps,
+  extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -147,7 +148,7 @@ const Container = (): JSX.Element => {
   useEffect(() => {
     if (fetchError) {
       setError({
-        reason: JSON.stringify(fetchError),
+        reason: extractReasonFromFetchError(fetchError),
         instruction: "Please reload this page",
       });
     }
@@ -180,7 +181,7 @@ const Container = (): JSX.Element => {
 
       if (updateUserError) {
         setError({
-          reason: JSON.stringify(updateUserError),
+          reason: extractReasonFromFetchError(updateUserError),
           instruction: "Please reload this page",
         });
         return undefined;
