@@ -1,12 +1,12 @@
-import IconButton from "@material-ui/core/IconButton";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import DeleteIcon from "@material-ui/icons/Delete";
 import {
   createFilterOptionsForMultiSelect,
   MultiSelect,
   MultiSelectProps,
 } from "@dataware-tools/app-common";
+import IconButton from "@material-ui/core/IconButton";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 type Database = string;
 
@@ -21,7 +21,7 @@ type Props = {
   >;
   actionMultiSelectProps: Pick<
     MultiSelectProps<Action, false, false>,
-    "onChange" | "getOptionLabel" | "getOptionSelected"
+    "onChange" | "getOptionLabel" | "isOptionEqualToValue"
   >;
   onDeleteButtonClick: () => void;
 } & Omit<ContainerProps, "onChange" | "onDelete" | "index">;
@@ -105,7 +105,7 @@ const Container = ({
 
   const actionMultiSelectProps: Props["actionMultiSelectProps"] = {
     getOptionLabel: (option) => option.name,
-    getOptionSelected: (option, value) => {
+    isOptionEqualToValue: (option, value) => {
       return option.action_id === value.action_id;
     },
     onChange: (_, newValues) => {

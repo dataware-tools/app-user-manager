@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { mutate } from "swr";
 import {
   permissionManager,
   LoadingIndicator,
@@ -18,10 +16,12 @@ import {
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 
-import { makeStyles } from "@material-ui/core/styles";
-import AddCircle from "@material-ui/icons/AddCircle";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/core/Pagination";
+import AddCircle from "@material-ui/icons/AddCircle";
+import { makeStyles } from "@material-ui/styles";
+import { useState, useEffect } from "react";
+import { mutate } from "swr";
 
 import { UserList, UserListProps } from "./UserList";
 import { useListUsers, useListRoles, fetchPermissionManager } from "utils";

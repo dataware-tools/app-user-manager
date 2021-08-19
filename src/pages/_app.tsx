@@ -1,24 +1,34 @@
-import { AppProps } from "next/app";
-import React, { useEffect } from "react";
+import { AppState, Auth0Provider } from "@auth0/auth0-react";
+import { theme, PageWrapper } from "@dataware-tools/app-common";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { StylesProvider } from "@material-ui/styles";
+import { AppProps } from "next/app";
 import Head from "next/head";
-import { ThemeProvider, StylesProvider } from "@material-ui/core/styles";
-import dynamic from "next/dynamic";
-import { theme } from "@dataware-tools/app-common";
+import React, { useEffect } from "react";
 import { SWRConfig } from "swr";
-import { SwrOptions } from "../utils/index";
-import "./global.css";
+import { repository } from "../../package.json";
+import { SwrOptions, authConfig, redirectUri } from "utils/index";
+import "./scrollbar.global.css";
 
 const App = ({ Component, pageProps }: AppProps): JSX.Element => {
   useEffect(() => {
-    // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles?.parentElement?.removeChild(jssStyles);
     }
   }, []);
 
-  const SafeHydrate = dynamic(() => import("./_app_csr"), { ssr: false });
+  const onRedirectCallback = (appState: AppState): void => {
+    const nonQueryParamURL =
+      appState && appState.returnTo
+        ? appState.returnTo
+        : typeof window === "undefined"
+        ? null
+        : window.location.origin;
+    history.replaceState(null, "", nonQueryParamURL);
+  };
+
   return (
     <>
       <Head>
@@ -33,10 +43,18 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => {
           <StylesProvider injectFirst>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              {/* See: https://ryotarch.com/javascript/react/next-js-with-csr/ */}
-              <SafeHydrate>
-                <Component {...pageProps} />
-              </SafeHydrate>
+              <Auth0Provider
+                domain={authConfig.domain}
+                clientId={authConfig.clientId}
+                audience={authConfig.apiUrl}
+                // @ts-expect-error redirectUri is not undefined in client side.
+                redirectUri={redirectUri}
+                onRedirectCallback={onRedirectCallback}
+              >
+                <PageWrapper repository={repository}>
+                  <Component {...pageProps} />
+                </PageWrapper>
+              </Auth0Provider>
             </ThemeProvider>
           </StylesProvider>
         </SWRConfig>

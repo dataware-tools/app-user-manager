@@ -8,11 +8,11 @@ import {
   metaStore,
   permissionManager,
 } from "@dataware-tools/app-common";
-import LoadingButton from "@material-ui/lab/LoadingButton";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
-import { PermissionList, PermissionListProps } from "./PermissionList";
+import LoadingButton from "@material-ui/lab/LoadingButton";
+import { makeStyles } from "@material-ui/styles";
 import { createRef, useState, RefObject } from "react";
+import { PermissionList, PermissionListProps } from "./PermissionList";
 
 type Props = {
   classes: ReturnType<typeof useStyles>;
@@ -107,7 +107,7 @@ const Component = ({
           <LoadingButton
             size="large"
             onClick={onClickSaveButton}
-            pending={isSaving}
+            loading={isSaving}
           >
             Save
           </LoadingButton>

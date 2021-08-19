@@ -1,6 +1,6 @@
+import Button from "@material-ui/core/Button";
 import { useState } from "react";
 import { RoleEditModal } from "./RoleEditModal";
-import Button from "@material-ui/core/Button";
 
 export default {
   component: RoleEditModal,

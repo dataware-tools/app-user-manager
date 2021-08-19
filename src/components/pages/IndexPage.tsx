@@ -8,8 +8,8 @@ import {
   PageBody,
 } from "@dataware-tools/app-common";
 import { useState, useEffect } from "react";
-import { UsersPage } from "../organisms/UsersPage";
 import { RolesPage } from "../organisms/RolesPage";
+import { UsersPage } from "../organisms/UsersPage";
 
 export const IndexPage = (): JSX.Element => {
   // TODO: save tab number to local state
@@ -40,6 +40,7 @@ export const IndexPage = (): JSX.Element => {
           resetQueryString("push");
           addQueryString(`?tab=${tabNames[newValue]}`, "replace");
         }}
+        sx={{ minWidth: "10vw" }}
       />
       <PageBody>
         {(() => {

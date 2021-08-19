@@ -1,8 +1,9 @@
+import { theme } from "@dataware-tools/app-common";
+import { ServerStyleSheets } from "@material-ui/styles";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
 import React from "react";
-import { ServerStyleSheets } from "@material-ui/core/styles";
-import { theme } from "@dataware-tools/app-common";
+import { homepage } from "../../package.json";
 
 export const MetaHeader = (): JSX.Element => {
   return (
@@ -13,17 +14,16 @@ export const MetaHeader = (): JSX.Element => {
         rel="stylesheet"
       />
       {/*
-      if you want to use japanese better font, comment out this. but you should remind that japanese font is maybe little heavy for usual application.
+      if you want to use japanese better font, comment out this. but you should remind that japanese font may have heavy size for usual application.
       <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
         rel="stylesheet"
       />
     */}
-      <link rel="icon" href="/user-manager/favicon.ico" />
+      <link rel="icon" href={`${homepage}/favicon.ico`} />
       {/* PWA primary color */}
       <meta name="theme-color" content={theme.palette.primary.main} />
       <meta charSet="utf-8" />
-      <meta name="theme-color" content="#000000" />
       <meta name="description" content="Human Dataware Lab user manager" />
     </>
   );
