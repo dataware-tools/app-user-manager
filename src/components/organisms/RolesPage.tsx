@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   Spacer,
@@ -18,16 +17,17 @@ import {
   TableProps,
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
-import LoadingButton from "@material-ui/lab/LoadingButton";
-import { makeStyles } from "@material-ui/core/styles";
-import AddCircle from "@material-ui/icons/AddCircle";
 import Pagination, { PaginationProps } from "@material-ui/core/Pagination";
+import AddCircle from "@material-ui/icons/AddCircle";
+import LoadingButton from "@material-ui/lab/LoadingButton";
+import { makeStyles } from "@material-ui/styles";
+import { useState, useEffect } from "react";
 import { mutate } from "swr";
-import { fetchPermissionManager, useListRoles } from "utils";
 import {
   RoleEditModal,
   RoleEditModalProps,
 } from "components/organisms/RoleEditModal";
+import { fetchPermissionManager, useListRoles } from "utils";
 
 type Props = {
   classes: ReturnType<typeof useStyles>;

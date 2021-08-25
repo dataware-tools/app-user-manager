@@ -1,8 +1,8 @@
 import { MultiSelect } from "@dataware-tools/app-common";
-import { useState, useEffect, memo } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import { makeStyles } from "@material-ui/styles";
+import { useState, useEffect, memo } from "react";
 
 type Roles = {
   role_id: number;
@@ -51,7 +51,7 @@ const Component = ({
                 onChange(newValues);
               }}
               getOptionLabel={(option) => option.name}
-              getOptionSelected={(option, value) => {
+              isOptionEqualToValue={(option, value) => {
                 return option.role_id === value.role_id;
               }}
               onSave={onSave}

@@ -1,14 +1,11 @@
-import {
-  authConfig,
-  onRedirectCallback,
-  redirectUri,
-} from "../src/pages/_app_csr";
+import { authConfig, onRedirectCallback, redirectUri } from "../src/utils";
 
 import { Auth0Provider } from "@auth0/auth0-react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import React from "react";
-import { ThemeProvider, StylesProvider } from "@material-ui/core/styles";
-import theme from "../src/theme";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { StylesProvider } from "@material-ui/styles";
+import { theme } from "@dataware-tools/app-common";
 import { SWRConfig } from "swr";
 import { SwrOptions } from "../src/utils";
 
@@ -17,7 +14,7 @@ export const parameters = {
 };
 
 export const decorators = [
-  (story) => {
+  (Story, context) => {
     return (
       <>
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -36,7 +33,7 @@ export const decorators = [
                 redirectUri={redirectUri}
                 onRedirectCallback={onRedirectCallback}
               >
-                {story()}
+                <Story {...context} />
               </Auth0Provider>
             </SWRConfig>
           </ThemeProvider>

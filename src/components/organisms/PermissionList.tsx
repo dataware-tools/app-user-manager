@@ -1,29 +1,27 @@
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  permissionManager,
+  metaStore,
+  Spacer,
+  SquareIconButton,
+} from "@dataware-tools/app-common";
+import Box from "@material-ui/core/Box";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import AddCircle from "@material-ui/icons/AddCircle";
+import { createRef, ReactNode, RefObject } from "react";
 import {
   PermissionListItem,
   PermissionListItemProps,
 } from "./PermissionListItem";
-import { createRef, ReactNode, RefObject } from "react";
-import AddCircle from "@material-ui/icons/AddCircle";
-import {
-  permissionManager,
-  metaStore,
-  theme as themeInstance,
-  Spacer,
-  SquareIconButton,
-} from "@dataware-tools/app-common";
 
 type Action = permissionManager.ActionModel;
 type Database = metaStore.DatabaseModel;
 type Permission = permissionManager.RoleModel["permissions"][number];
 
 type Props = {
-  classes: ReturnType<typeof useStyles>;
   onItemChange: PermissionListItemProps["onChange"];
   onItemDelete: PermissionListItemProps["onDelete"];
   onItemAdd: () => void;
@@ -40,7 +38,6 @@ type ContainerProps = {
 
 const Component = ({
   title,
-  classes,
   actions,
   databaseNames,
   permissions,
@@ -51,12 +48,12 @@ const Component = ({
 }: Props): JSX.Element => {
   return (
     <div>
-      <div className={classes.titleContainer}>
+      <Box sx={{ alignItems: "center", display: "flex", padding: "10px 0" }}>
         {title}
         <Spacer direction="horizontal" size="5px" />
         <SquareIconButton icon={<AddCircle />} onClick={onItemAdd} />
-      </div>
-      <div className={classes.tableContainer}>
+      </Box>
+      <Box sx={{ height: "30vh", margin: "0 3vw", overflowY: "auto" }}>
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
@@ -84,43 +81,12 @@ const Component = ({
         {/* FIXME: View port will not contain new permission by executing scrollToBottomOfList, because state will be changed asynchronously.
             So below extra space is needed to scroll to new permission, I think, however there may be a better way
             Do yo have any other method?  */}
-        <div className={classes.bottomSpace} />
+        <Box sx={{ minHeight: "50px" }} />
         <div ref={listBottomRef} />
-      </div>
+      </Box>
     </div>
   );
 };
-
-const useStyles = makeStyles((theme: typeof themeInstance) => ({
-  header: {
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    lineHeight: 1.7,
-  },
-  tableContainer: {
-    height: "30vh",
-    margin: "0 3vw",
-    overflowY: "auto",
-  },
-  titleContainer: {
-    alignItems: "center",
-    display: "flex",
-    padding: "10px 0",
-  },
-  addButton: {
-    alignItems: "center",
-    cursor: "pointer",
-    display: "flex",
-    justifyContent: "center",
-    padding: "5px",
-    "&:hover": {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-  bottomSpace: {
-    minHeight: "50px",
-  },
-}));
 
 const Container = ({
   actions,
@@ -129,7 +95,6 @@ const Container = ({
   permissions,
   ...delegated
 }: ContainerProps): JSX.Element => {
-  const classes = useStyles();
   const listBottomRef = createRef<HTMLDivElement>();
 
   const scrollToBottomOfList = () => {
@@ -165,7 +130,6 @@ const Container = ({
 
   return (
     <Component
-      classes={classes}
       actions={actions}
       permissions={permissions}
       databaseNames={databaseNames}

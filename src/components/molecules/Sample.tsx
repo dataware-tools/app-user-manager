@@ -1,45 +1,34 @@
-import {
-  theme as themeInstance,
-  databaseStore,
-} from "@dataware-tools/app-common";
-import { makeStyles } from "@material-ui/core/styles";
-
-import { Button } from "@material-ui/core";
-
 import { useAuth0 } from "@auth0/auth0-react";
-import useSWR, { mutate } from "swr";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { mutate } from "swr";
+import { useListDatabases } from "utils/index";
 
-type Props = {
-  classes: ReturnType<typeof useStyles>;
+export type SamplePresentationProps = {
   user: any;
-  URL: string;
+  onRevalidate: () => void;
   error: any;
   data: any;
-} & ContainerProps;
+} & SampleProps;
 
-type ContainerProps = {
+export type SampleProps = {
   sample: string;
 };
 
-const Component = ({
-  classes,
-  URL,
-  user,
-  error,
-  data,
-  sample,
-}: Props): JSX.Element => {
+export const SamplePresentation = (
+  props: SamplePresentationProps
+): JSX.Element => {
+  const { onRevalidate, user, error, data, sample } = props;
   return (
     <div>
-      <h1 className={classes.sample}>Hello {user ? user.name : "world"}</h1>
-      <div>this is {sample}</div>
-      <Button
-        onClick={() => {
-          mutate(URL);
-        }}
+      <Typography
+        variant="h3"
+        sx={{ ":hover": { backgroundColor: "action.hover" } }}
       >
-        revalidate API
-      </Button>
+        Hello {user ? user.name : "world"}
+      </Typography>
+      <div>this is {sample}</div>
+      <Button onClick={onRevalidate}>revalidate API</Button>
       {error ? (
         <div>error: {JSON.stringify(error)}</div>
       ) : data ? (
@@ -49,40 +38,21 @@ const Component = ({
   );
 };
 
-const useStyles = makeStyles((theme: typeof themeInstance) => ({
-  sample: {
-    "&:hover": {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}));
-
-const Container = ({ ...delegated }: ContainerProps): JSX.Element => {
-  const apiUrlBase =
-    process.env.NEXT_PUBLIC_BACKEND_API_PREFIX || "/api/latest";
-  const { user, getAccessTokenSilently } = useAuth0();
-  const fetchAPI = async () => {
-    databaseStore.OpenAPI.TOKEN = await getAccessTokenSilently();
-    databaseStore.OpenAPI.BASE = apiUrlBase;
-    const Res = await databaseStore.DatabaseService.listDatabases({
-    });
-    return Res;
+export const Sample = (props: SampleProps): JSX.Element => {
+  const { ...delegated } = props;
+  const { user, getAccessTokenSilently: getAccessToken } = useAuth0();
+  const [data, error, cacheKey] = useListDatabases(getAccessToken, {});
+  const onRevalidate = () => {
+    mutate(cacheKey);
   };
-  const URL = `${apiUrlBase}/databases`;
-  const { data, error } = useSWR(URL, fetchAPI);
-  const classes = useStyles();
 
   return (
-    <Component
-      classes={classes}
+    <SamplePresentation
       user={user}
       data={data}
       error={error}
-      URL={URL}
+      onRevalidate={onRevalidate}
       {...delegated}
     />
   );
 };
-
-export { Container as Sample };
-export type { ContainerProps as SampleProps };
