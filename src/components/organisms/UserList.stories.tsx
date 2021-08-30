@@ -13,12 +13,12 @@ Default.args = {
   users: [
     {
       user_id: "1",
-      name: "Toshimitsu Watanabe",
+      name: "Administrator",
       roles: [{ role_id: 1, name: "admin" }],
     },
     {
       user_id: "2",
-      name: "Tomotaka Watanabe",
+      name: "End user",
       roles: [{ role_id: 2, name: "manager" }],
     },
   ],

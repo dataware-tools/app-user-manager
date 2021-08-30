@@ -1,6 +1,3 @@
-import { authConfig, onRedirectCallback, redirectUri } from "../src/utils";
-
-import { Auth0Provider } from "@auth0/auth0-react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -26,15 +23,7 @@ export const decorators = [
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <SWRConfig value={SwrOptions}>
-              <Auth0Provider
-                domain={authConfig.domain}
-                clientId={authConfig.clientId}
-                audience={authConfig.apiUrl}
-                redirectUri={redirectUri}
-                onRedirectCallback={onRedirectCallback}
-              >
-                <Story {...context} />
-              </Auth0Provider>
+              <Story {...context} />
             </SWRConfig>
           </ThemeProvider>
         </StylesProvider>
