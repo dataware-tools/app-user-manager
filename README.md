@@ -2,28 +2,14 @@
 
 Web-application for managing users' roles and permissions.
 
+## Getting started
 
-## How to build docker-image
-
-```bash
-$ export DOCKER_BUILDKIT=1
-$ docker build -t app-user-manager --ssh default .
-
-```
-
-On MacOS, you may have to run the following commands before building the image.
+First, install all dependencies.
 
 ```bash
-$ ssh-add
-
-```
-
-## How to run docker-container
-
-After building the image
-
-```bash
-$ dc up
+npm install
+# or
+yarn install
 ```
 
 If you want to change Auth0's configurations (i.e., client-id, domain, etc.),
@@ -32,11 +18,8 @@ you need to set the following environment variables:
 - `NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_CONFIG_DOMAIN`: Domain (default: `dataware-tools.us.auth0.com`)
 - `NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_CONFIG_CLIENT_ID`: Client ID (default: the one for the demo page)
 - `NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_CONFIG_API_URL`: API URL (default: `https://demo.dataware-tools.com/`)
-- `NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_MANAGE_PAGE`: User management URL (default: `https://manage.auth0.com/dashboard/us/dataware-tools/users`)
 
-## Getting started
-
-First, run the development server:
+Next, run the development server:
 
 ```bash
 npm run dev
@@ -44,88 +27,107 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000/user-manager with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `pages/*.tsx`, `components/*.tsx`. The page auto-updates as you edit the file.
 
-## Learn more about Next.js
+## Run in docker container
 
-To learn more about Next.js, take a look at the following resources:
+### How to build docker-image
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## How to create this template?
-
-TODO: write this.
-
-### 1. Execute create-next-app
-
-This template bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-### 2. Install and initialize eslint
-
-Allow [official Getting Started](https://eslint.org/docs/user-guide/getting-started).
-
-This template answer for question to initialize eslint config like below. Below is example.
-
-```
-❯ npx eslint --init
-✔ How would you like to use ESLint? · style
-✔ What type of modules does your project use? · esm
-✔ Which framework does your project use? · react
-✔ Does your project use TypeScript? · No / Yes
-✔ Where does your code run? · browser
-✔ How would you like to define a style for your project? · guide
-✔ Which style guide do you want to follow? · standard
-✔ What format do you want your config file to be in? · JavaScript
-Checking peerDependencies of eslint-config-standard@latest
-The config that you've selected requires the following dependencies:
-
-eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest eslint-config-standard@latest eslint@^7.12.1 eslint-plugin-import@^2.22.1 eslint-plugin-node@^11.1.0 eslint-plugin-promise@^4.2.1 @typescript-eslint/parser@latest
-✔ Would you like to install them now with npm? · No / Yes
+```bash
+$ export DOCKER_BUILDKIT=1
+$ docker build -t app:latest --ssh default --secret id=npmrc,src=${HOME}/.npmrc .
 ```
 
-### 3. Add eslint rules, extends, plugin.
+On MacOS or Linux, you may have to run the following commands before building the image.
 
-[Explanation of defference between rules, extends, plugin is here.](https://blog.ojisan.io/eslint-plugin-and-extend)
+```bash
+$ ssh-add
+```
 
-Below is example. (Probably, some plugin was already configured when initializing eslint)
+### How to run docker-container
 
-- [eslint:recommended](https://eslint.org/docs/rules/)
-- [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react)
-- [standard-with-typescript](https://github.com/standard/eslint-config-standard-with-typescript)
-- [eslint-plugin-eslint-comments](https://mysticatea.github.io/eslint-plugin-eslint-comments/)
-- [eslint-plugin-imort](https://github.com/benmosher/eslint-plugin-import)
-- [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y)
-- eslint-plugin-compat
+After success of building image
 
-### 4. Install and initialize prettier.
+```bash
+$ dc up
+```
 
-Allow [official Getting Started](https://prettier.io/docs/en/install.html).
+## Npm scripts
 
-Note that [You may need to configure eslint](https://prettier.io/docs/en/install.html#eslint-and-other-linters).
+- `dev`: Start development server.
 
-### 5. Configure prettier
+- `test`: Run all test process, including linting source code.
 
-Configure your favorite [options](https://prettier.io/docs/en/options.html).
+- `lint`: Lint all source code.
 
-I think default options is better for many people (not best). Beacuse prettier team decided default value by deep thinking, probably.
+- `format`: Format all source code.
 
-### 6. Add editorconfig file
+## Major library introduction
 
-See [official site](https://editorconfig.org/)
+### Production
 
-### 7. Add recomended extensions for editor
+- [Next.js](https://nextjs.org/learn/basics/create-nextjs-app)
 
-Example for VSCode.
+  React Framework. No complex config needed, but extendable.
 
-- [mgmcdermott.vscode-language-babel](https://marketplace.visualstudio.com/items?itemName=mgmcdermott.vscode-language-babel)
-- [ms-azuretools.vscode-docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
-- [editorconfig.editorconfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
-- [dbaeumer.vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-- [esbenp.prettier-vscode](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-- [aaron-bond.better-comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
-- stylelint-plugin
+- [Material-UI](https://next.material-ui.com/getting-started/usage/)
+
+  React components library. Simple and customizable, and make site accessible.
+
+- [SWR](https://swr.vercel.app/getting-started#quick-start)
+
+  React data fetching library. Easy to caching data.
+
+- [React Router](https://reactrouter.com/web/guides/quick-start)
+
+  Navigation components library for React.
+
+- [Recoil](https://recoiljs.org/docs/introduction/getting-started)
+
+  State management library for React.
+
+- [immer](https://immerjs.github.io/immer/)
+
+  Library for working with immutable state in a more convenient way.
+
+- [auth0-react](https://auth0.com/docs/libraries/auth0-react#getting-started)
+
+  Auth0 React SDK.
+
+### Development
+
+- [Storybook](https://storybook.js.org/tutorials/intro-to-storybook/react/en/get-started/)
+
+  Dev tool for documenting, visual testing UI.
+
+  (\* [japanese introduction available](https://storybook.js.org/tutorials/intro-to-storybook/react/ja/get-started/))
+
+- [Loki](https://loki.js.org/getting-started.html)
+
+  Visual regression test tool for Storybook
+
+- [Jest](https://jestjs.io/ja/docs/getting-started)
+
+  JavaScript Testing Framework with a focus on simplicity.
+
+- [Testing Library](https://testing-library.com/docs/react-testing-library/example-intro)
+
+  Library for testing UI components in a user-centric way.
+
+- [MSW](https://mswjs.io/docs/getting-started/mocks)
+
+  API mocking library intercepting actual requests, by using Service Worker.
+
+- [prettier](https://prettier.io/docs/en/install.html#summary)
+
+  Opinionated code formatter for JS, JSX, TS, JSON, etc.
+
+- [eslint](https://eslint.org/docs/user-guide/getting-started#configuration)
+
+  High customizable linter for JS/altJS.
+
+- [stylelint](https://stylelint.io/user-guide/get-started#customize)
+
+  High customizable linter for CSS/Sass/CSSinJS.
