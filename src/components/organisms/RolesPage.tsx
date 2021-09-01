@@ -17,10 +17,10 @@ import {
   TableProps,
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
+import Box from "@material-ui/core/Box";
 import Pagination, { PaginationProps } from "@material-ui/core/Pagination";
 import AddCircle from "@material-ui/icons/AddCircle";
 import LoadingButton from "@material-ui/lab/LoadingButton";
-import { makeStyles } from "@material-ui/styles";
 import { useState, useEffect } from "react";
 import { mutate } from "swr";
 import {
@@ -29,8 +29,7 @@ import {
 } from "components/organisms/RoleEditModal";
 import { fetchPermissionManager, useListRoles } from "utils";
 
-type Props = {
-  classes: ReturnType<typeof useStyles>;
+export type RolesPagePresentationProps = {
   searchText: SearchFormProps["value"];
   perPage: PerPageSelectProps["perPage"];
   perPageOptions: PerPageSelectProps["values"];
@@ -52,8 +51,7 @@ type Props = {
   onChangePage: (page: number) => void;
 };
 
-const Component = ({
-  classes,
+export const RolesPagePresentation = ({
   searchText,
   perPage,
   perPageOptions,
@@ -73,7 +71,7 @@ const Component = ({
   onSuccessSaveRole,
   onChangePage,
   onAddRole,
-}: Props) => {
+}: RolesPagePresentationProps): JSX.Element => {
   return (
     <>
       <PageToolBar
@@ -127,33 +125,26 @@ const Component = ({
       {isFetchComplete ? (
         <>
           <Spacer direction="vertical" size="1vh" />
-          <div className={classes.paginationContainer}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              padding: "0 3vw",
+            }}
+          >
             <Pagination
               count={totalPage}
               page={page}
               onChange={(_, page) => onChangePage(page)}
             />
-          </div>
+          </Box>
         </>
       ) : null}
     </>
   );
 };
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    padding: "0 3vw",
-  },
-  paginationContainer: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-  },
-}));
-
-const Container = (): JSX.Element => {
+export const RolesPage = (): JSX.Element => {
   // TODO: save per_page to local state
   const [searchText, setSearchText] = useState(
     getQueryString("searchText") || ""
@@ -167,7 +158,6 @@ const Container = (): JSX.Element => {
   const [editingRoleId, setEditingRoleId] = useState<undefined | number>(
     undefined
   );
-  const classes = useStyles();
   const { getAccessTokenSilently: getAccessToken } = useAuth0();
   const [listRolesRes, listRolesError, listRolesCacheKey] = useListRoles(
     getAccessToken,
@@ -270,8 +260,7 @@ const Container = (): JSX.Element => {
     : 0;
 
   return (
-    <Component
-      classes={classes}
+    <RolesPagePresentation
       error={error}
       isFetchComplete={isFetchComplete}
       isEditingRole={isEditingRole}
@@ -294,5 +283,3 @@ const Container = (): JSX.Element => {
     />
   );
 };
-
-export { Container as RolesPage };

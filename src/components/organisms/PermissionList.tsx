@@ -21,14 +21,14 @@ type Action = permissionManager.ActionModel;
 type Database = metaStore.DatabaseModel;
 type Permission = permissionManager.RoleModel["permissions"][number];
 
-type Props = {
+export type PermissionListPresentationProps = {
   onItemChange: PermissionListItemProps["onChange"];
   onItemDelete: PermissionListItemProps["onDelete"];
   onItemAdd: () => void;
   databaseNames: string[];
   listBottomRef: RefObject<HTMLDivElement>;
-} & Omit<ContainerProps, "onChange" | "databases">;
-type ContainerProps = {
+} & Omit<PermissionListProps, "onChange" | "databases">;
+export type PermissionListProps = {
   title: ReactNode;
   actions: Action[];
   databases: Database[];
@@ -36,7 +36,7 @@ type ContainerProps = {
   permissions: Permission[];
 };
 
-const Component = ({
+export const PermissionListPresentation = ({
   title,
   actions,
   databaseNames,
@@ -45,7 +45,7 @@ const Component = ({
   onItemDelete,
   onItemAdd,
   listBottomRef,
-}: Props): JSX.Element => {
+}: PermissionListPresentationProps): JSX.Element => {
   return (
     <div>
       <Box sx={{ alignItems: "center", display: "flex", padding: "10px 0" }}>
@@ -88,13 +88,13 @@ const Component = ({
   );
 };
 
-const Container = ({
+export const PermissionList = ({
   actions,
   databases,
   onChange,
   permissions,
   ...delegated
-}: ContainerProps): JSX.Element => {
+}: PermissionListProps): JSX.Element => {
   const listBottomRef = createRef<HTMLDivElement>();
 
   const scrollToBottomOfList = () => {
@@ -109,19 +109,24 @@ const Container = ({
     .filter((database) => Boolean(database.name))
     .map((database) => database.name as NonNullable<typeof database.name>);
 
-  const onItemChange: Props["onItemChange"] = (targetIndex, newValue) => {
+  const onItemChange: PermissionListPresentationProps["onItemChange"] = (
+    targetIndex,
+    newValue
+  ) => {
     const newPermissions = permissions.map((permission, i) =>
       i === targetIndex ? newValue : permission
     );
     onChange(newPermissions);
   };
 
-  const onItemDelete: Props["onItemDelete"] = (targetIndex) => {
+  const onItemDelete: PermissionListPresentationProps["onItemDelete"] = (
+    targetIndex
+  ) => {
     const newPermissions = permissions.filter((_, i) => i !== targetIndex);
     onChange(newPermissions);
   };
 
-  const onItemAdd: Props["onItemAdd"] = () => {
+  const onItemAdd: PermissionListPresentationProps["onItemAdd"] = () => {
     const newPermissions = [...permissions];
     newPermissions.push({ databases: [], actions: [] });
     onChange(newPermissions);
@@ -129,7 +134,7 @@ const Container = ({
   };
 
   return (
-    <Component
+    <PermissionListPresentation
       actions={actions}
       permissions={permissions}
       databaseNames={databaseNames}
@@ -141,6 +146,3 @@ const Container = ({
     />
   );
 };
-
-export { Container as PermissionList };
-export type { ContainerProps as PermissionListProps };

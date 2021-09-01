@@ -14,7 +14,7 @@ type Action = { action_id: string; name: string };
 
 type Permission = { databases: Database[]; actions: Action[] };
 
-type Props = {
+export type PermissionListItemPresentationProps = {
   databaseMultiSelectProps: Pick<
     MultiSelectProps<Database, false, true>,
     "onChange" | "getOptionLabel" | "filterOptions"
@@ -24,9 +24,9 @@ type Props = {
     "onChange" | "getOptionLabel" | "isOptionEqualToValue"
   >;
   onDeleteButtonClick: () => void;
-} & Omit<ContainerProps, "onChange" | "onDelete" | "index">;
+} & Omit<PermissionListItemProps, "onChange" | "onDelete" | "index">;
 
-type ContainerProps = {
+export type PermissionListItemProps = {
   actions: Action[];
   databases: Database[];
   index: number;
@@ -35,14 +35,14 @@ type ContainerProps = {
   permission: Permission;
 };
 
-const Component = ({
+export const PermissionListItemPresentation = ({
   actions,
   databases,
   permission,
   databaseMultiSelectProps,
   actionMultiSelectProps,
   onDeleteButtonClick,
-}: Props): JSX.Element => {
+}: PermissionListItemPresentationProps): JSX.Element => {
   return (
     <TableRow>
       <TableCell style={{ lineHeight: 1.5, fontSize: "1rem" }}>
@@ -74,15 +74,15 @@ const Component = ({
   );
 };
 
-const Container = ({
+export const PermissionListItem = ({
   index,
   permission,
   onChange,
   onDelete,
   ...delegated
-}: ContainerProps): JSX.Element => {
+}: PermissionListItemProps): JSX.Element => {
   const filter = createFilterOptionsForMultiSelect<Database>();
-  const databaseMultiSelectProps: Props["databaseMultiSelectProps"] = {
+  const databaseMultiSelectProps: PermissionListItemPresentationProps["databaseMultiSelectProps"] = {
     filterOptions: (options, params) => {
       const filtered = filter(options, params);
 
@@ -103,7 +103,7 @@ const Container = ({
     },
   };
 
-  const actionMultiSelectProps: Props["actionMultiSelectProps"] = {
+  const actionMultiSelectProps: PermissionListItemPresentationProps["actionMultiSelectProps"] = {
     getOptionLabel: (option) => option.name,
     isOptionEqualToValue: (option, value) => {
       return option.action_id === value.action_id;
@@ -116,11 +116,11 @@ const Container = ({
     },
   };
 
-  const onDeleteButtonClick: Props["onDeleteButtonClick"] = () =>
+  const onDeleteButtonClick: PermissionListItemPresentationProps["onDeleteButtonClick"] = () =>
     onDelete(index);
 
   return (
-    <Component
+    <PermissionListItemPresentation
       permission={permission}
       databaseMultiSelectProps={databaseMultiSelectProps}
       actionMultiSelectProps={actionMultiSelectProps}
@@ -129,6 +129,3 @@ const Container = ({
     />
   );
 };
-
-export { Container as PermissionListItem };
-export type { ContainerProps as PermissionListItemProps };
