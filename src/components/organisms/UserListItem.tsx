@@ -1,7 +1,7 @@
 import { MultiSelect } from "@dataware-tools/app-common";
+import Box from "@material-ui/core/Box";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
-import { makeStyles } from "@material-ui/styles";
 import { useState, useEffect, memo } from "react";
 
 type Roles = {
@@ -14,35 +14,48 @@ type User = {
   roles: Roles;
 };
 
-type Props = {
-  classes: ReturnType<typeof useStyles>;
+export type UserListItemPresentationProps = {
   roleOptions: Roles;
   onChange: (newRoles: Roles) => void;
   onCancelEdit: () => void;
   onSave?: () => Promise<void>;
-} & Omit<ContainerProps, "onUpdateUser">;
+} & Omit<UserListItemProps, "onUpdateUser">;
 
-type ContainerProps = {
+export type UserListItemProps = {
   user: User;
   roles: Roles;
   onUpdateUser: (user: User) => Promise<void> | void;
 };
 
-const Component = ({
+export const UserListItemPresentation = ({
   user,
-  classes,
   roles,
   roleOptions,
   onCancelEdit,
   onChange,
   onSave,
-}: Props) => {
+}: UserListItemPresentationProps): JSX.Element => {
   return (
     <TableRow>
       <TableCell>{user.name}</TableCell>
-      <TableCell className={classes.roleCell}>
-        <div className={classes.container}>
-          <div className={classes.multiSelectContainer}>
+      <TableCell
+        sx={{
+          width: "70%",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              width: "100%",
+            }}
+          >
             <MultiSelect
               freeSolo={false}
               options={roleOptions}
@@ -60,35 +73,18 @@ const Component = ({
               filterSelectedOptions
               fullWidth
             />
-          </div>
-        </div>
+          </Box>
+        </Box>
       </TableCell>
     </TableRow>
   );
 };
 
-const useStyles = makeStyles({
-  container: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-  },
-  multiSelectContainer: {
-    flex: 1,
-    width: "100%",
-  },
-  roleCell: {
-    width: "70%",
-  },
-});
-
-const Container = memo(
-  ({ user, onUpdateUser, roles }: ContainerProps): JSX.Element => {
+export const UserListItem = memo(
+  ({ user, onUpdateUser, roles }: UserListItemProps): JSX.Element => {
     const [currentRoles, setCurrentRoles] = useState<Roles>(user.roles);
     const [prevRoles, setPrevRoles] = useState<Roles>(user.roles);
     const [isSavable, setIsSavable] = useState(false);
-
-    const classes = useStyles();
 
     const onSave = async () => {
       await onUpdateUser({ ...user, roles: currentRoles });
@@ -108,8 +104,7 @@ const Container = memo(
     }, [currentRoles, prevRoles]);
 
     return (
-      <Component
-        classes={classes}
+      <UserListItemPresentation
         onSave={isSavable ? onSave : undefined}
         onCancelEdit={onCancelEdit}
         onChange={setCurrentRoles}
@@ -120,6 +115,3 @@ const Container = memo(
     );
   }
 );
-
-export { Container as UserListItem };
-export type { ContainerProps as UserListItemProps };

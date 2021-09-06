@@ -4,43 +4,41 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { makeStyles } from "@material-ui/styles";
 import { useMemo, RefObject } from "react";
 import { UserListItem, UserListItemProps } from "./UserListItem";
 
 type Users = permissionManager.UserModel[];
 type Roles = permissionManager.RoleModel[];
 
-type Props = {
-  classes: ReturnType<typeof useStyles>;
+export type UserListPresentationProps = {
   roles: {
     name: string;
     role_id: number;
   }[];
-} & Omit<ContainerProps, "roles">;
-type ContainerProps = {
+} & Omit<UserListProps, "roles">;
+
+export type UserListProps = {
   users: Users;
   roles: Roles;
   bottomRef?: RefObject<HTMLDivElement>;
   onUpdateUser: UserListItemProps["onUpdateUser"];
 };
 
-const Component = ({
-  classes,
+export const UserListPresentation = ({
   users,
   roles,
   bottomRef,
   onUpdateUser,
-}: Props) => {
+}: UserListPresentationProps): JSX.Element => {
   return (
     <>
       <Table size="small" stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell key="user" className={classes.headerCell}>
+            <TableCell key="user" sx={{ height: "47px" }}>
               User
             </TableCell>
-            <TableCell key="roles" className={classes.headerCell}>
+            <TableCell key="roles" sx={{ height: "47px" }}>
               Roles
             </TableCell>
           </TableRow>
@@ -60,13 +58,11 @@ const Component = ({
     </>
   );
 };
-const useStyles = makeStyles({
-  headerCell: {
-    height: "47px",
-  },
-});
 
-const Container = ({ roles, ...delegated }: ContainerProps): JSX.Element => {
+export const UserList = ({
+  roles,
+  ...delegated
+}: UserListProps): JSX.Element => {
   const fixedRoles = useMemo(() => {
     return roles.map((role) => ({
       name: role.name,
@@ -74,10 +70,5 @@ const Container = ({ roles, ...delegated }: ContainerProps): JSX.Element => {
     }));
   }, [roles]);
 
-  const classes = useStyles();
-
-  return <Component classes={classes} roles={fixedRoles} {...delegated} />;
+  return <UserListPresentation roles={fixedRoles} {...delegated} />;
 };
-
-export { Container as UserList };
-export type { ContainerProps as UserListProps };

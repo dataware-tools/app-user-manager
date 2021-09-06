@@ -18,13 +18,13 @@ import { mutate } from "swr";
 import { RoleEditModalBody, RoleEditModalBodyProps } from "./RoleEditModalBody";
 import { useGetRole, useListActions, useListDatabases } from "utils";
 
-type Props = {
+export type RoleEditModalPresentationProps = {
   error?: ErrorMessageProps;
   roleEditModalBodyProps: RoleEditModalBodyProps;
   isFetchComplete: boolean;
-} & Omit<ContainerProps, "focusTarget" | "onSaveSucceeded" | "roleId">;
+} & Omit<RoleEditModalProps, "focusTarget" | "onSaveSucceeded" | "roleId">;
 
-type ContainerProps = {
+export type RoleEditModalProps = {
   open: boolean;
   focusTarget?: "roleName";
   onClose: () => void;
@@ -34,13 +34,13 @@ type ContainerProps = {
   roleId?: number;
 };
 
-const Component = ({
+export const RoleEditModalPresentation = ({
   open,
   onClose,
   error,
   roleEditModalBodyProps,
   isFetchComplete,
-}: Props) => {
+}: RoleEditModalPresentationProps): JSX.Element => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogWrapper>
@@ -62,13 +62,14 @@ const Component = ({
     </Dialog>
   );
 };
-const Container = ({
+
+export const RoleEditModal = ({
   open,
   focusTarget,
   onClose,
   onSaveSucceeded,
   roleId,
-}: ContainerProps): JSX.Element => {
+}: RoleEditModalProps): JSX.Element => {
   const { getAccessTokenSilently: getAccessToken } = useAuth0();
   const [error, setError] = useState<undefined | ErrorMessageProps>(undefined);
 
@@ -146,7 +147,7 @@ const Container = ({
     }
   }, [fetchError]);
 
-  const roleEditModalBodyProps: Props["roleEditModalBodyProps"] = {
+  const roleEditModalBodyProps: RoleEditModalPresentationProps["roleEditModalBodyProps"] = {
     actions: listActionsRes?.actions || [],
     databases: listDatabasesRes?.data || [],
     onModalClose: onClose,
@@ -155,7 +156,7 @@ const Container = ({
     initialRole: getRoleRes,
   };
   return (
-    <Component
+    <RoleEditModalPresentation
       open={open}
       error={error}
       isFetchComplete={isFetchComplete}
@@ -164,6 +165,3 @@ const Container = ({
     />
   );
 };
-
-export { Container as RoleEditModal };
-export type { ContainerProps as RoleEditModalProps };

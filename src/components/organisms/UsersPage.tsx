@@ -16,18 +16,17 @@ import {
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Pagination from "@material-ui/core/Pagination";
 import AddCircle from "@material-ui/icons/AddCircle";
-import { makeStyles } from "@material-ui/styles";
 import { useState, useEffect } from "react";
 import { mutate } from "swr";
 
 import { UserList, UserListProps } from "./UserList";
 import { useListUsers, useListRoles, fetchPermissionManager } from "utils";
 
-type Props = {
-  classes: ReturnType<typeof useStyles>;
+export type UsersPagePresentationProps = {
   error?: ErrorMessageProps;
   searchText: SearchFormProps["defaultValue"];
   perPage: PerPageSelectProps["perPage"];
@@ -43,8 +42,7 @@ type Props = {
   onChangePage: (newPage: number) => void;
 };
 
-const Component = ({
-  classes,
+export const UsersPagePresentation = ({
   error,
   searchText,
   perPage,
@@ -58,7 +56,7 @@ const Component = ({
   onChangePerPage,
   onSaveUser,
   onChangePage,
-}: Props) => {
+}: UsersPagePresentationProps): JSX.Element => {
   return (
     <>
       <PageToolBar
@@ -98,29 +96,26 @@ const Component = ({
       </PageMain>
       <Spacer direction="vertical" size="1vh" />
       {isFetchComplete ? (
-        <div className={classes.paginationContainer}>
+        <Box
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <Pagination
             count={totalPage}
             page={page}
             onChange={(_, newPage) => onChangePage(newPage)}
           />
-        </div>
+        </Box>
       ) : null}
     </>
   );
 };
 
-const useStyles = makeStyles(() => ({
-  paginationContainer: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-  },
-}));
-
-const Container = (): JSX.Element => {
+export const UsersPage = (): JSX.Element => {
   const { getAccessTokenSilently: getAccessToken } = useAuth0();
-  const classes = useStyles();
 
   // TODO: save per_page to local state
   const [searchText, setSearchText] = useState(
@@ -204,8 +199,7 @@ const Container = (): JSX.Element => {
     : 0;
 
   return (
-    <Component
-      classes={classes}
+    <UsersPagePresentation
       error={error}
       isFetchComplete={isFetchComplete}
       onChangePage={setPage}
@@ -222,5 +216,3 @@ const Container = (): JSX.Element => {
     />
   );
 };
-
-export { Container as UsersPage };

@@ -8,14 +8,13 @@ import {
   metaStore,
   permissionManager,
 } from "@dataware-tools/app-common";
+import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import LoadingButton from "@material-ui/lab/LoadingButton";
-import { makeStyles } from "@material-ui/styles";
 import { createRef, useState, RefObject } from "react";
 import { PermissionList, PermissionListProps } from "./PermissionList";
 
-type Props = {
-  classes: ReturnType<typeof useStyles>;
+export type RoleEditModalBodyPresentationProps = {
   initialRoleName?: string;
   initialRoleDescription?: string;
   onClickSaveButton: () => void;
@@ -25,9 +24,12 @@ type Props = {
   roleDescriptionRef: RefObject<HTMLInputElement>;
   onChangePermissions: PermissionListProps["onChange"];
   permissions: PermissionListProps["permissions"];
-} & Omit<ContainerProps, "roleId" | "onSave" | "onModalClose" | "initialRole">;
+} & Omit<
+  RoleEditModalBodyProps,
+  "roleId" | "onSave" | "onModalClose" | "initialRole"
+>;
 
-type ContainerProps = {
+export type RoleEditModalBodyProps = {
   focusTarget?: "roleName";
   initialRole?: permissionManager.RoleModel;
   actions: permissionManager.ActionModel[];
@@ -40,8 +42,7 @@ type ContainerProps = {
   onModalClose: () => void;
 };
 
-const Component = ({
-  classes,
+export const RoleEditModalBodyPresentation = ({
   focusTarget,
   initialRoleName,
   initialRoleDescription,
@@ -54,7 +55,7 @@ const Component = ({
   roleNameRef,
   roleDescriptionRef,
   onChangePermissions,
-}: Props): JSX.Element => {
+}: RoleEditModalBodyPresentationProps): JSX.Element => {
   return (
     <DialogBody>
       <TextField
@@ -63,7 +64,7 @@ const Component = ({
         fullWidth
         autoFocus={focusTarget === "roleName"}
         InputProps={{
-          style: {
+          sx: {
             fontSize: "1.7rem",
             fontWeight: "bolder",
             lineHeight: 1.5,
@@ -80,14 +81,18 @@ const Component = ({
           <DialogSubTitle>
             <NoticeableLetters>Description</NoticeableLetters>
           </DialogSubTitle>
-          <div className={classes.descriptionInputContainer}>
+          <Box
+            sx={{
+              padding: "0 3vw",
+            }}
+          >
             <TextField
               fullWidth
               inputRef={roleDescriptionRef}
               multiline
               defaultValue={initialRoleDescription}
             />
-          </div>
+          </Box>
         </div>
         <Spacer direction="vertical" size="1vh" />
         <PermissionList
@@ -117,29 +122,12 @@ const Component = ({
   );
 };
 
-const useStyles = makeStyles(() => ({
-  roleNameInput: {
-    fontSize: "2rem",
-    fontWeight: "bold",
-    lineHeight: 1.5,
-  },
-  descriptionLabel: {
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-    lineHeight: 2,
-  },
-  descriptionInputContainer: {
-    padding: "0 3vw",
-  },
-}));
-
-const Container = ({
+export const RoleEditModalBody = ({
   initialRole,
   onSave,
   onModalClose,
   ...delegated
-}: ContainerProps): JSX.Element => {
-  const classes = useStyles();
+}: RoleEditModalBodyProps): JSX.Element => {
   const roleNameRef = createRef<HTMLInputElement>();
   const roleDescriptionRef = createRef<HTMLInputElement>();
 
@@ -177,12 +165,12 @@ const Container = ({
     }
   };
 
-  const onChangePermissions: Props["onChangePermissions"] = (newPermissions) =>
-    setPermissions([...newPermissions]);
+  const onChangePermissions: RoleEditModalBodyPresentationProps["onChangePermissions"] = (
+    newPermissions
+  ) => setPermissions([...newPermissions]);
 
   return (
-    <Component
-      classes={classes}
+    <RoleEditModalBodyPresentation
       roleNameRef={roleNameRef}
       initialRoleName={initialRole?.name}
       roleDescriptionRef={roleDescriptionRef}
@@ -196,6 +184,3 @@ const Container = ({
     />
   );
 };
-
-export { Container as RoleEditModalBody };
-export type { ContainerProps as RoleEditModalBodyProps };
