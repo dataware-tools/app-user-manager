@@ -127,9 +127,9 @@ export const RolesPagePresentation = ({
           <Spacer direction="vertical" size="1vh" />
           <Box
             sx={{
+              alignItems: "center",
               display: "flex",
-              flexDirection: "column",
-              padding: "0 3vw",
+              justifyContent: "center",
             }}
           >
             <Pagination
@@ -254,6 +254,16 @@ export const RolesPage = (): JSX.Element => {
     setEditingRoleId(undefined);
   };
 
+  const onChangePerPage = (perPage: number) => {
+    setPerPage(perPage);
+    setPage(1);
+  };
+
+  const onChangeSearchText = (searchText: string) => {
+    setSearchText(searchText);
+    setPage(1);
+  };
+
   const isFetchComplete = Boolean(!fetchError && listRolesRes);
   const totalPage = listRolesRes
     ? Math.ceil(listRolesRes.total / listRolesRes.per_page)
@@ -271,8 +281,8 @@ export const RolesPage = (): JSX.Element => {
       perPage={perPage}
       perPageOptions={[10, 20, 50, 100]}
       onChangePage={setPage}
-      onChangePerPage={setPerPage}
-      onChangeSearchText={setSearchText}
+      onChangePerPage={onChangePerPage}
+      onChangeSearchText={onChangeSearchText}
       onDeleteRole={onDeleteRole}
       onSelectRole={onSelectRole}
       onSuccessSaveRole={onSuccessSaveRole}

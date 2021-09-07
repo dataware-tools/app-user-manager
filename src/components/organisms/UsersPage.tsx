@@ -193,6 +193,16 @@ export const UsersPage = (): JSX.Element => {
     mutate(listUsersCacheKey, updateUser);
   };
 
+  const onChangePerPage = (perPage: number) => {
+    setPerPage(perPage);
+    setPage(1);
+  };
+
+  const onChangeSearchText = (searchText: string) => {
+    setSearchText(searchText);
+    setPage(1);
+  };
+
   const isFetchComplete = Boolean(!fetchError && listUsersRes && listRolesRes);
   const totalCount = listUsersRes
     ? Math.ceil(listUsersRes.total / listUsersRes.per_page)
@@ -203,8 +213,8 @@ export const UsersPage = (): JSX.Element => {
       error={error}
       isFetchComplete={isFetchComplete}
       onChangePage={setPage}
-      onChangePerPage={setPerPage}
-      onChangeSearchText={setSearchText}
+      onChangePerPage={onChangePerPage}
+      onChangeSearchText={onChangeSearchText}
       onSaveUser={onSaveUser}
       page={page}
       perPage={perPage}
