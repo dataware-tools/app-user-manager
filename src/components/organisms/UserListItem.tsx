@@ -2,7 +2,7 @@ import { MultiSelect } from "@dataware-tools/app-common";
 import Box from "@material-ui/core/Box";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
-import { useState, useEffect, memo } from "react";
+import { useState, memo } from "react";
 
 type Roles = {
   role_id: number;
@@ -17,8 +17,7 @@ type User = {
 export type UserListItemPresentationProps = {
   roleOptions: Roles;
   onChange: (newRoles: Roles) => void;
-  onCancelEdit: () => void;
-  onSave?: () => Promise<void>;
+  onSave: () => Promise<void>;
 } & Omit<UserListItemProps, "onUpdateUser">;
 
 export type UserListItemProps = {
@@ -31,7 +30,6 @@ export const UserListItemPresentation = ({
   user,
   roles,
   roleOptions,
-  onCancelEdit,
   onChange,
   onSave,
 }: UserListItemPresentationProps): JSX.Element => {
@@ -67,9 +65,7 @@ export const UserListItemPresentation = ({
               isOptionEqualToValue={(option, value) => {
                 return option.role_id === value.role_id;
               }}
-              onSave={onSave}
-              saveOnFocusOut={false}
-              onFocusOut={onCancelEdit}
+              onFocusOut={onSave}
               filterSelectedOptions
               fullWidth
             />
@@ -84,29 +80,17 @@ export const UserListItem = memo(
   ({ user, onUpdateUser, roles }: UserListItemProps): JSX.Element => {
     const [currentRoles, setCurrentRoles] = useState<Roles>(user.roles);
     const [prevRoles, setPrevRoles] = useState<Roles>(user.roles);
-    const [isSavable, setIsSavable] = useState(false);
 
     const onSave = async () => {
-      await onUpdateUser({ ...user, roles: currentRoles });
-      setPrevRoles(currentRoles);
-    };
-
-    const onCancelEdit = () => {
-      setCurrentRoles(prevRoles);
-    };
-
-    useEffect(() => {
       if (JSON.stringify(currentRoles) !== JSON.stringify(prevRoles)) {
-        setIsSavable(true);
-      } else {
-        setIsSavable(false);
+        await onUpdateUser({ ...user, roles: currentRoles });
+        setPrevRoles(currentRoles);
       }
-    }, [currentRoles, prevRoles]);
+    };
 
     return (
       <UserListItemPresentation
-        onSave={isSavable ? onSave : undefined}
-        onCancelEdit={onCancelEdit}
+        onSave={onSave}
         onChange={setCurrentRoles}
         roleOptions={roles}
         roles={currentRoles}
