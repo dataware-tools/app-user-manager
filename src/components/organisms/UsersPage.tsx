@@ -16,10 +16,10 @@ import {
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Pagination from "@material-ui/core/Pagination";
-import AddCircle from "@material-ui/icons/AddCircle";
+import AddCircle from "@mui/icons-material/AddCircle";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Pagination from "@mui/material/Pagination";
 import { useState, useEffect } from "react";
 import { mutate } from "swr";
 
@@ -198,8 +198,8 @@ export const UsersPage = (): JSX.Element => {
     setPage(1);
   };
 
-  const onChangeSearchText = (searchText: string) => {
-    setSearchText(searchText);
+  const onChangeSearchText = (searchText?: string) => {
+    setSearchText(searchText || "");
     setPage(1);
   };
 
