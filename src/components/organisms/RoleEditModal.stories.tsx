@@ -1,4 +1,4 @@
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { useState } from "react";
 import { RoleEditModal } from "./RoleEditModal";
 import { TestAuthProvider, CONST_STORY_BOOK } from "test-utils";

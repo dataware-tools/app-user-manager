@@ -4,13 +4,13 @@ import {
   Spacer,
   SquareIconButton,
 } from "@dataware-tools/app-common";
-import Box from "@material-ui/core/Box";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import AddCircle from "@material-ui/icons/AddCircle";
+import AddCircle from "@mui/icons-material/AddCircle";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { createRef, ReactNode, RefObject } from "react";
 import {
   PermissionListItem,

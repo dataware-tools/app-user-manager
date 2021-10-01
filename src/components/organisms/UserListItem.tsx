@@ -1,7 +1,7 @@
 import { MultiSelect } from "@dataware-tools/app-common";
-import Box from "@material-ui/core/Box";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import Box from "@mui/material/Box";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import { useState, memo } from "react";
 
 type Roles = {

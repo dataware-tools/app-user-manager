@@ -8,9 +8,9 @@ import {
   metaStore,
   permissionManager,
 } from "@dataware-tools/app-common";
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import LoadingButton from "@material-ui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import { createRef, useState, RefObject } from "react";
 import { PermissionList, PermissionListProps } from "./PermissionList";
 

@@ -17,10 +17,10 @@ import {
   TableProps,
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
-import Box from "@material-ui/core/Box";
-import Pagination, { PaginationProps } from "@material-ui/core/Pagination";
-import AddCircle from "@material-ui/icons/AddCircle";
-import LoadingButton from "@material-ui/lab/LoadingButton";
+import AddCircle from "@mui/icons-material/AddCircle";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Box from "@mui/material/Box";
+import Pagination, { PaginationProps } from "@mui/material/Pagination";
 import { useState, useEffect } from "react";
 import { mutate } from "swr";
 import {
@@ -259,8 +259,8 @@ export const RolesPage = (): JSX.Element => {
     setPage(1);
   };
 
-  const onChangeSearchText = (searchText: string) => {
-    setSearchText(searchText);
+  const onChangeSearchText = (searchText?: string) => {
+    setSearchText(searchText || "");
     setPage(1);
   };
 
