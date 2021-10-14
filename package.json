@@ -1,5 +1,12 @@
 {
   "name": "@dataware-tools/app-user-manager",
+  "engines": {
+    "node": "16.11.1",
+    "npm": "8.x"
+  },
+  "volta": {
+    "node": "16.11.1"
+  },
   "version": "0.1.0",
   "private": true,
   "repository": "https://github.com/dataware-tools/app-user-manager.git",
@@ -23,6 +30,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.8.0",
+    "@dataware-tools/api-meta-store-client": "^0.4.10-alpha2",
     "@dataware-tools/app-common": "^21.10.2",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
