@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.8.0",
-    "@dataware-tools/api-meta-store-client": "^0.4.10-alpha2",
     "@dataware-tools/app-common": "^21.10.2",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -91,7 +90,7 @@
     "semantic-ui-react": "^2.0.4",
     "stylelint": "^13.12.0",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-recommended": "^4.0.0",
+    "stylelint-config-recommended": "^5.0.0",
     "stylelint-config-standard": "^21.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-declaration-block-no-ignored-properties": "^2.3.0",
