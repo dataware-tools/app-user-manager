@@ -4,6 +4,9 @@
     "node": "16.11.1",
     "npm": "8.x"
   },
+  "volta": {
+    "node": "16.11.1"
+  },
   "version": "0.1.0",
   "private": true,
   "repository": "https://github.com/dataware-tools/app-user-manager.git",
@@ -110,8 +113,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "volta": {
-    "node": "16.11.1"
   }
 }
