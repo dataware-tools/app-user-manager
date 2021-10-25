@@ -16,6 +16,7 @@ import {
   SearchFormProps,
   TableProps,
   extractReasonFromFetchError,
+  confirm,
 } from "@dataware-tools/app-common";
 import AddCircle from "@mui/icons-material/AddCircle";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -203,6 +204,14 @@ export const RolesPage = (): JSX.Element => {
   };
 
   const onDeleteRole = async (roleId: number) => {
+    if (
+      !(await confirm({
+        title: "Are you sure you want to delete role?",
+        confirmMode: "delete",
+      }))
+    )
+      return;
+
     const prev = listRolesRes;
     const newLocalRoles = prev?.roles.filter((role) => role.role_id !== roleId);
     mutate(
