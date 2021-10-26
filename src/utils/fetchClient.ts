@@ -1,8 +1,8 @@
+import { metaStore } from "@dataware-tools/api-meta-store-client";
+import { permissionManager } from "@dataware-tools/api-permission-manager-client";
 import {
   API_ROUTE,
-  metaStore,
   objToQueryString,
-  permissionManager,
   AwaitType,
 } from "@dataware-tools/app-common";
 import useSWR from "swr";

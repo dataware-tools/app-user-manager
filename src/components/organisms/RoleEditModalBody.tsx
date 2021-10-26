@@ -1,3 +1,5 @@
+import { metaStore } from "@dataware-tools/api-meta-store-client";
+import { permissionManager } from "@dataware-tools/api-permission-manager-client";
 import {
   Spacer,
   DialogBody,
@@ -5,8 +7,6 @@ import {
   DialogMain,
   NoticeableLetters,
   DialogSubTitle,
-  metaStore,
-  permissionManager,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";

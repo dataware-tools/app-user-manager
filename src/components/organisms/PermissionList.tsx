@@ -1,9 +1,6 @@
-import {
-  permissionManager,
-  metaStore,
-  Spacer,
-  SquareIconButton,
-} from "@dataware-tools/app-common";
+import { metaStore } from "@dataware-tools/api-meta-store-client";
+import { permissionManager } from "@dataware-tools/api-permission-manager-client";
+import { Spacer, SquareIconButton } from "@dataware-tools/app-common";
 import AddCircle from "@mui/icons-material/AddCircle";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
