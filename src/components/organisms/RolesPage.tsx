@@ -1,9 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { permissionManager } from "@dataware-tools/api-permission-manager-client";
 import {
   Spacer,
   addQueryString,
   getQueryString,
-  permissionManager,
   LoadingIndicator,
   ErrorMessage,
   ErrorMessageProps,

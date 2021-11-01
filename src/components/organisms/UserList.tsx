@@ -1,4 +1,4 @@
-import { permissionManager } from "@dataware-tools/app-common";
+import { permissionManager } from "@dataware-tools/api-permission-manager-client";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
