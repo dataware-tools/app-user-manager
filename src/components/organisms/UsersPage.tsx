@@ -75,7 +75,7 @@ export const UsersPagePresentation = ({
             <Spacer direction="horizontal" size="15px" />
             <Button
               href={
-                process.env.NEXT_PUBLIC_DATAWARE_TOOLS_AUTH_MANAGE_PAGE ||
+                process.env.DATAWARE_TOOLS_AUTH_MANAGE_PAGE ||
                 "https://manage.auth0.com/dashboard/us/dataware-tools/users"
               }
               startIcon={<AddCircle />}
