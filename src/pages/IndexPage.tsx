@@ -1,4 +1,4 @@
-import {} from "../../utils";
+import {} from "../utils";
 import {
   getQueryString,
   addQueryString,
@@ -8,8 +8,8 @@ import {
   PageBody,
 } from "@dataware-tools/app-common";
 import { useState, useEffect } from "react";
-import { RolesPage } from "../organisms/RolesPage";
-import { UsersPage } from "../organisms/UsersPage";
+import { RolesPage } from "../components/organisms/RolesPage";
+import { UsersPage } from "../components/organisms/UsersPage";
 
 export const IndexPage = (): JSX.Element => {
   // TODO: save tab number to local state
