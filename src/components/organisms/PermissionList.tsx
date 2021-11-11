@@ -22,7 +22,7 @@ export type PermissionListPresentationProps = {
   onItemChange: PermissionListItemProps["onChange"];
   onItemDelete: PermissionListItemProps["onDelete"];
   onItemAdd: () => void;
-  databaseNames: string[];
+  databaseIds: string[];
   listBottomRef: RefObject<HTMLDivElement>;
 } & Omit<PermissionListProps, "onChange" | "databases">;
 export type PermissionListProps = {
@@ -36,7 +36,7 @@ export type PermissionListProps = {
 export const PermissionListPresentation = ({
   title,
   actions,
-  databaseNames,
+  databaseIds,
   permissions,
   onItemChange,
   onItemDelete,
@@ -67,7 +67,7 @@ export const PermissionListPresentation = ({
                   permission={permission}
                   index={index}
                   actions={actions}
-                  databases={databaseNames}
+                  databases={databaseIds}
                   onChange={onItemChange}
                   onDelete={onItemDelete}
                 />
@@ -102,9 +102,7 @@ export const PermissionList = ({
     }
   };
 
-  const databaseNames = databases
-    .filter((database) => Boolean(database.name))
-    .map((database) => database.name as NonNullable<typeof database.name>);
+  const databaseIds = databases.map((database) => database.database_id);
 
   const onItemChange: PermissionListPresentationProps["onItemChange"] = (
     targetIndex,
@@ -134,7 +132,7 @@ export const PermissionList = ({
     <PermissionListPresentation
       actions={actions}
       permissions={permissions}
-      databaseNames={databaseNames}
+      databaseIds={databaseIds}
       onItemChange={onItemChange}
       onItemDelete={onItemDelete}
       onItemAdd={onItemAdd}
