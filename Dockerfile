@@ -8,7 +8,7 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 RUN npm -g config set user root && npm -g config set unsafe-perm true
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm install
 
-FROM docker:20.10.10-dind AS test
+FROM docker:20.10.11-dind AS test
 RUN apk update && apk add \
   bash \
   git \
