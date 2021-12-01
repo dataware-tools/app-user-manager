@@ -13,9 +13,9 @@
 [[ -z "${DATAWARE_TOOLS_AUTH_MANAGE_PAGE}" ]] &&
   DATAWARE_TOOLS_AUTH_MANAGE_PAGE="https://manage.auth0.com/dashboard/us/dataware-tools/users"
 
-sed -i -e "s/ETb1RhJEbtXlFgWtaHzl5kPCkaYqhTVl/${DATAWARE_TOOLS_AUTH_CONFIG_CLIENT_ID}/g" /app/dist/**/*.js
-sed -i -e "s/dataware-tools.us.auth0.com/${DATAWARE_TOOLS_AUTH_CONFIG_DOMAIN}/g" /app/dist/**/*.js
-sed -i -e "s|https://demo.dataware-tools.com/|${DATAWARE_TOOLS_AUTH_CONFIG_API_URL}|g" /app/dist/**/*.js
-sed -i -e "s|https://manage.auth0.com/dashboard/us/dataware-tools/user|${DATAWARE_TOOLS_AUTH_MANAGE_PAGE}|g" /app/dits/**/*.js
+sed -i -e "s/ETb1RhJEbtXlFgWtaHzl5kPCkaYqhTVl/${DATAWARE_TOOLS_AUTH_CONFIG_CLIENT_ID}/g" /app/dist/*/*/*.js
+sed -i -e "s/dataware-tools.us.auth0.com/${DATAWARE_TOOLS_AUTH_CONFIG_DOMAIN}/g" /app/dist/*/*/*.js
+sed -i -e "s|https://demo.dataware-tools.com/|${DATAWARE_TOOLS_AUTH_CONFIG_API_URL}|g" /app/dist/*/*/*.js
+sed -i -e "s|https://manage.auth0.com/dashboard/us/dataware-tools/user|${DATAWARE_TOOLS_AUTH_MANAGE_PAGE}|g" /app/dist/*/*/*.js
 
 exec "$@"

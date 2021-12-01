@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "index.html",
+      "destination": "user-manager/index.html"
+    }
+  ]
+}
