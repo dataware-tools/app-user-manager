@@ -10,3 +10,7 @@
 ::-webkit-scrollbar-track {
   background-color: hsla(200, 10%, 98%);
 }
+
+::-webkit-scrollbar-track:hover {
+  background-color: hsla(200, 10%, 90%);
+}
