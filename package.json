@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@originjs/vite-plugin-commonjs": "^1.0.0",
+    "@originjs/vite-plugin-commonjs": "^1.0.1",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@storybook/addon-actions": "^6.3.12",
     "@storybook/addon-essentials": "^6.3.12",
