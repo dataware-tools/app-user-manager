@@ -15,9 +15,8 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    // "plugin:jsx-a11y/recommended",
-    // "plugin:compat/recommended",
     "prettier",
+    "plugin:storybook/recommended",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -67,12 +66,20 @@ module.exports = {
     camelcase: "off",
     "react/display-name": "off",
     "sort-imports": "off",
-    "import/order": ["warn", { alphabetize: { order: "asc" } }],
+    "import/order": [
+      "warn",
+      {
+        alphabetize: {
+          order: "asc",
+        },
+      },
+    ],
     "unused-imports/no-unused-imports": "error",
     "import/no-anonymous-default-export": [
       "warn",
       {
-        allowCallExpression: false, // The true value here is for backward compatibility
+        allowCallExpression: false,
+        // The true value here is for backward compatibility
         allowObject: true, // storybook may have unnamed object export
       },
     ],
