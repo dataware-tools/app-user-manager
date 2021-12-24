@@ -147,14 +147,15 @@ export const RoleEditModal = ({
     }
   }, [fetchError]);
 
-  const roleEditModalBodyProps: RoleEditModalPresentationProps["roleEditModalBodyProps"] = {
-    actions: listActionsRes?.actions || [],
-    databases: listDatabasesRes?.data || [],
-    onModalClose: onClose,
-    onSave: onSaveRole,
-    focusTarget: focusTarget,
-    initialRole: getRoleRes,
-  };
+  const roleEditModalBodyProps: RoleEditModalPresentationProps["roleEditModalBodyProps"] =
+    {
+      actions: listActionsRes?.actions || [],
+      databases: listDatabasesRes?.data || [],
+      onModalClose: onClose,
+      onSave: onSaveRole,
+      focusTarget: focusTarget,
+      initialRole: getRoleRes,
+    };
   return (
     <RoleEditModalPresentation
       open={open}
