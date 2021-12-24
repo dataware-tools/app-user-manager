@@ -165,9 +165,8 @@ export const RoleEditModalBody = ({
     }
   };
 
-  const onChangePermissions: RoleEditModalBodyPresentationProps["onChangePermissions"] = (
-    newPermissions
-  ) => setPermissions([...newPermissions]);
+  const onChangePermissions: RoleEditModalBodyPresentationProps["onChangePermissions"] =
+    (newPermissions) => setPermissions([...newPermissions]);
 
   return (
     <RoleEditModalBodyPresentation

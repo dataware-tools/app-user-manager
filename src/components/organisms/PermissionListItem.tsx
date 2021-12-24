@@ -82,42 +82,44 @@ export const PermissionListItem = ({
   ...delegated
 }: PermissionListItemProps): JSX.Element => {
   const filter = createFilterOptionsForMultiSelect<Database>();
-  const databaseMultiSelectProps: PermissionListItemPresentationProps["databaseMultiSelectProps"] = {
-    filterOptions: (options, params) => {
-      const filtered = filter(options, params);
+  const databaseMultiSelectProps: PermissionListItemPresentationProps["databaseMultiSelectProps"] =
+    {
+      filterOptions: (options, params) => {
+        const filtered = filter(options, params);
 
-      const { inputValue } = params;
-      const isExisting = options.some((option) => inputValue === option);
-      if (inputValue !== "" && !isExisting) {
-        filtered.push(inputValue);
-      }
+        const { inputValue } = params;
+        const isExisting = options.some((option) => inputValue === option);
+        if (inputValue !== "" && !isExisting) {
+          filtered.push(inputValue);
+        }
 
-      return filtered;
-    },
-    getOptionLabel: (option) => option,
-    onChange: (_, newValues) => {
-      onChange(index, {
-        databases: [...newValues],
-        actions: permission.actions,
-      });
-    },
-  };
+        return filtered;
+      },
+      getOptionLabel: (option) => option,
+      onChange: (_, newValues) => {
+        onChange(index, {
+          databases: [...newValues],
+          actions: permission.actions,
+        });
+      },
+    };
 
-  const actionMultiSelectProps: PermissionListItemPresentationProps["actionMultiSelectProps"] = {
-    getOptionLabel: (option) => option.name,
-    isOptionEqualToValue: (option, value) => {
-      return option.action_id === value.action_id;
-    },
-    onChange: (_, newValues) => {
-      onChange(index, {
-        databases: permission.databases,
-        actions: [...newValues],
-      });
-    },
-  };
+  const actionMultiSelectProps: PermissionListItemPresentationProps["actionMultiSelectProps"] =
+    {
+      getOptionLabel: (option) => option.name,
+      isOptionEqualToValue: (option, value) => {
+        return option.action_id === value.action_id;
+      },
+      onChange: (_, newValues) => {
+        onChange(index, {
+          databases: permission.databases,
+          actions: [...newValues],
+        });
+      },
+    };
 
-  const onDeleteButtonClick: PermissionListItemPresentationProps["onDeleteButtonClick"] = () =>
-    onDelete(index);
+  const onDeleteButtonClick: PermissionListItemPresentationProps["onDeleteButtonClick"] =
+    () => onDelete(index);
 
   return (
     <PermissionListItemPresentation
