@@ -33,7 +33,7 @@
     "@dataware-tools/app-common": "^21.12.8",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@mui/icons-material": "^5.2.4",
+    "@mui/icons-material": "^5.2.5",
     "@mui/lab": "^5.0.0-alpha.61",
     "@mui/material": "^5.2.5",
     "@mui/styles": "^5.2.3",
@@ -89,7 +89,7 @@
     "ts-jest": "^27.1.2",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "^4.4.4",
-    "vite": "^2.7.6",
+    "vite": "^2.7.7",
     "vite-plugin-env-compatible": "^1.1.1",
     "vite-tsconfig-paths": "^3.3.17"
   }
