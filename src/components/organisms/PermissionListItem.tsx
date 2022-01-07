@@ -1,3 +1,4 @@
+import { metaStore } from "@dataware-tools/api-meta-store-client";
 import {
   createFilterOptionsForMultiSelect,
   MultiSelect,
@@ -8,16 +9,16 @@ import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 
-type Database = string;
+type Database = metaStore.DatabaseModel;
 
 type Action = { action_id: string; name: string };
 
-type Permission = { databases: Database[]; actions: Action[] };
+type Permission = { databases: string[]; actions: Action[] };
 
 export type PermissionListItemPresentationProps = {
   databaseMultiSelectProps: Pick<
-    MultiSelectProps<Database, false, true>,
-    "onChange" | "getOptionLabel" | "filterOptions"
+    MultiSelectProps<Database | string, false, true>,
+    "onChange" | "getOptionLabel" | "filterOptions" | "isOptionEqualToValue"
   >;
   actionMultiSelectProps: Pick<
     MultiSelectProps<Action, false, false>,
@@ -84,21 +85,45 @@ export const PermissionListItem = ({
   const filter = createFilterOptionsForMultiSelect<Database>();
   const databaseMultiSelectProps: PermissionListItemPresentationProps["databaseMultiSelectProps"] =
     {
+      getOptionLabel: (option) => {
+        return typeof option === "string"
+          ? option
+          : option.name
+          ? `${option.database_id} (name: ${option.name})`
+          : option.database_id;
+      },
+      isOptionEqualToValue: (option, value) => {
+        console.log(option);
+        console.log(value);
+        return typeof option === "string"
+          ? typeof value === "string"
+            ? option === value
+            : option === value.name
+          : typeof value === "string"
+          ? option.database_id === value
+          : option.database_id === value.database_id;
+      },
       filterOptions: (options, params) => {
-        const filtered = filter(options, params);
+        const filtered = filter(options as Database[], params);
 
         const { inputValue } = params;
-        const isExisting = options.some((option) => inputValue === option);
+        const isExisting = options.some((option) =>
+          typeof option === "string"
+            ? inputValue === option
+            : inputValue === option.database_id
+        );
         if (inputValue !== "" && !isExisting) {
-          filtered.push(inputValue);
+          filtered.push({ database_id: inputValue });
         }
 
         return filtered;
       },
-      getOptionLabel: (option) => option,
       onChange: (_, newValues) => {
+        const newDatabases = newValues.map((value) =>
+          typeof value === "string" ? value : value.database_id
+        );
         onChange(index, {
-          databases: [...newValues],
+          databases: newDatabases,
           actions: permission.actions,
         });
       },
