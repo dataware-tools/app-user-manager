@@ -1,11 +1,13 @@
 import { AUTH_CONFIG } from "@dataware-tools/app-common";
+import { SWRConfig } from "swr";
 
 const APP_ROUTE = {
   HOME: "/",
 };
 
-const SwrOptions = {
+const SwrOptions: Parameters<typeof SWRConfig>[0]["value"] = {
   errorRetryCount: 1,
+  fetcher: (url) => fetch(url).then((res) => res.json()),
 };
 
 const authConfig = {

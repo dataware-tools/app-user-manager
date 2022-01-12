@@ -23,7 +23,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Pagination, { PaginationProps } from "@mui/material/Pagination";
 import { useState, useEffect } from "react";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import {
   RoleEditModal,
   RoleEditModalProps,
@@ -146,6 +146,7 @@ export const RolesPagePresentation = ({
 };
 
 export const RolesPage = (): JSX.Element => {
+  const { mutate } = useSWRConfig();
   // TODO: save per_page to local state
   const [searchText, setSearchText] = useState(
     getQueryString("searchText") || ""

@@ -21,7 +21,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Pagination from "@mui/material/Pagination";
 import { useState, useEffect } from "react";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 
 import { UserList, UserListProps } from "./UserList";
 import { useListUsers, useListRoles, fetchPermissionManager } from "utils";
@@ -116,6 +116,7 @@ export const UsersPagePresentation = ({
 
 export const UsersPage = (): JSX.Element => {
   const { getAccessTokenSilently: getAccessToken } = useAuth0();
+  const { mutate } = useSWRConfig();
 
   // TODO: save per_page to local state
   const [searchText, setSearchText] = useState(

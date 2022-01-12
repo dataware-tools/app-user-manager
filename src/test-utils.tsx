@@ -6,6 +6,7 @@ import { StylesProvider } from "@mui/styles";
 import { render, RenderOptions } from "@testing-library/react";
 import React from "react";
 import { SWRConfig } from "swr";
+import { SwrOptions } from "utils";
 
 export const authConfig = {
   domain: process.env.JEST_AUTH0_DOMAIN || AUTH_CONFIG.domain,
@@ -39,7 +40,7 @@ const AllTheProviders: React.FC = ({ children }) => {
     <StylesProvider injectFirst>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
+        <SWRConfig value={SwrOptions}>{children}</SWRConfig>
       </ThemeProvider>
     </StylesProvider>
   );
