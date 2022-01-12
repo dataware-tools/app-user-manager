@@ -93,8 +93,6 @@ export const PermissionListItem = ({
           : option.database_id;
       },
       isOptionEqualToValue: (option, value) => {
-        console.log(option);
-        console.log(value);
         return typeof option === "string"
           ? typeof value === "string"
             ? option === value
