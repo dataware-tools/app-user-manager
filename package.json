@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "basePath": "/user-manager/",
   "engines": {
-    "node": "14 - 16",
-    "npm": "7 - 8"
+    "node": "16",
+    "npm": "8"
   },
   "volta": {
-    "node": "16.11.1"
+    "node": "16.13.1"
   },
   "repository": "https://github.com/dataware-tools/app-user-manager.git",
   "scripts": {
