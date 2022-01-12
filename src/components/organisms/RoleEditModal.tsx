@@ -14,7 +14,7 @@ import {
 } from "@dataware-tools/app-common";
 import Dialog from "@mui/material/Dialog";
 import { useState, useEffect } from "react";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import { RoleEditModalBody, RoleEditModalBodyProps } from "./RoleEditModalBody";
 import { useGetRole, useListActions, useListDatabases } from "utils";
 
@@ -71,6 +71,7 @@ export const RoleEditModal = ({
   roleId,
 }: RoleEditModalProps): JSX.Element => {
   const { getAccessTokenSilently: getAccessToken } = useAuth0();
+  const { mutate } = useSWRConfig();
   const [error, setError] = useState<undefined | ErrorMessageProps>(undefined);
 
   const initializeState = () => {
