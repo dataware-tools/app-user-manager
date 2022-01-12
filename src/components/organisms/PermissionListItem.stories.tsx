@@ -24,7 +24,11 @@ Default.args = {
     { name: "foo", action_id: "2" },
     { name: "bar", action_id: "3" },
   ],
-  databases: ["test", "foo", "bar"],
+  databases: [
+    { database_id: "test", name: "Test" },
+    { database_id: "foo", name: "Foo" },
+    { database_id: "bar", name: "Bar" },
+  ],
   onDelete: (index) => {
     console.log("delete!");
     console.log(index);
