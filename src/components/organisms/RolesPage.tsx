@@ -43,7 +43,7 @@ export type RolesPagePresentationProps = {
   error?: ErrorMessageProps;
   isFetchComplete: boolean;
   onSelectRole: (roleId: number) => void;
-  onDeleteRole: (roleId: number) => void;
+  onDeleteRole: (role: permissionManager.RoleModel) => void;
   onCancelRoleEdit: RoleEditModalProps["onClose"];
   onSuccessSaveRole: RoleEditModalProps["onSaveSucceeded"];
   onAddRole: () => void;
@@ -109,7 +109,7 @@ export const RolesPagePresentation = ({
                 onSelectRole(targetDetail.row.role_id as number)
               }
               onDeleteRow={(targetDetail) =>
-                onDeleteRole(targetDetail.row.role_id as number)
+                onDeleteRole(targetDetail.row as permissionManager.RoleModel)
               }
             />
             <RoleEditModal
@@ -204,17 +204,21 @@ export const RolesPage = (): JSX.Element => {
     setEditingRoleId(undefined);
   };
 
-  const onDeleteRole = async (roleId: number) => {
+  const onDeleteRole: RolesPagePresentationProps["onDeleteRole"] = async (
+    deletedRole
+  ) => {
     if (
       !(await confirm({
-        title: "Are you sure you want to delete role?",
+        title: `Are you sure you want to delete ${deletedRole.name}?`,
         confirmMode: "delete",
       }))
     )
       return;
 
     const prev = listRolesRes;
-    const newLocalRoles = prev?.roles.filter((role) => role.role_id !== roleId);
+    const newLocalRoles = prev?.roles.filter(
+      (role) => role.role_id !== deletedRole.role_id
+    );
     mutate(
       listRolesCacheKey,
       {
@@ -227,7 +231,7 @@ export const RolesPage = (): JSX.Element => {
     const [, deleteRoleError] = await fetchPermissionManager(
       getAccessToken,
       permissionManager.RoleService.deleteRole,
-      { roleId }
+      { roleId: deletedRole.role_id }
     );
 
     if (deleteRoleError) {
