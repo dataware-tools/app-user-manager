@@ -205,11 +205,11 @@ export const RolesPage = (): JSX.Element => {
   };
 
   const onDeleteRole: RolesPagePresentationProps["onDeleteRole"] = async (
-    newRole
+    deletedRole
   ) => {
     if (
       !(await confirm({
-        title: `Are you sure you want to delete ${newRole.name}?`,
+        title: `Are you sure you want to delete ${deletedRole.name}?`,
         confirmMode: "delete",
       }))
     )
@@ -217,7 +217,7 @@ export const RolesPage = (): JSX.Element => {
 
     const prev = listRolesRes;
     const newLocalRoles = prev?.roles.filter(
-      (role) => role.role_id !== newRole.role_id
+      (role) => role.role_id !== deletedRole.role_id
     );
     mutate(
       listRolesCacheKey,
@@ -231,7 +231,7 @@ export const RolesPage = (): JSX.Element => {
     const [, deleteRoleError] = await fetchPermissionManager(
       getAccessToken,
       permissionManager.RoleService.deleteRole,
-      { roleId: newRole.role_id }
+      { roleId: deletedRole.role_id }
     );
 
     if (deleteRoleError) {
