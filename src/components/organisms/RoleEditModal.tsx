@@ -19,6 +19,7 @@ import {
   NoticeableLetters,
   DialogSubTitle,
   confirm,
+  useConfirmClosingWindow,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
@@ -205,6 +206,27 @@ export const RoleEditModal = ({
       listDatabasesRes &&
       (roleId ? getRoleRes : true)
   );
+  const {
+    addEventListener: addEventListenerForConfirmClosingWindow,
+    removeEventListener: removeEventListenerForConfirmClosingWindow,
+  } = useConfirmClosingWindow(() => {
+    if (
+      !roleId &&
+      Object.values(getValues()).some((value) => {
+        if (Array.isArray(value)) {
+          return value.length !== 0;
+        } else {
+          return value !== "" && value != null;
+        }
+      })
+    ) {
+      return true;
+    } else if (!roleId && getRoleRes && !equal(getRoleRes, getValues())) {
+      return true;
+    }
+
+    return false;
+  });
 
   // When modal is opened, state should be initialized
   const prevOpen = usePrevious(open);
@@ -212,6 +234,7 @@ export const RoleEditModal = ({
     if (open && !prevOpen) {
       setError(undefined);
       reset(initialDummyRole);
+      addEventListenerForConfirmClosingWindow();
     }
   }, [open, prevOpen, reset]);
 
@@ -279,6 +302,7 @@ export const RoleEditModal = ({
       });
     };
 
+    console.log(getValues());
     switch (reason) {
       case "backdropClick":
       case "escapeKeyDown":
@@ -288,18 +312,24 @@ export const RoleEditModal = ({
           }
         } else if (
           !roleId &&
-          Object.values(getValues()).some(
-            (value) => value !== "" && value != null
-          )
+          Object.values(getValues()).some((value) => {
+            if (Array.isArray(value)) {
+              return value.length !== 0;
+            } else {
+              return value !== "" && value != null;
+            }
+          })
         ) {
           if (!(await confirmClosingModal())) {
             return;
           }
         }
+        removeEventListenerForConfirmClosingWindow();
         propsOnClose();
         break;
 
       default:
+        removeEventListenerForConfirmClosingWindow();
         propsOnClose();
     }
   };
