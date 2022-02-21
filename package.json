@@ -44,7 +44,7 @@
     "react-hook-form": "^7.22.5",
     "react-router-dom": "^6.2.1",
     "serve": "^13.0.2",
-    "swr": "^1.1.2"
+    "swr": "^1.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
