@@ -277,7 +277,7 @@ export const RoleEditModal = ({
     };
     const saveRoleRes = roleId
       ? await permissionManager.RoleService.updateRole({
-          roleId: roleId,
+          roleId,
           requestBody: newRole,
         }).catch(setError)
       : await permissionManager.RoleService.createRole({
