@@ -1,5 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const baseConfig = require("@dataware-tools/dev-tools-for-typescript/configs/lint-staged.config");
 module.exports = {
-  "**/*.{js,jsx,ts,tsx}": "eslint --fix",
-  "**/*.{js,jsx,ts,tsx,css,md}": "prettier --write ",
-  "**/*.{ts,tsx}": () => "tsc --noEmit --project tsconfig.json",
+  ...baseConfig,
 };

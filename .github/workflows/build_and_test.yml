@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 300
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Build test image
         env:
@@ -31,7 +31,7 @@ jobs:
     timeout-minutes: 300
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Trivy
         run: |
@@ -57,4 +57,4 @@ jobs:
           docker build --target production -t app:production --secret id=npmrc,src=/tmp/.npmrc .
 
       - name: Scan production image
-        run: trivy --exit-code 0 --no-progress app:production
+        run: trivy image --exit-code 0 --no-progress app:production
