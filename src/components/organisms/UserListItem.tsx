@@ -1,4 +1,5 @@
 import { MultiSelect } from "@dataware-tools/app-common";
+import { Option } from "@dataware-tools/app-common/dist/components/MultiSelect";
 import Box from "@mui/material/Box";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -24,6 +25,21 @@ export type UserListItemProps = {
   user: User;
   roles: Roles;
   onUpdateUser: (user: User) => Promise<void> | void;
+};
+
+const stringToHash = (string: string | undefined) => {
+  if (!string) return 0;
+  let hash = 0;
+
+  if (string.length === 0) return hash;
+
+  for (let i = 0; i < string.length; i++) {
+    const char = string.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+
+  return hash;
 };
 
 export const UserListItemPresentation = ({
@@ -58,11 +74,28 @@ export const UserListItemPresentation = ({
               freeSolo={false}
               options={roleOptions}
               value={roles}
+              // @ts-expect-error to be fixed
               onChange={(_, newValues) => {
                 onChange(newValues);
               }}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option: Option) => {
+                if (typeof option !== "string" && typeof option !== "number") {
+                  return option.name ? option.name : "";
+                } else if (typeof option === "string") {
+                  return option;
+                }
+                return "";
+              }}
+              getOptionColor={(option: Option) => {
+                console.log(option);
+                if (typeof option !== "string" && typeof option !== "number") {
+                  const hue = stringToHash(option.name) % 360;
+                  return `hsl(${hue}, 50%, 80%)`;
+                }
+                return "";
+              }}
               isOptionEqualToValue={(option, value) => {
+                // @ts-expect-error to be fixed
                 return option.role_id === value.role_id;
               }}
               onFocusOut={onSave}
