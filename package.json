@@ -51,7 +51,7 @@
     "@dataware-tools/dev-tools-for-typescript": "^0.0.1",
     "@dataware-tools/eslint-config": "^0.1.0",
     "@types/react": "17.0.48",
-    "@types/react-dom": "18.0.5",
+    "@types/react-dom": "18.0.6",
     "@types/react-router-dom": "5.3.3"
   }
 }
