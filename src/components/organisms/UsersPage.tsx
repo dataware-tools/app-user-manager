@@ -24,7 +24,12 @@ import { useState, useEffect } from "react";
 import { useSWRConfig } from "swr";
 
 import { UserList, UserListProps } from "./UserList";
-import { useListUsers, useListRoles, fetchPermissionManager } from "utils";
+import {
+  enqueueErrorToastForFetchError,
+  useListUsers,
+  useListRoles,
+  fetchPermissionManager,
+} from "utils";
 
 export type UsersPagePresentationProps = {
   error?: ErrorMessageProps;
@@ -176,10 +181,10 @@ export const UsersPage = (): JSX.Element => {
       );
 
       if (updateUserError) {
-        setError({
-          reason: extractReasonFromFetchError(updateUserError),
-          instruction: "Please reload this page",
-        });
+        enqueueErrorToastForFetchError(
+          "Failed to update user's role",
+          updateUserError
+        );
         return undefined;
       } else if (updateUserRes) {
         const newUsers = prev?.users.map((user) =>
