@@ -28,7 +28,11 @@ import {
   RoleEditModal,
   RoleEditModalProps,
 } from "components/organisms/RoleEditModal";
-import { fetchPermissionManager, useListRoles } from "utils";
+import {
+  enqueueErrorToastForFetchError,
+  fetchPermissionManager,
+  useListRoles,
+} from "utils";
 
 export type RolesPagePresentationProps = {
   searchText: SearchFormProps["value"];
@@ -229,16 +233,14 @@ export const RolesPage = (): JSX.Element => {
     );
 
     const [, deleteRoleError] = await fetchPermissionManager(
-      getAccessToken,
+      "getAccessToken",
       permissionManager.RoleService.deleteRole,
       { roleId: deletedRole.role_id }
     );
 
     if (deleteRoleError) {
-      setError({
-        reason: extractReasonFromFetchError(deleteRoleError),
-        instruction: "Please reload this page",
-      });
+      console.log(deleteRoleError);
+      enqueueErrorToastForFetchError("Failed to delete role", deleteRoleError);
     } else {
       mutate(listRolesCacheKey);
     }
