@@ -233,13 +233,12 @@ export const RolesPage = (): JSX.Element => {
     );
 
     const [, deleteRoleError] = await fetchPermissionManager(
-      "getAccessToken",
+      getAccessToken,
       permissionManager.RoleService.deleteRole,
       { roleId: deletedRole.role_id }
     );
 
     if (deleteRoleError) {
-      console.log(deleteRoleError);
       enqueueErrorToastForFetchError("Failed to delete role", deleteRoleError);
     } else {
       mutate(listRolesCacheKey);
