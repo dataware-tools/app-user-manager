@@ -1,5 +1,4 @@
 import { MultiSelect } from "@dataware-tools/app-common";
-import { Option } from "@dataware-tools/app-common/dist/components/MultiSelect";
 import Box from "@mui/material/Box";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -74,11 +73,10 @@ export const UserListItemPresentation = ({
               freeSolo={false}
               options={roleOptions}
               value={roles}
-              // @ts-expect-error to be fixed
               onChange={(_, newValues) => {
                 onChange(newValues);
               }}
-              getOptionLabel={(option: Option) => {
+              getOptionLabel={(option) => {
                 if (typeof option !== "string" && typeof option !== "number") {
                   return option.name ? option.name : "";
                 } else if (typeof option === "string") {
@@ -86,8 +84,7 @@ export const UserListItemPresentation = ({
                 }
                 return "";
               }}
-              getOptionColor={(option: Option) => {
-                console.log(option);
+              getOptionColor={(option) => {
                 if (typeof option !== "string" && typeof option !== "number") {
                   const hue = stringToHash(option.name) % 360;
                   return `hsl(${hue}, 50%, 80%)`;
@@ -95,7 +92,6 @@ export const UserListItemPresentation = ({
                 return "";
               }}
               isOptionEqualToValue={(option, value) => {
-                // @ts-expect-error to be fixed
                 return option.role_id === value.role_id;
               }}
               onFocusOut={onSave}
