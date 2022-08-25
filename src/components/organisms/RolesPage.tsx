@@ -15,6 +15,7 @@ import {
   PerPageSelectProps,
   SearchFormProps,
   TableProps,
+  enqueueErrorToastForFetchError,
   extractReasonFromFetchError,
   confirm,
 } from "@dataware-tools/app-common";
@@ -28,11 +29,7 @@ import {
   RoleEditModal,
   RoleEditModalProps,
 } from "components/organisms/RoleEditModal";
-import {
-  enqueueErrorToastForFetchError,
-  fetchPermissionManager,
-  useListRoles,
-} from "utils";
+import { fetchPermissionManager, useListRoles } from "utils";
 
 export type RolesPagePresentationProps = {
   searchText: SearchFormProps["value"];
