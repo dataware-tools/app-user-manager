@@ -19,6 +19,7 @@ import {
   NoticeableLetters,
   DialogSubTitle,
   confirm,
+  enqueueErrorToastForFetchError,
   useConfirmClosingWindow,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -30,12 +31,7 @@ import { useState, useEffect } from "react";
 import { useForm, Controller, Control, ControllerProps } from "react-hook-form";
 import { useSWRConfig } from "swr";
 import { PermissionList, PermissionListProps } from "./PermissionList";
-import {
-  enqueueErrorToastForFetchError,
-  useGetRole,
-  useListActions,
-  useListDatabases,
-} from "utils";
+import { useGetRole, useListActions, useListDatabases } from "utils";
 
 type ValidateRuleType = ControllerProps["rules"];
 export type FormType = {

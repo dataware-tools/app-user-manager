@@ -13,6 +13,7 @@ import {
   PageMain,
   SearchFormProps,
   PerPageSelectProps,
+  enqueueErrorToastForFetchError,
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 
@@ -24,12 +25,7 @@ import { useState, useEffect } from "react";
 import { useSWRConfig } from "swr";
 
 import { UserList, UserListProps } from "./UserList";
-import {
-  enqueueErrorToastForFetchError,
-  useListUsers,
-  useListRoles,
-  fetchPermissionManager,
-} from "utils";
+import { useListUsers, useListRoles, fetchPermissionManager } from "utils";
 
 export type UsersPagePresentationProps = {
   error?: ErrorMessageProps;
