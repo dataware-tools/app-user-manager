@@ -19,6 +19,7 @@ import {
   NoticeableLetters,
   DialogSubTitle,
   confirm,
+  enqueueErrorToastForFetchError,
   useConfirmClosingWindow,
 } from "@dataware-tools/app-common";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -268,28 +269,26 @@ export const RoleEditModal = ({
 
     permissionManager.OpenAPI.TOKEN = await getAccessToken();
     permissionManager.OpenAPI.BASE = API_ROUTE.PERMISSION.BASE;
-    const setError = (error: any) => {
-      setError({
-        reason: extractReasonFromFetchError(error),
-        instruction: "Please reload this page",
-      });
-      return undefined;
-    };
     const saveRoleRes = roleId
       ? await permissionManager.RoleService.updateRole({
           roleId,
           requestBody: newRole,
-        }).catch(setError)
+        }).catch((e: any) =>
+          enqueueErrorToastForFetchError("Failed to update role", e)
+        )
       : await permissionManager.RoleService.createRole({
           requestBody: newRole,
-        }).catch(setError);
+        }).catch((e: any) =>
+          enqueueErrorToastForFetchError("Failed to create role", e)
+        );
 
     if (saveRoleRes) {
       onSaveSucceeded(saveRoleRes);
       mutate(getRoleCacheKey);
-      setIsSaving(false);
       propsOnClose();
     }
+
+    setIsSaving(false);
   });
 
   const onClose = async (reason?: string) => {

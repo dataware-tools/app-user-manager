@@ -15,6 +15,7 @@ import {
   PerPageSelectProps,
   SearchFormProps,
   TableProps,
+  enqueueErrorToastForFetchError,
   extractReasonFromFetchError,
   confirm,
 } from "@dataware-tools/app-common";
@@ -235,10 +236,7 @@ export const RolesPage = (): JSX.Element => {
     );
 
     if (deleteRoleError) {
-      setError({
-        reason: extractReasonFromFetchError(deleteRoleError),
-        instruction: "Please reload this page",
-      });
+      enqueueErrorToastForFetchError("Failed to delete role", deleteRoleError);
     } else {
       mutate(listRolesCacheKey);
     }

@@ -13,6 +13,7 @@ import {
   PageMain,
   SearchFormProps,
   PerPageSelectProps,
+  enqueueErrorToastForFetchError,
   extractReasonFromFetchError,
 } from "@dataware-tools/app-common";
 
@@ -176,10 +177,10 @@ export const UsersPage = (): JSX.Element => {
       );
 
       if (updateUserError) {
-        setError({
-          reason: extractReasonFromFetchError(updateUserError),
-          instruction: "Please reload this page",
-        });
+        enqueueErrorToastForFetchError(
+          "Failed to update user's role",
+          updateUserError
+        );
         return undefined;
       } else if (updateUserRes) {
         const newUsers = prev?.users.map((user) =>
