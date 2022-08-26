@@ -76,20 +76,12 @@ export const UserListItemPresentation = ({
               onChange={(_, newValues) => {
                 onChange(newValues);
               }}
-              getOptionLabel={(option) => {
-                if (typeof option !== "string" && typeof option !== "number") {
-                  return option.name ? option.name : "";
-                } else if (typeof option === "string") {
-                  return option;
-                }
-                return "";
-              }}
+              getOptionLabel={(option) => option.name}
               getOptionColor={(option) => {
-                if (typeof option !== "string" && typeof option !== "number") {
-                  const hue = stringToHash(option.name) % 360;
-                  return `hsl(${hue}, 50%, 80%)`;
-                }
-                return "";
+                const hue = stringToHash(option.name) % 360;
+                const sat = 50 + (stringToHash(option.name) % 10);
+                const lum = 80 + (stringToHash(option.name) % 10);
+                return `hsl(${hue}, ${sat}%, ${lum}%)`;
               }}
               isOptionEqualToValue={(option, value) => {
                 return option.role_id === value.role_id;
