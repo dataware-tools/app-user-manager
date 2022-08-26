@@ -78,10 +78,13 @@ export const UserListItemPresentation = ({
               }}
               getOptionLabel={(option) => option.name}
               getOptionColor={(option) => {
-                const hue = stringToHash(option.name) % 360;
-                const sat = 50 + (stringToHash(option.name) % 10);
-                const lum = 80 + (stringToHash(option.name) % 10);
-                return `hsl(${hue}, ${sat}%, ${lum}%)`;
+                const hash = stringToHash(option.name);
+                const hue = hash % 360;
+                const saturation = hash % 100;
+                const lightness = (hash * hash) % 100;
+                return `hsl(${hue}, ${saturation < 40 ? 40 : saturation}%, ${
+                  lightness > 60 ? lightness : 60
+                }%)`;
               }}
               isOptionEqualToValue={(option, value) => {
                 return option.role_id === value.role_id;
