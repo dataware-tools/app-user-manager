@@ -44,7 +44,7 @@
     "react-hook-form": "7.34.2",
     "react-router-dom": "6.3.0",
     "serve": "14.0.1",
-    "swr": "1.1.2"
+    "swr": "1.3.0"
   },
   "devDependencies": {
     "@dataware-tools/dev-tools-for-react": "0.0.2",
