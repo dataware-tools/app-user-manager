@@ -11,7 +11,7 @@
   },
   "repository": "https://github.com/dataware-tools/app-user-manager.git",
   "scripts": {
-    "dev": "vite --open",
+    "dev": "vite --open --port 3000 --host",
     "build": "vite build; cp serve.json dist",
     "start": "serve dist -p 3000 -s",
     "test": "run-s lint test:unit test:build test:visual-regression",
