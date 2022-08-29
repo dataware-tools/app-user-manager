@@ -6,7 +6,7 @@ import { authConfig, redirectUri } from "./utils/index";
 import { IndexPage } from "pages/IndexPage";
 
 const Router = (): JSX.Element | null => {
-  const onRedirectCallback = (appState: AppState): void => {
+  const onRedirectCallback = (appState?: AppState): void => {
     if (appState?.returnTo) {
       window.location.href = appState.returnTo;
     } else {
