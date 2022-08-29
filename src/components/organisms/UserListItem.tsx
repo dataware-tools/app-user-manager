@@ -26,6 +26,21 @@ export type UserListItemProps = {
   onUpdateUser: (user: User) => Promise<void> | void;
 };
 
+const stringToHash = (string: string | undefined) => {
+  if (!string) return 0;
+  let hash = 0;
+
+  if (string.length === 0) return hash;
+
+  for (let i = 0; i < string.length; i++) {
+    const char = string.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+
+  return hash;
+};
+
 export const UserListItemPresentation = ({
   user,
   roles,
@@ -62,6 +77,15 @@ export const UserListItemPresentation = ({
                 onChange(newValues);
               }}
               getOptionLabel={(option) => option.name}
+              getOptionColor={(option) => {
+                const hash = stringToHash(option.name);
+                const hue = hash % 360;
+                const saturation = hash % 100;
+                const lightness = (hash * hash) % 100;
+                return `hsl(${hue}, ${saturation < 40 ? 40 : saturation}%, ${
+                  lightness > 60 ? lightness : 60
+                }%)`;
+              }}
               isOptionEqualToValue={(option, value) => {
                 return option.role_id === value.role_id;
               }}
