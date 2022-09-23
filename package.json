@@ -7,7 +7,7 @@
     "npm": "7 - 8"
   },
   "volta": {
-    "node": "16.17.0"
+    "node": "16.17.1"
   },
   "repository": "https://github.com/dataware-tools/app-user-manager.git",
   "scripts": {
